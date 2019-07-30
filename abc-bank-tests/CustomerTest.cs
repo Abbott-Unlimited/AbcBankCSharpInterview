@@ -1,6 +1,5 @@
-﻿using System;
+﻿using abc_bank;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using abc_bank;
 
 namespace abc_bank_tests
 {
@@ -10,10 +9,10 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestApp()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
-            Account savingsAccount = new Account(Account.SAVINGS);
+            var checkingAccount = new Account(AccountType.Checking);
+            var savingsAccount = new Account(AccountType.Savings);
 
-            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+            var customer = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
             checkingAccount.Deposit(100.0);
             savingsAccount.Deposit(4000.0);
@@ -30,33 +29,20 @@ namespace abc_bank_tests
                     "  withdrawal $200.00\n" +
                     "Total $3,800.00\n" +
                     "\n" +
-                    "Total In All Accounts $3,900.00", henry.GetStatement());
+                    "Total In All Accounts $3,900.00", customer.GetStatement());
         }
 
         [TestMethod]
-        public void TestOneAccount()
+        public void TestAccountsOpened()
         {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
-            Assert.AreEqual(1, oscar.GetNumberOfAccounts());
-        }
+            var customer = new Customer("Oscar").OpenAccount(new Account(AccountType.Savings));
+            Assert.AreEqual(1, customer.Accounts.Count);
 
-        [TestMethod]
-        public void TestTwoAccount()
-        {
-            Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(2, oscar.GetNumberOfAccounts());
-        }
+            customer.OpenAccount(new Account(AccountType.Savings));
+            Assert.AreEqual(2, customer.Accounts.Count);
 
-        [TestMethod]
-        [Ignore]
-        public void TestThreeAccounts()
-        {
-            Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+            customer.OpenAccount(new Account(AccountType.Checking));
+            Assert.AreEqual(3, customer.Accounts.Count);
         }
     }
 }

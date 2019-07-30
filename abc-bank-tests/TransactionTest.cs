@@ -1,6 +1,5 @@
-﻿using System;
+﻿using abc_bank;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using abc_bank;
 
 namespace abc_bank_tests
 {
@@ -8,11 +7,10 @@ namespace abc_bank_tests
     public class TransactionTest
     {
         [TestMethod]
-        public void Transaction()
+        public void AddTransactionTest()
         {
-            Transaction t = new Transaction(5);
-            //t instanceOf Transaction
-            Assert.IsTrue(t.GetType() == typeof(Transaction));
+            var transaction = new Transaction(500);
+            Assert.IsInstanceOfType(transaction, typeof(Transaction));
         }
     }
 }

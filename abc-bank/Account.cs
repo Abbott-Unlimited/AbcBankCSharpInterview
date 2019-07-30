@@ -1,84 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
     public class Account
     {
+        public int ID;
+        public AccountType Type;
+        public List<Transaction> Transactions;        
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
-        public List<Transaction> transactions;
-
-        public Account(int accountType) 
+        public Account(AccountType type) 
         {
-            this.accountType = accountType;
-            this.transactions = new List<Transaction>();
+            Type = type;
+            Transactions = new List<Transaction>();
         }
 
         public void Deposit(double amount) 
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(amount));
-            }
+            if (amount <= 0) throw new ArgumentException("amount must be greater than zero");
+            else Transactions.Add(new Transaction(amount));
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(double amount)
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
-            }
+            if (amount <= 0) throw new ArgumentException("amount must be greater than zero");
+            else Transactions.Add(new Transaction(-amount));
         }
 
         public double InterestEarned() 
         {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
-                    else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+            switch(Type)
+            {
+                case AccountType.Checking:
+                    if (GetBalance() < 0) return GetBalance();
+                    else return GetBalance() * 0.001;
+                case AccountType.Savings:
+                    if (GetBalance() < 0) return GetBalance();
+                    if (GetBalance() <= 1000) return GetBalance() * 0.001;
+                    else return (10 + (GetBalance() - 1000)) * 0.002;
+                case AccountType.Maxi_Savings:
+                    if (GetBalance() < 0) return GetBalance();
+                    else if (GetBalance() <= 2000) return (20 + (GetBalance() - 1000)) * 0.05;
+                    else if (GetBalance() <= 3000) return (70 + (GetBalance() - 2000)) * 0.1;
+                    else if (Transactions.Any(transaction => transaction.Date >= DateTime.Now.Subtract(TimeSpan.FromDays(10)))) return GetBalance() * .5;
+                    return GetBalance() * .001;
                 default:
-                    return amount * 0.001;
+                    return GetBalance();
             }
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
+        public string GetStatement()
         {
-            double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
-            return amount;
-        }
+            //Display Account Type
+            var result = Type.ToString().Replace("_", " ") + " Account\n";
 
-        public int GetAccountType() 
+            //Display Transactions
+            Transactions.ForEach(transaction =>
+                result += "  " + 
+                (transaction.Amount < 0 ? "withdrawal" : "deposit") + " " +
+                string.Format("{0:C}", Math.Abs(transaction.Amount)) +
+                "\n");
+
+            //Display Total
+            result += "Total " + GetBalance().ToString("C");
+
+            return result;
+        }
+        public double GetBalance()
         {
-            return accountType;
+            return Transactions.Sum(transaction => transaction.Amount);
         }
-
     }
+
+    public enum AccountType { Checking, Savings, Maxi_Savings }
 }

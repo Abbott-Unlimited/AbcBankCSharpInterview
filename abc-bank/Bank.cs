@@ -1,58 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Utilities;
+
 
 namespace abc_bank
 {
     public class Bank
     {
-        private List<Customer> customers;
+        private List<Customer> _Customers;
 
         public Bank()
         {
-            customers = new List<Customer>();
+            _Customers = new List<Customer>();
         }
 
         public void AddCustomer(Customer customer)
         {
-            customers.Add(customer);
+            _Customers.Add(customer);
         }
 
-        public String CustomerSummary() {
-            String summary = "Customer Summary";
-            foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
-            return summary;
-        }
-
-        //Make sure correct plural of word is created based on the number passed in:
-        //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
+        public string CustomersSummary()
         {
-            return number + " " + (number == 1 ? word : word + "s");
+            string result = "Customers Summary";
+
+            _Customers.ForEach(customer =>
+                result += string.Format("\n - {0} ({1})", 
+                customer.Name, 
+                customer.Accounts.Count.FormatMorpheme("account")));
+
+            return result;
         }
 
-        public double totalInterestPaid() {
-            double total = 0;
-            foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
-            return total;
-        }
-
-        public String GetFirstCustomer()
+        public double TotalInterestPaid()
         {
-            try
-            {
-                customers = null;
-                return customers[0].GetName();
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.StackTrace);
-                return "Error";
-            }
+            return _Customers.Sum(customer => customer.TotalInterestEarned());
+        }
+
+        public string GetFirstCustomer()
+        {
+            return _Customers.FirstOrDefault().Name;
         }
     }
 }
