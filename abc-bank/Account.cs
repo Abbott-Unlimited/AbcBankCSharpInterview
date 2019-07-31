@@ -13,6 +13,15 @@ namespace abc_bank
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
 
+        public const double CHECKING_INTEREST_RATE = 0.001;
+
+        public const double FIRST_THOUSAND_SAVINGS_RATE = 0.001;
+        public const double OVER_THOUSAND_SAVINGS_RATE = 0.002;
+
+        public const double FIRST_THOUSAND_MAXI_SAVINGS_RATE = 0.02;
+        public const double SECOND_THOUSAND_MAXI_SAVINGS_RATE = 0.05;
+        public const double OVER_TWO_THOUSAND_MAXI_SAVINGS_RATE = 0.1;
+
         private readonly int accountType;
         public List<Transaction> transactions;
 
@@ -46,20 +55,20 @@ namespace abc_bank
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return amount * FIRST_THOUSAND_SAVINGS_RATE;
                     else
-                        return 1 + (amount-1000) * 0.002;
+                        return 1000 * FIRST_THOUSAND_SAVINGS_RATE + (amount-1000) * OVER_THOUSAND_SAVINGS_RATE;
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.02;
+                        return amount * FIRST_THOUSAND_MAXI_SAVINGS_RATE;
                     if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                        return 1000 * FIRST_THOUSAND_MAXI_SAVINGS_RATE + (amount-1000) * SECOND_THOUSAND_MAXI_SAVINGS_RATE;
+                    return 1000 * FIRST_THOUSAND_MAXI_SAVINGS_RATE + 1000 * SECOND_THOUSAND_MAXI_SAVINGS_RATE + (amount-2000) * OVER_TWO_THOUSAND_MAXI_SAVINGS_RATE;
                 default:
-                    return amount * 0.001;
+                    return amount * CHECKING_INTEREST_RATE;
             }
         }
 
