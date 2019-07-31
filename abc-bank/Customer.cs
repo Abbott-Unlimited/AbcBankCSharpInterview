@@ -28,13 +28,21 @@ namespace abc_bank
             return this;
         }
 
+
+
         public int GetNumberOfAccounts()
         {
             return accounts.Count;
         }
 
-        public void TransferBetweenAccounts(int sourceAccountIndex, int destinationAccountIndex, double amount)
+        public Customer TransferBetweenAccounts(int sourceAccountIndex, int destinationAccountIndex, double amount)
         {
+            // The customer has no account.
+            if (accounts.Count == 0)
+            {
+                throw new ArgumentException("the user has no accounts");
+            }
+
             // Ensure that amount > 0
             if (amount <= 0.0)
             {
@@ -59,13 +67,21 @@ namespace abc_bank
                 throw new ArgumentException("source and destination accounts cannot be the same");
             }
 
-            TransferBetweenAccounts(accounts[sourceAccountIndex], accounts[destinationAccountIndex], amount);
+            // Insufficient amount in source account
+            if (accounts[sourceAccountIndex].sumTransactions() < amount)
+            {
+                throw new ArgumentException("insufficient funds for transactions");
+            }
+
+            return TransferBetweenAccounts(accounts[sourceAccountIndex], accounts[destinationAccountIndex], amount);
         }
 
-        public void TransferBetweenAccounts(Account sourceAccount, Account destinationAccount, double amount)
+        private Customer TransferBetweenAccounts(Account sourceAccount, Account destinationAccount, double amount)
         {
             sourceAccount.Withdraw(amount);
             destinationAccount.Deposit(amount);
+
+            return this;
         }
 
         public double TotalInterestEarned() 
