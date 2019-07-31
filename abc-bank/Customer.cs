@@ -15,17 +15,6 @@ namespace abc_bank
             Accounts = new List<Account>();
         }
 
-        public Customer Transfer(Account fromAccount, Account toAccount, double amount)
-        {
-            if(fromAccount.GetBalance() >= amount)
-            {
-                fromAccount.Withdraw(amount);
-                toAccount.Deposit(amount);
-            }
-
-            return this;
-        }
-
         public Customer OpenAccount(Account account)
         {
             Accounts.Add(account);
@@ -45,7 +34,7 @@ namespace abc_bank
             Accounts.ForEach(account =>
             {
                 result += account.GetStatement() + "\n\n";
-                total += account.GetBalance();
+                total += account.GetCurrentBalance();
             });
 
             result += "Total In All Accounts " + total.ToString("C");

@@ -12,7 +12,7 @@ namespace abc_bank_tests
         public Customer Customer;
         public Account Account;
 
-        private void TestInit(AccountType type)
+        private void TestInit(Type type)
         {
             Bank = new Bank();
             Customer = new Customer("Bill");
@@ -24,7 +24,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void CustomersSummaryDisplayed()
         {
-            TestInit(AccountType.Checking);
+            TestInit(Type.Checking);
 
             Assert.AreEqual("Customers Summary\n - Bill (1 account)", Bank.CustomersSummary());
         }
@@ -32,7 +32,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void Checking_Interest_Rate_Paid()
         {
-            TestInit(AccountType.Checking);
+            TestInit(Type.Checking);
             Account.Deposit(100.0);
 
             Assert.AreEqual(0.1, Bank.TotalInterestPaid(), DOUBLE_DELTA);
@@ -41,7 +41,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void Savings_Interest_Rate_Paid()
         {
-            TestInit(AccountType.Savings);
+            TestInit(Type.Savings);
             Account.Deposit(1500.0);
 
             Assert.AreEqual(2.0, Bank.TotalInterestPaid(), DOUBLE_DELTA);
@@ -50,7 +50,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void Maxi_Savings_Interest_Rate_Paid()
         {
-            TestInit(AccountType.Maxi_Savings);
+            TestInit(Type.Maxi_Savings);
             Account.Deposit(3000.0);
 
             Assert.AreEqual(170.0, Bank.TotalInterestPaid(), DOUBLE_DELTA);

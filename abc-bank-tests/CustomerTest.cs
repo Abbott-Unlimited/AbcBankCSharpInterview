@@ -9,8 +9,8 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestApp()
         {
-            var checkingAccount = new Account(AccountType.Checking);
-            var savingsAccount = new Account(AccountType.Savings);
+            var checkingAccount = new Account(Type.Checking);
+            var savingsAccount = new Account(Type.Savings);
 
             var customer = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
@@ -33,16 +33,27 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void TestAccountsOpened()
+        public void TestOneAccountsOpened()
         {
-            var customer = new Customer("Oscar").OpenAccount(new Account(AccountType.Savings));
+            var customer = new Customer("Oscar").OpenAccount(new Account(Type.Savings));
             Assert.AreEqual(1, customer.Accounts.Count);
+        }
 
-            customer.OpenAccount(new Account(AccountType.Savings));
-            Assert.AreEqual(2, customer.Accounts.Count);
-
-            customer.OpenAccount(new Account(AccountType.Checking));
+        [TestMethod]
+        public void TestMultipleAccountsOpened()
+        {
+            var customer = new Customer("Oscar").OpenAccount(new Account(Type.Savings));
+            customer.OpenAccount(new Account(Type.Checking));
+            customer.OpenAccount(new Account(Type.Maxi_Savings));
             Assert.AreEqual(3, customer.Accounts.Count);
+        }
+
+        [TestMethod]
+        public void TestMultipleSavingsAccountsOpened()
+        {
+            var customer = new Customer("Oscar").OpenAccount(new Account(Type.Savings));
+            customer.OpenAccount(new Account(Type.Savings));
+            Assert.AreEqual(2, customer.Accounts.Count);
         }
     }
 }
