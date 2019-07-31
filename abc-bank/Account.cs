@@ -18,9 +18,8 @@ namespace abc_bank
         public const double FIRST_THOUSAND_SAVINGS_RATE = 0.001;
         public const double OVER_THOUSAND_SAVINGS_RATE = 0.002;
 
-        public const double FIRST_THOUSAND_MAXI_SAVINGS_RATE = 0.02;
-        public const double SECOND_THOUSAND_MAXI_SAVINGS_RATE = 0.05;
-        public const double OVER_TWO_THOUSAND_MAXI_SAVINGS_RATE = 0.1;
+        public const double MAXI_SAVINGS_OVER_TEN_DAY_INTEREST_RATE = 0.05;
+        public const double MAXI_SAVINGS_UNDER_TEN_DAY_INTEREST_RATE = 0.001;
 
         private readonly int accountType;
         public List<Transaction> transactions;
@@ -54,26 +53,48 @@ namespace abc_bank
             double amount = sumTransactions();
             switch(accountType){
                 case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * FIRST_THOUSAND_SAVINGS_RATE;
-                    else
-                        return 1000 * FIRST_THOUSAND_SAVINGS_RATE + (amount-1000) * OVER_THOUSAND_SAVINGS_RATE;
+                    return CalculateSavingsInterest(amount);
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * FIRST_THOUSAND_MAXI_SAVINGS_RATE;
-                    if (amount <= 2000)
-                        return 1000 * FIRST_THOUSAND_MAXI_SAVINGS_RATE + (amount-1000) * SECOND_THOUSAND_MAXI_SAVINGS_RATE;
-                    return 1000 * FIRST_THOUSAND_MAXI_SAVINGS_RATE + 1000 * SECOND_THOUSAND_MAXI_SAVINGS_RATE + (amount-2000) * OVER_TWO_THOUSAND_MAXI_SAVINGS_RATE;
+                    return CalculateMaxiSavingsInterest(amount);
                 default:
-                    return amount * CHECKING_INTEREST_RATE;
+                    return DefaultInterest(amount);
             }
         }
 
         public double sumTransactions() {
            return CheckIfTransactionsExist(true);
+        }
+
+        private double CalculateSavingsInterest(double amount)
+        {
+            double calculatedInterest = 0.0;
+
+            if (amount <= 1000)
+                calculatedInterest = amount * FIRST_THOUSAND_SAVINGS_RATE;
+            else
+                calculatedInterest = 1000 * FIRST_THOUSAND_SAVINGS_RATE + (amount - 1000) * OVER_THOUSAND_SAVINGS_RATE;
+
+            return calculatedInterest;
+        }
+
+        private double CalculateMaxiSavingsInterest(double amount)
+        {
+            // For brevity's sake, we're assuming that all transactions occur in the same timezone.
+            // Ideally, everything would have to be converted to UTC prior to attempting such an operation.
+            // Also, ideally we would need to be mindful of MINDATE and MAXDATE.
+            DateTime tenDayPriorDate = DateTime.Now.AddDays(-10);
+
+            bool hasTransactionOccurredInTenDays = transactions.Where(currentTransaction => currentTransaction.transactionDate >= tenDayPriorDate).Count() > 0;
+
+            return amount * (hasTransactionOccurredInTenDays? MAXI_SAVINGS_UNDER_TEN_DAY_INTEREST_RATE : MAXI_SAVINGS_OVER_TEN_DAY_INTEREST_RATE);
+        }
+
+        private double DefaultInterest(double amount)
+        {
+            return amount * CHECKING_INTEREST_RATE;
         }
 
         private double CheckIfTransactionsExist(bool checkAll) 
