@@ -84,7 +84,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("${0:n}", Math.Round(Math.Abs(d), 2));
         }
     }
 }
