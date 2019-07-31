@@ -33,6 +33,41 @@ namespace abc_bank
             return accounts.Count;
         }
 
+        public void TransferBetweenAccounts(int sourceAccountIndex, int destinationAccountIndex, double amount)
+        {
+            // Ensure that amount > 0
+            if (amount <= 0.0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+
+            // Ensure that 0 <= sourceAccountIndex <= accounts.length - 1
+            if (sourceAccountIndex < 0 || sourceAccountIndex > accounts.Count - 1 || accounts[sourceAccountIndex] == null)
+            {
+                throw new ArgumentException("source account does not exist");
+            }
+
+            // Ensure that 0 <= destinationAccountIndex <= accounts.length - 1
+            if (destinationAccountIndex < 0 || destinationAccountIndex > accounts.Count - 1 || accounts[destinationAccountIndex] == null)
+            {
+                throw new ArgumentException("destination account does not exist");
+            }
+
+            // Ensure that sourceAccountIndex is NOT the same as the destination account index. 
+            if (sourceAccountIndex == destinationAccountIndex)
+            {
+                throw new ArgumentException("source and destination accounts cannot be the same");
+            }
+
+            TransferBetweenAccounts(accounts[sourceAccountIndex], accounts[destinationAccountIndex], amount);
+        }
+
+        public void TransferBetweenAccounts(Account sourceAccount, Account destinationAccount, double amount)
+        {
+            sourceAccount.Withdraw(amount);
+            destinationAccount.Deposit(amount);
+        }
+
         public double TotalInterestEarned() 
         {
             double total = 0;
