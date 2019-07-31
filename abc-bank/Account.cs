@@ -64,6 +64,12 @@ namespace abc_bank
             }
         }
 
+        public double DailyInterestEarned()
+        {
+            int dayCount = DateTime.IsLeapYear(DateTime.Now.Year) ? 366 : 365;
+            return InterestEarned() / dayCount;
+        }
+
         public double sumTransactions() {
            return CheckIfTransactionsExist(true);
         }
