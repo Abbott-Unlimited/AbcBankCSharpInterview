@@ -54,10 +54,5 @@ namespace abc_bank
                 return "Error";
             }
         }
-
-        static public String ToDollars(double d)
-        {
-            return String.Format("{0:c}", Math.Abs(d));
-        }
     }
 }

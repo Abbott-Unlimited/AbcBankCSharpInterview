@@ -51,11 +51,9 @@ namespace abc_bank
                     else
                         return 1 + (amount-1000) * 0.002;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    if (transactions.Any(t => t.amount < 0.0 && (t.transactionDate - DateTime.Now).TotalDays < 10))
+                        return amount * 0.001;
+                    return amount * 0.05;
                 default:
                     return amount * 0.001;
             }
@@ -63,22 +61,8 @@ namespace abc_bank
 
         public double DailyInterest()
         {
-            double amount = sumTransactions();
-            switch (accountType)
-            {
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return (0.01 / 365.0) * amount;
-                    else
-                        return (0.02 / 365.0) * amount;
-                case MAXI_SAVINGS:
-                    if (transactions.Any(t => t.amount < 0.0 && (t.transactionDate - DateTime.Now).TotalDays < 10))
-                        return (0.01 / 365.0) * amount;
-                    else
-                        return (0.05 / 365.0) * amount;
-                default:
-                    return (0.01 / 365.0) * amount;
-            }
+            int daysInYear = DateTime.IsLeapYear(DateTime.Now.Year) ? 366 : 365;
+            return InterestEarned() / daysInYear;
         }
 
         public double sumTransactions() {

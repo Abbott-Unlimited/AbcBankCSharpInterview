@@ -30,7 +30,11 @@ namespace abc_bank
 
         public void TransferMoney(Account from, Account to, double amount)
         {
-            if (amount > from.sumTransactions())
+            if (from == to)
+            {
+                throw new ArgumentException("unable to perform transaction");
+            }
+            else if (amount > from.sumTransactions())
             {
                 throw new ArgumentException("insufficient funds for transfer");
             }
@@ -64,7 +68,7 @@ namespace abc_bank
                 statement += "\n" + statementForAccount(a) + "\n";
                 total += a.sumTransactions();
             }
-            statement += "\nTotal In All Accounts " + Bank.ToDollars(total);
+            statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
@@ -88,11 +92,16 @@ namespace abc_bank
             //Now total up all the transactions
             double total = 0.0;
             foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + Bank.ToDollars(t.amount) + "\n";
+                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
-            s += "Total " + Bank.ToDollars(total);
+            s += "Total " + ToDollars(total);
             return s;
+        }
+
+        static public String ToDollars(double d)
+        {
+            return String.Format("{0:c}", Math.Abs(d), 2);
         }
     }
 }
