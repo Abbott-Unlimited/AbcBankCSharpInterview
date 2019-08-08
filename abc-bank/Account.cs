@@ -8,7 +8,6 @@ namespace abc_bank
 {
     public class Account
     {
-
         public const int CHECKING = 0;
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
@@ -35,6 +34,8 @@ namespace abc_bank
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
+            } else if (amount > sumTransactions()) {
+                throw new ArgumentException("insufficient funds");
             } else {
                 transactions.Add(new Transaction(-amount));
             }
@@ -49,9 +50,6 @@ namespace abc_bank
                         return amount * 0.001;
                     else
                         return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.02;
@@ -60,6 +58,26 @@ namespace abc_bank
                     return 70 + (amount-2000) * 0.1;
                 default:
                     return amount * 0.001;
+            }
+        }
+
+        public double DailyInterest()
+        {
+            double amount = sumTransactions();
+            switch (accountType)
+            {
+                case SAVINGS:
+                    if (amount <= 1000)
+                        return (0.01 / 365.0) * amount;
+                    else
+                        return (0.02 / 365.0) * amount;
+                case MAXI_SAVINGS:
+                    if (transactions.Any(t => t.amount < 0.0 && (t.transactionDate - DateTime.Now).TotalDays < 10))
+                        return (0.01 / 365.0) * amount;
+                    else
+                        return (0.05 / 365.0) * amount;
+                default:
+                    return (0.01 / 365.0) * amount;
             }
         }
 

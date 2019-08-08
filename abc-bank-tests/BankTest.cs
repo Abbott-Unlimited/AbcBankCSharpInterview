@@ -7,7 +7,6 @@ namespace abc_bank_tests
     [TestClass]
     public class BankTest
     {
-
         private static readonly double DOUBLE_DELTA = 1e-15;
 
         [TestMethod]
@@ -53,6 +52,28 @@ namespace abc_bank_tests
             checkingAccount.Deposit(3000.0);
 
             Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void TestDailyInterest()
+        {
+            Bank bank = new Bank();
+            Account checking = new Account(Account.CHECKING);
+            Account savings = new Account(Account.SAVINGS);
+            Account maxi = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(checking).OpenAccount(savings).OpenAccount(maxi));
+
+            checking.Deposit(1000);
+            savings.Deposit(2500);
+            maxi.Deposit(500);
+
+            // Get the total interest earned by each account after 90 days.
+            string checkingInterestGained = Bank.ToDollars(checking.DailyInterest() * 90);
+            Assert.AreEqual("$2.47", checkingInterestGained);
+            string savingsInterestGained = Bank.ToDollars(savings.DailyInterest() * 90);
+            Assert.AreEqual("$12.33", savingsInterestGained);
+            string maxiInterestGained = Bank.ToDollars(maxi.DailyInterest() * 90);
+            Assert.AreEqual("$6.16", maxiInterestGained);
         }
     }
 }
