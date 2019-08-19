@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
@@ -33,7 +30,7 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public double TotalInterestEarned()
         {
             double total = 0;
             foreach (Account a in accounts)
@@ -41,12 +38,12 @@ namespace abc_bank
             return total;
         }
 
-        public String GetStatement() 
+        public String GetStatement()
         {
             String statement = null;
             statement = "Statement for " + name + "\n";
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (Account a in accounts)
             {
                 statement += "\n" + statementForAccount(a) + "\n";
                 total += a.sumTransactions();
@@ -55,12 +52,35 @@ namespace abc_bank
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        public void transferFunds(Account a, Account b, double Amt)
+        {
+            //account a is the account to transfer from
+            //account b is the account to transfer to
+            //double Amt is the amount to transfer
+            try
+            {
+                a.Withdraw(Amt);
+                b.Deposit(Amt);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetType() == typeof(ArgumentException))
+                    {
+                    throw new Exception("Transfer Not Possible");
+                }
+            }
+
+
+
+        }
+
+        private String statementForAccount(Account a)
         {
             String s = "";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
+            //Translate to pretty account type
+            switch (a.GetAccountType())
+            {
                 case Account.CHECKING:
                     s += "Checking Account\n";
                     break;
@@ -74,7 +94,8 @@ namespace abc_bank
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
+            foreach (Transaction t in a.transactions)
+            {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
@@ -84,7 +105,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C}", Math.Abs(d));
         }
     }
 }
