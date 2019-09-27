@@ -10,6 +10,7 @@ namespace abc_bank
     {
         private String name;
         private List<Account> accounts;
+        public DateTime now = DateTime.Now;
 
         public Customer(String name)
         {
@@ -17,6 +18,11 @@ namespace abc_bank
             this.accounts = new List<Account>();
         }
 
+        public void transferFunds(Account from, Account to, double amount)
+        {
+            from.Withdraw(amount);
+            to.Deposit(amount);
+        }
         public String GetName()
         {
             return name;
@@ -25,6 +31,7 @@ namespace abc_bank
         public Customer OpenAccount(Account account)
         {
             accounts.Add(account);
+            account.accountCreated = DateTime.Now;
             return this;
         }
 
@@ -37,7 +44,7 @@ namespace abc_bank
         {
             double total = 0;
             foreach (Account a in accounts)
-                total += a.InterestEarned();
+                total += a.InterestEarned((now - a.accountCreated).Days);
             return total;
         }
 
@@ -84,7 +91,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C}",d); //d.ToString("C2"); 
         }
     }
 }

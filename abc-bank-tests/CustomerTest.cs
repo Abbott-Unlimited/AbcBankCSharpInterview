@@ -15,20 +15,23 @@ namespace abc_bank_tests
 
             Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
-            checkingAccount.Deposit(100.0);
-            savingsAccount.Deposit(4000.0);
-            savingsAccount.Withdraw(200.0);
+            checkingAccount.Deposit(100.00);
+            savingsAccount.Deposit(4000.00);
+            savingsAccount.Withdraw(200.00);
+            henry.transferFunds(checkingAccount, savingsAccount, 50.00);
 
             Assert.AreEqual("Statement for Henry\n" +
                     "\n" +
                     "Checking Account\n" +
                     "  deposit $100.00\n" +
-                    "Total $100.00\n" +
+                    "  withdrawal ($50.00)\n" +
+                    "Total $50.00\n" +
                     "\n" +
                     "Savings Account\n" +
                     "  deposit $4,000.00\n" +
-                    "  withdrawal $200.00\n" +
-                    "Total $3,800.00\n" +
+                    "  withdrawal ($200.00)\n" + //find out what is creating the parenthesis around withdrawl amounts
+                    "  deposit $50.00\n" +
+                    "Total $3,850.00\n" +
                     "\n" +
                     "Total In All Accounts $3,900.00", henry.GetStatement());
         }
@@ -50,13 +53,25 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
+        //[Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
 }
+/*
+ * Customer can open an account(tested three)
+ * Customer can deposit and withdraw
+ * customer can request a statement
+ * a bank manager can get a report showing the list of customers and accounts they have
+ * interest accrued daily based on the creation of the account and the current day. insert static day in the past as the account created day to test this feature
+ * customer can transfer between accounts
+ * maxi savings account changed to 5% unless withdrawls in past 10 days
+ * bank manager can get a report showing total interest paid
+ */
+ 

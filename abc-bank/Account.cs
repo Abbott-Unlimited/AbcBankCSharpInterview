@@ -8,13 +8,14 @@ namespace abc_bank
 {
     public class Account
     {
-
+        public DateTime accountCreated = DateTime.Now;
         public const int CHECKING = 0;
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
 
         private readonly int accountType;
         public List<Transaction> transactions;
+
 
         public Account(int accountType) 
         {
@@ -40,27 +41,37 @@ namespace abc_bank
             }
         }
 
-        public double InterestEarned() 
+        public double InterestEarned(int ageOfAccount) 
         {
             double amount = sumTransactions();
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return amount *(ageOfAccount * getDailyPeriodicRate(0.1));
                     else
-                        return 1 + (amount-1000) * 0.002;
+                        return 1 + (amount-1000) * (ageOfAccount * getDailyPeriodicRate(0.2));
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    foreach(Transaction t in transactions)
+                    {
+                        if (t.amount > 0)
+                            continue;
+                        else if (t.amount < 0 && t.transactionDate <= DateTime.Now.AddDays(-10))
+                            continue;
+                        else
+                            return amount * (ageOfAccount * getDailyPeriodicRate(0.1));
+                    }
+                    return amount * (ageOfAccount * getDailyPeriodicRate(5));
                 default:
-                    return amount * 0.001;
+                    return amount * (ageOfAccount * getDailyPeriodicRate(0.1));
             }
+        }
+        private double getDailyPeriodicRate(double APR)
+        {
+            const int yearInDays = 365;
+            return (APR / yearInDays) / 100;
         }
 
         public double sumTransactions() {
