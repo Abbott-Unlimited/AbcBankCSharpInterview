@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "abc-bank", "abc-bank\abc-bank.csproj", "{C8A5871B-EEFA-49EB-84A0-5B021D13E233}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "abc-bank-tests", "abc-bank-tests\abc-bank-tests.csproj", "{36E8C1E7-37D3-4365-91E5-4FD57A1256BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testing-my-features", "Execute\testing-my-features.csproj", "{B13AF439-B9DF-4568-BC14-98FF7B841E51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,15 @@ Global
 		{36E8C1E7-37D3-4365-91E5-4FD57A1256BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36E8C1E7-37D3-4365-91E5-4FD57A1256BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36E8C1E7-37D3-4365-91E5-4FD57A1256BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B13AF439-B9DF-4568-BC14-98FF7B841E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B13AF439-B9DF-4568-BC14-98FF7B841E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B13AF439-B9DF-4568-BC14-98FF7B841E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B13AF439-B9DF-4568-BC14-98FF7B841E51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22A9C798-386F-4045-A45B-C81EDA039FA8}
 	EndGlobalSection
 EndGlobal

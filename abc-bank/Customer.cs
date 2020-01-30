@@ -22,6 +22,11 @@ namespace abc_bank
             return name;
         }
 
+        public List<Account> GetAccounts()
+        {
+            return accounts;
+        }
+
         public Customer OpenAccount(Account account)
         {
             accounts.Add(account);
@@ -37,7 +42,7 @@ namespace abc_bank
         {
             double total = 0;
             foreach (Account a in accounts)
-                total += a.InterestEarned();
+                total += a.InterestEarned(a);
             return total;
         }
 
@@ -82,9 +87,9 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
+        public String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C2}", d);
         }
     }
 }

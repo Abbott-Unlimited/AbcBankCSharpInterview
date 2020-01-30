@@ -40,7 +40,17 @@ namespace abc_bank
             }
         }
 
-        public double InterestEarned() 
+        public void Transfer(Account transferFrom, Account transferTo, double amount)
+        {
+            if (amount <= 0) {
+                throw new ArgumentException("amount must be greater than zero");
+            } else {
+                transferFrom.Withdraw(amount);
+                transferTo.Deposit(amount);
+            }
+        }
+
+        public double InterestEarned(Account acc) 
         {
             double amount = sumTransactions();
             switch(accountType){
@@ -53,11 +63,11 @@ namespace abc_bank
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    // Change Maxi-Savings accounts to have an interest rate of 5% assuming 
+                    // no withdrawals in the past 10 days otherwise 0.1%.
+                    if (isEligible(acc) == true)
+                        return amount * 0.05;
+                    return amount * 0.001;
                 default:
                     return amount * 0.001;
             }
@@ -80,5 +90,19 @@ namespace abc_bank
             return accountType;
         }
 
+        public bool isEligible(Account acc) {
+            bool eligible = true;
+            if (acc.accountType == 2) {
+                foreach (Transaction t in acc.transactions) {
+                    DateTime d = t.transactionDate;
+                    // If transaction was made in last 10 days
+                    // then customer is ineligible.
+                    if (d >= DateTime.Now.AddDays(-10)) {
+                        eligible = false;
+                    }
+                }
+            }
+            return eligible;
+        }
     }
 }
