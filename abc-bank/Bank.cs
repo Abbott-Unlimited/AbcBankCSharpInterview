@@ -6,52 +6,44 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
-    public class Bank
+    public class Bank : IBank
     {
-        private List<Customer> customers;
+        private IList<ICustomer> Customers;
 
         public Bank()
         {
-            customers = new List<Customer>();
+            Customers = new List<ICustomer>();
         }
 
-        public void AddCustomer(Customer customer)
+        public void AddCustomer(ICustomer customer)
         {
-            customers.Add(customer);
+            Customers.Add(customer);
         }
 
-        public String CustomerSummary() {
+        public String GetCustomerSummary() {
             String summary = "Customer Summary";
-            foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+            foreach (ICustomer c in Customers)
+                summary += c.ToString();
             return summary;
         }
 
-        //Make sure correct plural of word is created based on the number passed in:
-        //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
-        {
-            return number + " " + (number == 1 ? word : word + "s");
-        }
-
-        public double totalInterestPaid() {
+        public double GetTotalInterestPaid() {
             double total = 0;
-            foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
+            foreach(ICustomer c in Customers)
+                total += c.GetTotalInterestEarned();
             return total;
         }
 
-        public String GetFirstCustomer()
+        public String GetFirstCustomerName()
         {
             try
             {
-                customers = null;
-                return customers[0].GetName();
+                return Customers[0].GetName();
             }
             catch (Exception e)
             {
                 Console.Write(e.StackTrace);
-                return "Error";
+                return "error";
             }
         }
     }

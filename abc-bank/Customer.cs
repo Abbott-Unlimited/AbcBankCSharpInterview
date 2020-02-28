@@ -6,85 +6,64 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
-    public class Customer
+    public class Customer : ICustomer
     {
-        private String name;
-        private List<Account> accounts;
+        private readonly string Name;
+        private readonly IList<IAccount> Accounts;
 
-        public Customer(String name)
+        public Customer(string name)
         {
-            this.name = name;
-            this.accounts = new List<Account>();
+            Name = name;
+            Accounts = new List<IAccount>();
         }
 
-        public String GetName()
+        public string GetName()
         {
-            return name;
+            return Name;
         }
 
-        public Customer OpenAccount(Account account)
+        public IList<IAccount> GetAccounts()
         {
-            accounts.Add(account);
-            return this;
+            return Accounts;
+        }
+
+        public void OpenAccount(IAccount account)
+        {
+            Accounts.Add(account);
         }
 
         public int GetNumberOfAccounts()
         {
-            return accounts.Count;
+            return Accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public double GetTotalInterestEarned() 
         {
             double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
+            foreach (IAccount a in Accounts)
+                total += a.GetInterestEarned();
             return total;
         }
 
-        public String GetStatement() 
+        public string GetStatement() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
+            string statement = "Statement for " + Name + "\n";
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (IAccount a in Accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statement += "\n" + a.ToString() + "\n";
+                total += a.GetAccountBalance();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
+            statement += "\nTotal In All Accounts " + total.ToString("c");
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        public override string ToString()
         {
-            String s = "";
-
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
-
-            //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
-            }
-            s += "Total " + ToDollars(total);
-            return s;
-        }
-
-        private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return string.Format("\n - {0} ({1} account{2})",
+                GetName(),
+                GetNumberOfAccounts(), 
+                (GetNumberOfAccounts() > 1 ? "s" : ""));    
         }
     }
 }

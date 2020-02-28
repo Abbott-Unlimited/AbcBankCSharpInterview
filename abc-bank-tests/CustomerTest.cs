@@ -8,12 +8,73 @@ namespace abc_bank_tests
     public class CustomerTest
     {
         [TestMethod]
-        public void TestApp()
+        public void GetNameForOscarIsOscar()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
-            Account savingsAccount = new Account(Account.SAVINGS);
+            ICustomer oscar = new Customer("Oscar");
 
-            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+            Assert.AreEqual("Oscar", oscar.GetName());
+        }
+
+        [TestMethod]
+        public void OpenAccountCheckingAccountAddsCheckingAccount()
+        {
+            ICustomer oscar = new Customer("Oscar");
+
+            oscar.OpenAccount(new CheckingAccount());
+
+            Assert.IsTrue(oscar.GetAccounts()[0].GetType() == typeof(CheckingAccount));
+        }
+
+        [TestMethod]
+        public void OpenAccountSavingsAccountAddsSavingsAccount()
+        {
+            ICustomer oscar = new Customer("Oscar");
+
+            oscar.OpenAccount(new SavingsAccount());
+
+            Assert.IsTrue(oscar.GetAccounts()[0].GetType() == typeof(SavingsAccount));
+        }
+
+        [TestMethod]
+        public void OpenAccountMaxiSavingsAccountAddsMaxiSavingsAccount()
+        {
+            ICustomer oscar = new Customer("Oscar");
+
+            oscar.OpenAccount(new MaxiSavingsAccount());
+
+            Assert.IsTrue(oscar.GetAccounts()[0].GetType() == typeof(MaxiSavingsAccount));
+        }
+
+        [TestMethod]
+        public void GetNumberOfAccountsOneAccountShowsOne()
+        {
+            ICustomer oscar = new Customer("Oscar");
+
+            oscar.OpenAccount(new CheckingAccount());
+
+            Assert.AreEqual(1, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void GetNumberOfAccountsTwoAccountsShowsTwo()
+        {
+            ICustomer oscar = new Customer("Oscar");
+
+            oscar.OpenAccount(new CheckingAccount());
+            oscar.OpenAccount(new SavingsAccount());
+
+            Assert.AreEqual(2, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void GetStatementShowsTransactionsAndTotals()
+        {
+            IAccount checkingAccount = new CheckingAccount();
+            IAccount savingsAccount = new SavingsAccount();
+
+            ICustomer henry = new Customer("Henry");
+            henry.OpenAccount(checkingAccount);
+            henry.OpenAccount(savingsAccount);
 
             checkingAccount.Deposit(100.0);
             savingsAccount.Deposit(4000.0);
@@ -31,32 +92,6 @@ namespace abc_bank_tests
                     "Total $3,800.00\n" +
                     "\n" +
                     "Total In All Accounts $3,900.00", henry.GetStatement());
-        }
-
-        [TestMethod]
-        public void TestOneAccount()
-        {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
-            Assert.AreEqual(1, oscar.GetNumberOfAccounts());
-        }
-
-        [TestMethod]
-        public void TestTwoAccount()
-        {
-            Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(2, oscar.GetNumberOfAccounts());
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestThreeAccounts()
-        {
-            Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
 }
