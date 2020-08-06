@@ -8,7 +8,7 @@ There are several deliberate design, code quality and test issues that should be
 
 * Fix broken (non-passing), incorrect, or incomplete tests.
 * Refactor and add features (from the section below) as you see fit; there is no need to add all the features in order to "complete" the exercise. Keep in mind that code quality is the critical measure and there should be an obvious focus on testing.
-* Treat this code as if you owned this application, do whatever you feel is necessary to make this your own.
+* Treat this code as if you owned this application, do whatever you feel is necessary to make this your own. *Clarification:* Please do not change the testing framework.
 * In order to work on this take a fork into your own GitHub area; make whatever changes you feel are necessary and when you are satisfied submit back via a pull request. See details on GitHub's [Fork & Pull](https://help.github.com/articles/using-pull-requests) model.
 * You're welcome to spend as much time as you like; however it's anticipated that this should take about 2 hours.
 
