@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
     public class Account
     {
-
         public const int CHECKING = 0;
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
 
         private readonly int accountType;
+
+        private bool tenDaySpan;
+
+        public bool NoWithdrawslnLastTenDays
+        {
+            get { return tenDaySpan; }
+            set { tenDaySpan = value; }
+        }
+
         public List<Transaction> transactions;
 
         public Account(int accountType) 
@@ -46,39 +52,50 @@ namespace abc_bank
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
+
                         return amount * 0.001;
                     else
-                        return 1 + (amount-1000) * 0.002;
+
+                        return 1 + (amount - 1000) * 0.002;
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
+                    NoWithdrawslnLastTenDays = transactions.Any(t => t.GetTransactionDate().AddDays(-10).Equals(true));
+
+                    // Additional Feature #2 needs clarification to see if 2% is to be removed
                     if (amount <= 1000)
+
                         return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    if (amount <= 2000 && NoWithdrawslnLastTenDays.Equals(true))
+
+                        return 20 + (amount - 1000) * 0.05;
+                    return 70 + (amount - 2000) * 0.1;
                 default:
+
                     return amount * 0.001;
             }
         }
 
         public double sumTransactions() {
+
            return CheckIfTransactionsExist(true);
         }
 
         private double CheckIfTransactionsExist(bool checkAll) 
         {
             double amount = 0.0;
+
             foreach (Transaction t in transactions)
                 amount += t.amount;
+
             return amount;
         }
 
         public int GetAccountType() 
         {
+
             return accountType;
         }
-
     }
 }

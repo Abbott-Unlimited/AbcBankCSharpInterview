@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
@@ -16,6 +12,12 @@ namespace abc_bank
         {
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
+        }
+
+        public DateTime GetTransactionDate() 
+        {
+            
+            return transactionDate;
         }
     }
 }

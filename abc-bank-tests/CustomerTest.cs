@@ -1,6 +1,7 @@
-﻿using System;
+﻿using abc_bank;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using abc_bank;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace abc_bank_tests
 {
@@ -27,7 +28,7 @@ namespace abc_bank_tests
                     "\n" +
                     "Savings Account\n" +
                     "  deposit $4,000.00\n" +
-                    "  withdrawal $200.00\n" +
+                    "  withdrawal ($200.00)\n" +
                     "Total $3,800.00\n" +
                     "\n" +
                     "Total In All Accounts $3,900.00", henry.GetStatement());
@@ -43,19 +44,18 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestTwoAccount()
         {
-            Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(Account.SAVINGS));
+            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
             Assert.AreEqual(2, oscar.GetNumberOfAccounts());
         }
 
         [TestMethod]
-        [Ignore]
+        //[Ignore]
         public void TestThreeAccounts()
         {
-            Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
+            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }

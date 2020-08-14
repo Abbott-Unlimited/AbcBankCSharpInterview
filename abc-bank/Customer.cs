@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
@@ -19,13 +16,27 @@ namespace abc_bank
 
         public String GetName()
         {
+            
             return name;
         }
 
         public Customer OpenAccount(Account account)
         {
             accounts.Add(account);
+            
             return this;
+        }
+
+        public List<Account> GetAccounts() 
+        {
+            
+            return accounts;
+        }
+
+        public void TransferFunds(Account Source, Account Destination, Double Amount) 
+        {
+            Source.Withdraw(Amount);
+            Destination.Deposit(Amount);
         }
 
         public int GetNumberOfAccounts()
@@ -37,7 +48,10 @@ namespace abc_bank
         {
             double total = 0;
             foreach (Account a in accounts)
+            {
                 total += a.InterestEarned();
+            }
+
             return total;
         }
 
@@ -52,6 +66,7 @@ namespace abc_bank
                 total += a.sumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
+            
             return statement;
         }
 
@@ -79,12 +94,15 @@ namespace abc_bank
                 total += t.amount;
             }
             s += "Total " + ToDollars(total);
+            
             return s;
         }
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            //return String.Format("$%,.2f", Math.Abs(d));
+
+            return String.Format("{0:C2}", Convert.ToInt32(d));
         }
     }
 }
