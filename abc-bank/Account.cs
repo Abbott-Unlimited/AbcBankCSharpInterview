@@ -31,14 +31,15 @@ namespace abc_bank
             }
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(double amount, DateTime? transactionDate = null) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(-amount));
+                transactions.Add(new Transaction(-amount, transactionDate));
             }
         }
+
 
         public double InterestEarned() 
         {
@@ -49,15 +50,15 @@ namespace abc_bank
                         return amount * 0.001;
                     else
                         return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    if (transactions.Where(x => x.amount < 0).Any(x => x.transactionDate >= DateTime.Now.AddDays(-10)))
+                    {
+                        return amount * 0.001;
+                    }
+                    else
+                    {
+                        return amount * 0.05;
+                    }
                 default:
                     return amount * 0.001;
             }

@@ -19,7 +19,8 @@ namespace abc_bank_tests
             savingsAccount.Deposit(4000.0);
             savingsAccount.Withdraw(200.0);
 
-            Assert.AreEqual("Statement for Henry\n" +
+            var statement = henry.GetStatement();
+            var shouldbe = "Statement for Henry\n" +
                     "\n" +
                     "Checking Account\n" +
                     "  deposit $100.00\n" +
@@ -27,10 +28,13 @@ namespace abc_bank_tests
                     "\n" +
                     "Savings Account\n" +
                     "  deposit $4,000.00\n" +
-                    "  withdrawal $200.00\n" +
+                    "  withdrawal ($200.00)\n" +
                     "Total $3,800.00\n" +
                     "\n" +
-                    "Total In All Accounts $3,900.00", henry.GetStatement());
+                    "Total In All Accounts $3,900.00";
+            Console.WriteLine(statement);
+            Console.WriteLine(shouldbe);
+            Assert.AreEqual(statement, shouldbe);
         }
 
         [TestMethod]
@@ -57,6 +61,24 @@ namespace abc_bank_tests
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void Transfer()
+        {
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(Account.CHECKING);
+            Customer bill = new Customer("Bill");
+            bank.AddCustomer(bill.OpenAccount(checkingAccount));
+            Account savingsAccount = new Account(Account.SAVINGS);
+            checkingAccount.Deposit(900);
+            savingsAccount.Deposit(1800);
+            bill.Transfer(checkingAccount, savingsAccount, 200);
+
+
+            Assert.AreEqual(700, checkingAccount.sumTransactions());
+            Assert.AreEqual(2000, savingsAccount.sumTransactions());
+
         }
     }
 }
