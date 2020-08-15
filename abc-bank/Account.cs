@@ -90,11 +90,7 @@ namespace abc_bank
                     else
                         return (1.0 / 365) + (amount - 1000) * (0.002 / 365);
                 case MAXI_SAVINGS:
-                    //todo: broke these up for easy debugging.  may want to put them back into one statement
-                    var withdrawals = transactions.Where(x => x.amount < 0 && x.transactionDate <= interestDate);
-                    var tendaysago = interestDate.AddDays(-10);
-                    var withdrawalLast10days = withdrawals.Any(x => x.transactionDate >= tendaysago);
-                    if (withdrawalLast10days)
+                    if (transactions.Where(x => x.amount < 0 && x.transactionDate <= interestDate).Any(x => x.transactionDate >= interestDate.AddDays(-10)))
                     {
                         return amount * 0.001 / 365;
                     }

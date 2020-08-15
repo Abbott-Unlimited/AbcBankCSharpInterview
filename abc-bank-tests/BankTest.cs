@@ -81,7 +81,7 @@ namespace abc_bank_tests
             maxiSavingsAccount.Withdraw(200, withdrawalDate);
             //Interest should be 1500 *  6 days + 1300 * 15 days
 
-            Assert.AreEqual(2.15890, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(1.956986, bank.totalInterestPaid(), DOUBLE_DELTA);
 
         }
 
