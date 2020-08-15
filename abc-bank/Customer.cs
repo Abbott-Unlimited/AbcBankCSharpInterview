@@ -48,7 +48,7 @@ namespace abc_bank
             foreach (Account a in accounts)
             {
                 statement.Append(string.Format("\n{0}\n", statementForAccount(a)));
-                total += a.sumTransactions();
+                total += a.sumTransactions(DateTime.Now);
             }
             statement.Append(string.Format("\nTotal In All Accounts {0}", ToDollars(total)));
             return statement.ToString();

@@ -8,7 +8,7 @@ namespace abc_bank_tests
     public class BankTest
     {
 
-        private static readonly double DOUBLE_DELTA = 1e-15;
+        private static readonly double DOUBLE_DELTA = 1e-5;
 
         [TestMethod]
         public void CustomerSummary() 
@@ -30,7 +30,7 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(100.0);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(0.00027, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
@@ -39,9 +39,9 @@ namespace abc_bank_tests
             Account savingsAccount = new Account(Account.SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(savingsAccount));
 
-            savingsAccount.Deposit(1500.0);
+            savingsAccount.Deposit(1500.0, DateTime.Now.AddDays(-365));
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(2.00547, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
@@ -51,9 +51,9 @@ namespace abc_bank_tests
             Account savingsAccount = new Account(Account.SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(savingsAccount));
 
-            savingsAccount.Deposit(900);
+            savingsAccount.Deposit(900, DateTime.Now.AddDays(-365));
 
-            Assert.AreEqual(.9, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(.90246, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace abc_bank_tests
             maxiSavingsAccount.Deposit(3000.0);
             maxiSavingsAccount.Withdraw(200.0);
 
-            Assert.AreEqual(2.8, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(0.00767, bank.totalInterestPaid(), DOUBLE_DELTA);
 
         }
 
@@ -75,13 +75,13 @@ namespace abc_bank_tests
             Bank bank = new Bank();
             Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(maxiSavingsAccount));
-
-            maxiSavingsAccount.Deposit(1500);
+            DateTime? depositDate = DateTime.Now.AddDays(-20);
+            maxiSavingsAccount.Deposit(1500, depositDate);
             DateTime? withdrawalDate = DateTime.Now.AddDays(-15);
             maxiSavingsAccount.Withdraw(200, withdrawalDate);
+            //Interest should be 1500 *  6 days + 1300 * 15 days
 
-
-            Assert.AreEqual(65.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(2.15890, bank.totalInterestPaid(), DOUBLE_DELTA);
 
         }
 

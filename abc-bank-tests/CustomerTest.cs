@@ -76,8 +76,8 @@ namespace abc_bank_tests
             bill.Transfer(checkingAccount, savingsAccount, 200);
 
 
-            Assert.AreEqual(700, checkingAccount.sumTransactions());
-            Assert.AreEqual(2000, savingsAccount.sumTransactions());
+            Assert.AreEqual(700, checkingAccount.sumTransactions(DateTime.Now));
+            Assert.AreEqual(2000, savingsAccount.sumTransactions(DateTime.Now));
 
         }
     }
