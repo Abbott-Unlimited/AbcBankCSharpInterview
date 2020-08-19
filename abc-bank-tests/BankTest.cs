@@ -1,6 +1,6 @@
-﻿using System;
+﻿using abc_bank;
+using abc_bank.Accounts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using abc_bank;
 
 namespace abc_bank_tests
 {
@@ -8,42 +8,28 @@ namespace abc_bank_tests
     public class BankTest
     {
         [TestMethod]
-        public void CustomerSummary_ReportsOnCustomersAndTheirOpenedAccounts()
+        public void GetCustomerSummaryReport_ListsCustomersAndTheirOpenedAccounts()
         {
             Bank bofa = new Bank();
             Customer mark = new Customer("Mark");
             bofa.AddCustomer(mark);
-            mark.OpenAccount(new Account(Account.CHECKING));
-            mark.OpenAccount(new Account(Account.SAVINGS));
+            mark.OpenAccount(new CheckingAccount());
+            mark.OpenAccount(new SavingsAccount());
+            Customer jim = new Customer("Jim");
+            bofa.AddCustomer(jim);
+            jim.OpenAccount(new SavingsAccount());
 
-            string report = bofa.CustomerSummary();
+            string report = bofa.GetCustomerSummaryReport();
 
-            Assert.AreEqual("Customer Summary\n - Mark (2 accounts)", report);
+            Assert.AreEqual("Customer Summary\n - Mark (2 accounts)\n - Jim (1 account)", report);
         }
 
         [TestMethod]
-        public void CustomerSummary_PluralizesAccountsToBeGrammaticallyCorrect()
-        {
-            Bank capfed = new Bank();
-            Customer fred = new Customer("Fred");
-            capfed.AddCustomer(fred);
-            fred.OpenAccount(new Account(Account.CHECKING));
-            Customer jane = new Customer("Jane");
-            capfed.AddCustomer(jane);
-            jane.OpenAccount(new Account(Account.CHECKING));
-            jane.OpenAccount(new Account(Account.SAVINGS));
-
-            string report = capfed.CustomerSummary();
-
-            Assert.AreEqual("Customer Summary\n - Fred (1 account)\n - Jane (2 accounts)", report);
-        }
-
-        [TestMethod]
-        public void CustomerSummary_HasNothingToReportOnWithoutCustomers()
+        public void GetCustomerSummaryReport_HasNothingToReportOnWithoutCustomers()
         {
             Bank lonelyBank = new Bank();
 
-            string report = lonelyBank.CustomerSummary();
+            string report = lonelyBank.GetCustomerSummaryReport();
 
             Assert.AreEqual("Customer Summary", report);
         }
@@ -55,17 +41,17 @@ namespace abc_bank_tests
 
             Customer john = new Customer("John");
             bofa.AddCustomer(john);
-            Account johnChecking = new Account(Account.CHECKING);
+            Account johnChecking = new CheckingAccount();
             john.OpenAccount(johnChecking);
             johnChecking.Deposit(10000.0);
 
             Customer peter = new Customer("Peter");
             bofa.AddCustomer(peter);
-            Account peterMaxiSavings = new Account(Account.MAXI_SAVINGS);
+            Account peterMaxiSavings = new MaxiSavingsAccount();
             peter.OpenAccount(peterMaxiSavings);
             peterMaxiSavings.Deposit(3000.0);
 
-            double result = bofa.totalInterestPaid();
+            double result = bofa.TotalInterestPaid;
 
             // John's $10,000 in checking at 0.01% = 10, plus
             // Peter's $3,000 in maxi savings (first thousand at 2% (20),
