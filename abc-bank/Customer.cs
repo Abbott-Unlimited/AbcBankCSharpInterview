@@ -1,25 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
+        public string name;
+        public List<Account> accounts;
 
         public Customer(String name)
         {
             this.name = name;
-            this.accounts = new List<Account>();
-        }
-
-        public String GetName()
-        {
-            return name;
+            accounts = new List<Account>();
         }
 
         public Customer OpenAccount(Account account)
@@ -28,63 +20,45 @@ namespace abc_bank
             return this;
         }
 
-        public int GetNumberOfAccounts()
+        public void Transfer(Account acctFrom, Account acctTo, double amount)
         {
-            return accounts.Count;
-        }
-
-        public double TotalInterestEarned() 
-        {
-            double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
-            return total;
+            if (acctFrom.CalculateBalance() < amount)
+            {
+                throw new ArgumentException("Transfer Amount must be no larger than amount in source account.");
+            }
+            acctFrom.AddTransaction(-amount);
+            acctTo.AddTransaction(amount);
         }
 
         public String GetStatement() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
+            string statement = $"Statement for {name}\n";
             double total = 0.0;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statement += AccountDetails(a);
+                total += a.CalculateBalance();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
+            statement += $"\nTotal In All Accounts {String.Format("{0:C2}", total)}";
             return statement;
         }
-
-        private String statementForAccount(Account a) 
+     
+        private String AccountDetails(Account a) 
         {
-            String s = "";
+            var s = $"\n{a.accountType.GetDescription()} Account\n";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
-
-            //Now total up all the transactions
             double total = 0.0;
             foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
+                s += $"\t{(t.amount < 0 ? "withdrawal" : "deposit")} {ToDollars(t.amount)}\n";
                 total += t.amount;
             }
-            s += "Total " + ToDollars(total);
+            s += $"Total {ToDollars(total)}\n";
             return s;
         }
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C2}", Math.Abs(d));
         }
     }
 }

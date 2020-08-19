@@ -8,11 +8,12 @@ namespace abc_bank_tests
     public class TransactionTest
     {
         [TestMethod]
-        public void Transaction()
+        public void TransactionConstructorShouldSetAmountAndTransactionDate()
         {
-            Transaction t = new Transaction(5);
-            //t instanceOf Transaction
-            Assert.IsTrue(t.GetType() == typeof(Transaction));
+            var transAmt = 5;
+            Transaction t = new Transaction(transAmt);
+            Assert.AreEqual(transAmt, t.amount);
+            Assert.IsTrue(DateTime.Now.AddSeconds(3) > t.transactionDate);
         }
     }
 }

@@ -50,8 +50,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BankTest.cs" />
-    <Compile Include="CustomerTest.cs" />
+    <Compile Include="AccountTests\AddTransactionShould.cs" />
+    <Compile Include="AccountTests\CalculateBalanceShould.cs" />
+    <Compile Include="AccountTests\CalculateInterestEarnedShould.cs" />
+    <Compile Include="BankTests\AddCustomerShould.cs" />
+    <Compile Include="BankTests\CalculateTotalInterestPaidShould.cs" />
+    <Compile Include="BankTests\GetCustomerSummaryShould.cs" />
+    <Compile Include="CustomerTests\GetStatementShould.cs" />
+    <Compile Include="CustomerTests\OpenAccountShould.cs" />
+    <Compile Include="CustomerTests\TransferShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionTest.cs" />
   </ItemGroup>
