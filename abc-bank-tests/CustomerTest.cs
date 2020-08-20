@@ -1,6 +1,7 @@
 ﻿using abc_bank;
 using abc_bank.Accounts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace abc_bank_tests
 {
@@ -76,6 +77,50 @@ namespace abc_bank_tests
             // $2000 in savings (first thousand at 0.01% (1),
             //   second thousand at 0.02% (2)) = 3
             Assert.AreEqual(4.0, interest);
+        }
+
+        [TestMethod]
+        public void TransferBetweenAccounts_AllowsCustomerToMoveMoney()
+        {
+            Customer james = new Customer("James");
+            Account checking = new CheckingAccount();
+            Account savings = new SavingsAccount();
+            james.OpenAccount(checking).OpenAccount(savings);
+            checking.Deposit(1000.0);
+            savings.Deposit(2000.0);
+
+            james.TransferBetweenAccounts(savings, checking, 500.0);
+
+            Assert.AreEqual(1500.0, checking.Balance);
+            Assert.AreEqual(1500.0, savings.Balance);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TransferBetweenAccounts_SourceAccountMustBelongToCustomer()
+        {
+            Customer bob = new Customer("Bob");
+            Account bobChecking = new CheckingAccount();
+            bob.OpenAccount(bobChecking);
+            bobChecking.Deposit(2000.0);
+            Account saulSavings = new SavingsAccount();
+            saulSavings.Deposit(4000.0);
+
+            bob.TransferBetweenAccounts(saulSavings, bobChecking, 2000.0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TransferBetweenAccounts_TargetAccountMustBelongToCustomer()
+        {
+            Customer jim = new Customer("Jim");
+            Account jimChecking = new CheckingAccount();
+            jim.OpenAccount(jimChecking);
+            jimChecking.Deposit(2500.0);
+            Account mindyChecking = new CheckingAccount();
+            mindyChecking.Deposit(1800.0);
+
+            jim.TransferBetweenAccounts(jimChecking, mindyChecking, 500.0);
         }
 
         [TestMethod]

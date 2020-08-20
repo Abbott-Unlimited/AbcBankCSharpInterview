@@ -14,7 +14,7 @@ namespace abc_bank
 
         public double Balance => Transactions.Sum(transaction => transaction.Amount);
 
-        public void Deposit(double amount)
+        public virtual void Deposit(double amount)
         {
             if (amount <= 0)
             {
@@ -24,7 +24,7 @@ namespace abc_bank
             Transactions.Add(new Transaction(amount));
         }
 
-        public void Withdraw(double amount)
+        public virtual void Withdraw(double amount)
         {
             if (amount <= 0)
             {
@@ -32,6 +32,24 @@ namespace abc_bank
             }
 
             Transactions.Add(new Transaction(-amount));
+        }
+
+        public virtual void Transfer(Account accountTransferingTo, double amount)
+        {
+            Transaction withdrawal = new Transaction(-amount);
+            Transactions.Add(withdrawal);
+
+            try
+            {
+                accountTransferingTo.Deposit(amount);
+            }
+            catch
+            {
+                // Ensure that if something goes wrong during the deposit that the original
+                // withdraw transaction on this account is removed so funds are not lost.
+                Transactions.Remove(withdrawal);
+                throw;
+            }
         }
     }
 }

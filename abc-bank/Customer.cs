@@ -37,6 +37,22 @@ namespace abc_bank
             return statement;
         }
 
+        public void TransferBetweenAccounts(Account sourceAccount, Account targetAccount, double amount)
+        {
+            // Ensure both accounts belong to the customer before allowing the transfer
+            if (sourceAccount == null || !Accounts.Contains(sourceAccount))
+            {
+                throw new ArgumentException("must belong to the customer", nameof(sourceAccount));
+            }
+
+            if (targetAccount == null || !Accounts.Contains(targetAccount))
+            {
+                throw new ArgumentException("must belong to the customer", nameof(targetAccount));
+            }
+
+            sourceAccount.Transfer(targetAccount, amount);
+        }
+
         public string ToNameAndAccountsCountString() =>
             $"{Name} ({Accounts.Count} {(Accounts.Count == 1 ? "account" : "accounts")})";
 
