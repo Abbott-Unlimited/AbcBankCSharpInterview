@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//WT1 Claude Collins August 2020
+//WT3 Claude Collins August 2020 (xfer money)
+
 namespace abc_bank
 {
     public class Customer
@@ -84,7 +87,32 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+			//return String.Format("$%,.2f", Math.Abs(d));
+			//WT1 - Replaced above with below. Above is for Java
+			return String.Format("{0:C}", Math.Abs(d));
         }
-    }
+
+		//WT3 added below Xfer
+		public void Xfer(Account from, Account to, double amount)
+		{
+			if (amount <= 0)
+			{
+				throw new ArgumentException("Amount must be greater than zero");
+			}
+			else if (from == to)
+			{
+				throw new ArgumentException("Accounts must be different");
+			}
+			else if (amount > from.sumTransactions())
+			{
+				throw new ArgumentException("Not enough moola in account to transfer");
+			}
+			else
+			{
+				from.Withdraw(amount);
+				to.Deposit(amount);
+			}
+		}
+
+	}
 }

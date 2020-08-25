@@ -2,6 +2,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
 
+//WT2 Claude Collins August 2020
+//    Was ignored due to fail. Only two accounts were added, not three.
+
+//WT3 Claude Collins August 2020 (xfer between accounts)
+
 namespace abc_bank_tests
 {
     [TestClass]
@@ -33,7 +38,21 @@ namespace abc_bank_tests
                     "Total In All Accounts $3,900.00", henry.GetStatement());
         }
 
-        [TestMethod]
+		//WT3 added below TestXfer()
+		[TestMethod]
+		public void TestXfer()
+		{
+			Account checkingAccount = new Account(Account.CHECKING);
+			Account savingsAccount = new Account(Account.SAVINGS);
+
+			Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+
+			checkingAccount.Deposit(100);
+
+			henry.Xfer(checkingAccount, savingsAccount, 50);
+		}
+
+		[TestMethod]
         public void TestOneAccount()
         {
             Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
@@ -50,12 +69,13 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
+		//[Ignore] //WT2 commented out
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+			oscar.OpenAccount(new Account(Account.MAXI_SAVINGS)); //added WT2
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
