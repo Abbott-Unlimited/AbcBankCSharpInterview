@@ -55,6 +55,12 @@ namespace abc_bank
             return statement;
         }
 
+        public void TransferBetweenAccounts(Account accountA, Account accountB, Double amount)
+        {
+            accountA.Withdraw(amount);
+            accountB.Deposit(amount);
+        }
+
         private String statementForAccount(Account a) 
         {
             String s = "";
@@ -84,7 +90,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C}", Math.Abs(d));
         }
     }
 }

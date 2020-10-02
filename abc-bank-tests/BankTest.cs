@@ -51,8 +51,8 @@ namespace abc_bank_tests
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(3000.0);
-
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            //170
+            Assert.AreEqual(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }
