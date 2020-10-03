@@ -84,6 +84,18 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
+        public void Maxi_savings_account_negative()
+        {
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(AccountType.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+
+            checkingAccount.Withdraw(10000.0);
+
+            Assert.AreEqual(0.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        }
+
+        [TestMethod]
         public void Maxi_savings_account_old()
         {
             Bank bank = new Bank();

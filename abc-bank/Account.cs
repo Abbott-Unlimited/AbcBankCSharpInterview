@@ -70,7 +70,16 @@ namespace abc_bank
         public double InterestEarned() 
         {
             double amount = sumTransactions();
-            switch(accountType){
+            if (amount < 0)
+            {
+                // no interest on debt
+                return 0;
+            }
+
+            var dateProvider = new DateProvider();
+            var today = dateProvider.Now();
+            var date = transactions[transactions.Count - 1].GetDate();
+            switch (accountType){
                 case AccountType.SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.001;
@@ -80,9 +89,7 @@ namespace abc_bank
     //                if (amount <= 4000)
     //                    return 20;
                 case AccountType.MAXI_SAVINGS:
-                    var dateProvider = new DateProvider();
-                    var today = dateProvider.Now();
-                    var date = transactions[transactions.Count - 1].GetDate();
+                    
                     if (date.AddDays(10) < today)
                         return amount * 0.05;
                     return amount * 0.001;
