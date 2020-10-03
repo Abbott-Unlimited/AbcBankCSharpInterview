@@ -9,12 +9,12 @@ namespace abc_bank
     public class Customer
     {
         private String name;
-        private List<Account> accounts;
+        private HashSet<Account> accounts; // HashSet to prevent duplicates
 
         public Customer(String name)
         {
             this.name = name;
-            this.accounts = new List<Account>();
+            this.accounts = new HashSet<Account>();
         }
 
         public String GetName()
@@ -51,8 +51,18 @@ namespace abc_bank
                 statement += "\n" + statementForAccount(a) + "\n";
                 total += a.sumTransactions();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
+            statement += "\nTotal In All Accounts " + ToDollars(total, true);
             return statement;
+        }
+
+        public void Transfer(Account accountA, Account accountB, double amount) 
+        {
+            if (accounts.Contains(accountA) && accounts.Contains(accountB)) {
+                accountA.Withdraw(amount);
+                accountB.Deposit(amount);
+            }
+
+            return;
         }
 
         private String statementForAccount(Account a) 
@@ -61,13 +71,13 @@ namespace abc_bank
 
            //Translate to pretty account type
             switch(a.GetAccountType()){
-                case Account.CHECKING:
+                case AccountType.CHECKING:
                     s += "Checking Account\n";
                     break;
-                case Account.SAVINGS:
+                case AccountType.SAVINGS:
                     s += "Savings Account\n";
                     break;
-                case Account.MAXI_SAVINGS:
+                case AccountType.MAXI_SAVINGS:
                     s += "Maxi Savings Account\n";
                     break;
             }
@@ -75,16 +85,18 @@ namespace abc_bank
             //Now total up all the transactions
             double total = 0.0;
             foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
+                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount, false) + "\n";
                 total += t.amount;
             }
-            s += "Total " + ToDollars(total);
+            s += "Total " + ToDollars(total, true);
             return s;
         }
 
-        private String ToDollars(double d)
+        private String ToDollars(double d, bool isTotal)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            var absValue = Math.Abs(d);
+            var value = d < 0 && isTotal ? string.Format("-${0:N2}", absValue) : string.Format("${0:N2}", absValue);
+            return value;
         }
     }
 }

@@ -10,6 +10,8 @@ namespace abc_bank
     {
         private static DateProvider instance = null;
 
+        private static DateTime? time;
+
         public static DateProvider getInstance()
         {
             if (instance == null)
@@ -17,9 +19,14 @@ namespace abc_bank
             return instance;
         }
 
+        public static void setInstance(DateTime? mockTime)
+        {
+            time = mockTime;
+        }
+
         public DateTime Now()
         {
-            return DateTime.Now;
+            return time.HasValue ? time.Value : DateTime.Now;
         }
     }
 }

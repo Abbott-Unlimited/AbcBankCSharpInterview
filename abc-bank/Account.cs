@@ -6,17 +6,35 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// Type of account an account can be
+    /// </summary>
+    public enum AccountType
+    {
+        CHECKING,
+        SAVINGS,
+        MAXI_SAVINGS
+    }
+
+    /// <summary>
+    /// Account under a customer
+    /// </summary>
     public class Account
     {
-
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
+        /// <summary>
+        /// Type of account this account is
+        /// </summary>
+        private readonly AccountType accountType;
+        /// <summary>
+        /// Transaction history for this account
+        /// </summary>
         public List<Transaction> transactions;
 
-        public Account(int accountType) 
+        /// <summary>
+        /// Contstructor setting defaults for this account (account type and empty transaction history)
+        /// </summary>
+        /// <param name="accountType">Account type this account is</param>
+        public Account(AccountType accountType) 
         {
             this.accountType = accountType;
             this.transactions = new List<Transaction>();
@@ -44,7 +62,7 @@ namespace abc_bank
         {
             double amount = sumTransactions();
             switch(accountType){
-                case SAVINGS:
+                case AccountType.SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.001;
                     else
@@ -52,12 +70,13 @@ namespace abc_bank
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                case AccountType.MAXI_SAVINGS:
+                    var dateProvider = new DateProvider();
+                    var today = dateProvider.Now();
+                    var date = transactions[transactions.Count - 1].GetDate();
+                    if (date.AddDays(10) < today)
+                        return amount * 0.05;
+                    return amount * 0.001;
                 default:
                     return amount * 0.001;
             }
@@ -75,10 +94,9 @@ namespace abc_bank
             return amount;
         }
 
-        public int GetAccountType() 
+        public AccountType GetAccountType() 
         {
             return accountType;
         }
-
     }
 }
