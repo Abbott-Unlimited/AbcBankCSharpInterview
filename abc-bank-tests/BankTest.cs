@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
-using Moq;
 
 namespace abc_bank_tests
 {
@@ -93,9 +92,9 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(10000.0);
 
-            DateProvider.setInstance(DateTime.Now.AddDays(11));
+            DateProvider.setCustomDate(DateTime.Now.AddDays(11));
             var interest = bank.totalInterestPaid();
-            DateProvider.setInstance(null);
+            DateProvider.setCustomDate(null);
 
             Assert.AreEqual(500.0, interest, DOUBLE_DELTA);
         }

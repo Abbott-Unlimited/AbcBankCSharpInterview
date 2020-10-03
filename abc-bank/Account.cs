@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
@@ -40,6 +37,10 @@ namespace abc_bank
             this.transactions = new List<Transaction>();
         }
 
+        /// <summary>
+        /// Deposits money into the account
+        /// </summary>
+        /// <param name="amount">Amount of money being deposited</param>
         public void Deposit(double amount) 
         {
             if (amount <= 0) {
@@ -49,6 +50,10 @@ namespace abc_bank
             }
         }
 
+        /// <summary>
+        /// Withdraws money into the account
+        /// </summary>
+        /// <param name="amount">Amount of money being taken out</param>
         public void Withdraw(double amount) 
         {
             if (amount <= 0) {
@@ -58,6 +63,10 @@ namespace abc_bank
             }
         }
 
+        /// <summary>
+        /// Amount of interest this account has accrued 
+        /// </summary>
+        /// <returns>Total interest for the account</returns>
         public double InterestEarned() 
         {
             double amount = sumTransactions();
@@ -82,11 +91,19 @@ namespace abc_bank
             }
         }
 
+        /// <summary>
+        /// Gets sum of all transactions for the account
+        /// </summary>
+        /// <returns>Total sum of all trasnsactions</returns>
         public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
+           return CheckIfTransactionsExist();
         }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        /// <summary>
+        /// Gets sum of transactions, helper method for sumTransactions()
+        /// </summary>
+        /// <returns>Total sum of all trasnsactions</returns>
+        private double CheckIfTransactionsExist() 
         {
             double amount = 0.0;
             foreach (Transaction t in transactions)
@@ -94,6 +111,10 @@ namespace abc_bank
             return amount;
         }
 
+        /// <summary>
+        /// Getter method for the type of account this is
+        /// </summary>
+        /// <returns>The AccountType for this account</returns>
         public AccountType GetAccountType() 
         {
             return accountType;
