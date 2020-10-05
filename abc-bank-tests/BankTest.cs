@@ -11,7 +11,7 @@ namespace abc_bank_tests
         private static readonly double DOUBLE_DELTA = 1e-15;
 
         [TestMethod]
-        public void CustomerSummary() 
+        public void CustomerSummary()
         {
             Bank bank = new Bank();
             Customer john = new Customer("John");
@@ -53,6 +53,26 @@ namespace abc_bank_tests
             checkingAccount.Deposit(3000.0);
 
             Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void Transfer_Test()
+        {
+            Bank bank = new Bank();
+        Account checkingAccount1 = new Account(Account.CHECKING);
+        Customer bill = new Customer("Bill").OpenAccount(checkingAccount1);
+        bank.AddCustomer(bill);
+
+            checkingAccount1.Deposit(100.0);
+
+            Account checkingAccount2 = new Account(Account.CHECKING);
+        Customer tim = new Customer("Tim").OpenAccount(checkingAccount2);
+        bank.AddCustomer(tim);
+
+            checkingAccount2.Deposit(200.0);
+
+
+            Assert.AreEqual("Success", bank.Transfer(bill, checkingAccount1, tim, checkingAccount2, 100));
         }
     }
 }

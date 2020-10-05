@@ -8,7 +8,7 @@ namespace abc_bank
 {
     public class Bank
     {
-        private List<Customer> customers;
+        public List<Customer> customers;
 
         public Bank()
         {
@@ -51,6 +51,24 @@ namespace abc_bank
             catch (Exception e)
             {
                 Console.Write(e.StackTrace);
+                return "Error";
+            }
+        }
+
+        public void AddChanges(Customer oldCustomerStatus, Customer customerWithChanges)
+        {
+            customers[customers.FindIndex(c => c == oldCustomerStatus)] = customerWithChanges; 
+        }
+
+        public String Transfer(Customer personToTransferTo, Account accountToTransferTo,Customer customerToTransferFrom, Account accountToTransferFrom, double amount)
+        {
+            try { 
+                customerToTransferFrom.accounts[customerToTransferFrom.accounts.FindIndex(a => a.GetAccountType() == accountToTransferFrom.GetAccountType())].Withdraw(amount);
+                personToTransferTo.accounts[personToTransferTo.accounts.FindIndex(a => a.GetAccountType() == accountToTransferTo.GetAccountType())].Deposit(amount);
+                return "Success";
+            }
+            catch
+            {
                 return "Error";
             }
         }

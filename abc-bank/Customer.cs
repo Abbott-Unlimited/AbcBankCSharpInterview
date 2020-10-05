@@ -9,7 +9,7 @@ namespace abc_bank
     public class Customer
     {
         private String name;
-        private List<Account> accounts;
+        public List<Account> accounts;
 
         public Customer(String name)
         {
@@ -84,7 +84,33 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0}", Math.Abs(d).ToString("C"));
+        }
+
+        public void TransferToAnotherAccount(Account accountToWithdrawFrom, Account accountToAddTo, double amount)
+        {
+            accountToWithdrawFrom.Withdraw(amount);
+            accountToAddTo.Deposit(amount);
+        }
+
+        public Account GetAccount(int accountType)
+        {
+            switch(accountType)
+            {
+                case 1:
+                     Account temp = new Account(Account.CHECKING);
+                    return accounts[accounts.FindIndex(a => a.GetType() ==  temp.GetType())];
+                    
+                case 2:
+                    Account tempSavings = new Account(Account.SAVINGS);
+                    return accounts[accounts.FindIndex(a => a.GetType() == tempSavings.GetType())];
+                    
+                case 3:
+                    Account tempMaxiSavings = new Account(Account.MAXI_SAVINGS);
+                    return accounts[accounts.FindIndex(a => a.GetType() == tempMaxiSavings.GetType())];
+                    
+            }
+            return null;
         }
     }
 }
