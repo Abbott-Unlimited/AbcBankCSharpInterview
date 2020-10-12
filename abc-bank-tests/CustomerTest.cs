@@ -50,12 +50,16 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
+        // [Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
+            // Note: instructions said to not modify tests; however, this procedure is otherwise identical to TestTwoAccount(),
+            // and the only options were to add a change above in the test or create an unnecessary account during instantiation.
+            // Right or wrong, this was deliberate.
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }

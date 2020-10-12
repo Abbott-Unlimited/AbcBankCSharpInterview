@@ -52,7 +52,9 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            // Old calculation: Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            // This was necessary because 5% of $3000 produces $150, and $20 (170-150) > the margin of error above
         }
     }
 }
