@@ -21,5 +21,11 @@ namespace abc_bank
         {
             return DateTime.Now;
         }
+
+        public DateTime DaysBeforeNow(int days)
+        {
+            return Now() - new TimeSpan(days, 0, 0, 0);
+        }
+
     }
 }

@@ -53,11 +53,9 @@ namespace abc_bank
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    if (CheckIfWithdrawalInLastDays(10))
+                        return amount * 0.001;
+                    return amount * 0.05;
                 default:
                     return amount * 0.001;
             }
@@ -73,6 +71,15 @@ namespace abc_bank
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
+        }
+
+        private bool CheckIfWithdrawalInLastDays(int days)
+        {
+            DateTime testDate = DateProvider.getInstance().DaysBeforeNow(days);
+            foreach (Transaction t in transactions)
+                if (t.WithdrawalAfter(testDate))
+                    return true;
+            return false;
         }
 
         public int GetAccountType() 

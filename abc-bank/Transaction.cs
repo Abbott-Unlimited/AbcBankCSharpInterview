@@ -17,5 +17,10 @@ namespace abc_bank
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
         }
+
+        public bool WithdrawalAfter(DateTime testDate)
+        {
+            return (amount < 0) && (transactionDate >= testDate);
+        }
     }
 }
