@@ -10,7 +10,6 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestApp()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
             Account checkingAccount = new Account(Account.AccountType.CHECKING);
             Account savingsAccount = new Account(Account.AccountType.SAVINGS);
 
