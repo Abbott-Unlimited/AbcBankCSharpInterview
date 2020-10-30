@@ -80,5 +80,22 @@ namespace abc_bank
             return accountType;
         }
 
+        public void TransferTo(Account targetAccount, double amount)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+            else if (amount > sumTransactions())
+            {
+                throw new ArgumentException("amount cannot be greater than the balance in the account");
+            }
+            else
+            {
+                transactions.Add(new Transaction(-amount));
+                targetAccount.Deposit(amount);
+            }
+        }
+
     }
 }
