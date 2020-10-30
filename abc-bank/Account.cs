@@ -8,37 +8,40 @@ namespace abc_bank
 {
     public class Account
     {
+        public  enum AccountType
+        {
+            CHECKING,
+            SAVINGS,
+            MAXI_SAVINGS
+        };
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
+        private readonly AccountType accountType;
         public List<Transaction> transactions;
 
-        public Account(int accountType) 
+        public Account(AccountType accountType) 
         {
             this.accountType = accountType;
             this.transactions = new List<Transaction>();
         }
 
-        public void Deposit(decimal amount) 
+        public Account Deposit(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
                 transactions.Add(new Transaction(amount));
             }
-
+            return this;
         }
 
-        public void Withdraw(decimal amount) 
+        public Account Withdraw(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
                 transactions.Add(new Transaction(-amount));
             }
+            return this;
         }
 
         public decimal InterestEarned() 
@@ -60,23 +63,19 @@ namespace abc_bank
                     return 70 + (amount-2000) * 0.1M;
                 default:
                     throw new Exception("Unknown Account Type");
-
-        public decimal sumTransactions() {
-           return CheckIfTransactionsExist(true);
+            }
         }
 
-        private decimal CheckIfTransactionsExist(bool checkAll) 
-        {
+        public decimal sumTransactions() {
             decimal amount = 0;
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
         }
 
-        public int GetAccountType() 
+        public AccountType GetAccountType() 
         {
             return accountType;
         }
-
     }
 }
