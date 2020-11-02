@@ -10,13 +10,11 @@ namespace abc_bank
     {
         private List<Customer> customers;
 
-        public Bank()
-        {
+        public Bank() {
             customers = new List<Customer>();
         }
 
-        public void AddCustomer(Customer customer)
-        {
+        public void AddCustomer(Customer customer) {
             customers.Add(customer);
         }
 
@@ -29,29 +27,24 @@ namespace abc_bank
 
         //Make sure correct plural of word is created based on the number passed in:
         //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
-        {
+        private String format(int number, String word) {
             return number + " " + (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
-            double total = 0;
+        public decimal totalInterestPaid() {
+            decimal total = 0;
             foreach(Customer c in customers)
                 total += c.TotalInterestEarned();
             return total;
         }
 
-        public String GetFirstCustomer()
-        {
-            try
-            {
-                customers = null;
-                return customers[0].GetName();
+        public String GetFirstCustomer() {
+            try {
+                return customers.First().GetName();
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.Write(e.StackTrace);
-                return "Error";
+                return "Error: No Customers Found";
             }
         }
     }

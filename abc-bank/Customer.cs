@@ -8,72 +8,64 @@ namespace abc_bank
 {
     public class Customer
     {
-        private String name;
+        private readonly String name;
         private List<Account> accounts;
 
-        public Customer(String name)
-        {
+        public Customer(String name) {
             this.name = name;
             this.accounts = new List<Account>();
         }
 
-        public String GetName()
-        {
+        public String GetName() {
             return name;
         }
 
-        public Customer OpenAccount(Account account)
-        {
+        public Customer OpenAccount(Account account) {
             accounts.Add(account);
             return this;
         }
 
-        public int GetNumberOfAccounts()
-        {
+        public int GetNumberOfAccounts() {
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
-        {
-            double total = 0;
+        public decimal TotalInterestEarned() {
+            decimal total = 0;
             foreach (Account a in accounts)
                 total += a.InterestEarned();
             return total;
         }
 
-        public String GetStatement() 
-        {
+        public String GetStatement() {
             String statement = null;
             statement = "Statement for " + name + "\n";
-            double total = 0.0;
-            foreach (Account a in accounts) 
-            {
-                statement += "\n" + statementForAccount(a) + "\n";
+            decimal total = 0;
+            foreach (Account a in accounts) {
+                statement += "\n" + StatementForAccount(a) + "\n";
                 total += a.sumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
-        {
+        private String StatementForAccount(Account a) {
             String s = "";
 
            //Translate to pretty account type
             switch(a.GetAccountType()){
-                case Account.CHECKING:
+                case Account.AccountType.CHECKING:
                     s += "Checking Account\n";
                     break;
-                case Account.SAVINGS:
+                case Account.AccountType.SAVINGS:
                     s += "Savings Account\n";
                     break;
-                case Account.MAXI_SAVINGS:
+                case Account.AccountType.MAXI_SAVINGS:
                     s += "Maxi Savings Account\n";
                     break;
             }
 
             //Now total up all the transactions
-            double total = 0.0;
+            decimal total = 0;
             foreach (Transaction t in a.transactions) {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
@@ -82,9 +74,8 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
+        private String ToDollars(decimal d) {
+            return String.Format("${0:0,0.00}", Math.Abs(d));
         }
     }
 }
