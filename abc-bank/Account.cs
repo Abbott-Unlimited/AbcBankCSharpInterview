@@ -69,7 +69,7 @@ namespace abc_bank
             return accountType;
         }
 
-        public bool WithdrawlWithinGivenDays(int days){
+        public bool WithdrawlWithinGivenDays(int days) {
 
             DateTime oldestDate = DateTime.Now.AddDays(-days);
 

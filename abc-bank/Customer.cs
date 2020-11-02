@@ -26,12 +26,9 @@ namespace abc_bank
         }
 
         public void MakeDeposit(int accountNumber, decimal amount) {
-            if (isValidAccountNumber(accountNumber))
-            {
+            if (isValidAccountNumber(accountNumber)) {
                 accounts[accountNumber].Deposit(amount);
-            }
-            else
-            {
+            } else {
                 throw new ArgumentException("Account Number Invalid");
             }
         }
