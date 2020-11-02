@@ -25,8 +25,41 @@ namespace abc_bank
             return this;
         }
 
+        public void MakeDeposit(int accountNumber, decimal amount) {
+            if (isValidAccountNumber(accountNumber))
+            {
+                accounts[accountNumber].Deposit(amount);
+            }
+            else
+            {
+                throw new ArgumentException("Account Number Invalid");
+            }
+        }
+
+        public void MakeWithdrawl(int accountNumber, decimal amount) {
+            if (isValidAccountNumber(accountNumber)) {
+                accounts[accountNumber].Withdraw(amount);
+            } else {
+                throw new ArgumentException("Account Number Invalid");
+            }
+        }
+
+        public void TransferFunds(int from, int to, decimal amount) {
+            if (isValidAccountNumber(from) && isValidAccountNumber(to)) {
+                if(amount > 0) {
+
+                }
+                accounts[from].Withdraw(amount);
+                accounts[to].Deposit(amount);
+            }
+        }
+
         public int GetNumberOfAccounts() {
             return accounts.Count;
+        }
+
+        public decimal getAccountBalance(int accountNumber) {
+                return accounts[accountNumber].sumTransactions();
         }
 
         public decimal TotalInterestEarned() {
@@ -52,7 +85,7 @@ namespace abc_bank
             String s = "";
 
            //Translate to pretty account type
-            switch(a.GetAccountType()){
+            switch(a.GetAccountType()) {
                 case Account.AccountType.CHECKING:
                     s += "Checking Account\n";
                     break;
@@ -72,6 +105,14 @@ namespace abc_bank
             }
             s += "Total " + ToDollars(total);
             return s;
+        }
+
+        private bool isValidAccountNumber(int accountNumber) {
+            if (accountNumber < 0 || accountNumber >= accounts.Count()) {
+                return false;
+            } else {
+                return true;
+            }
         }
 
         private String ToDollars(decimal d) {

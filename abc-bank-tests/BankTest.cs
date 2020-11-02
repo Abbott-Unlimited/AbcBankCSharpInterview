@@ -43,12 +43,36 @@ namespace abc_bank_tests
         [TestMethod]
         public void MaxiSavingsAccount() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Account maxiSavingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiSavingsAccount));
 
-            checkingAccount.Deposit(3000.0M);
+            maxiSavingsAccount.Deposit(3000.0M);
 
             Assert.AreEqual(150.0M, bank.totalInterestPaid());
         }
+
+        [TestMethod]
+        public void MixedAccounts() {
+            Bank bank = new Bank();
+            Customer bill = new Customer("Bill");
+            Customer pete = new Customer("Pete");
+
+            bill.OpenAccount(new Account(Account.AccountType.CHECKING));
+            bill.OpenAccount(new Account(Account.AccountType.MAXI_SAVINGS));
+
+            bill.MakeDeposit(0, 100);
+            bill.MakeDeposit(1, 100);
+            bank.AddCustomer(bill);
+
+            pete.OpenAccount(new Account(Account.AccountType.CHECKING));
+            pete.OpenAccount(new Account(Account.AccountType.SAVINGS));
+
+            pete.MakeDeposit(0, 100);
+            pete.MakeDeposit(1, 1000);
+            bank.AddCustomer(pete);            
+            
+            Assert.AreEqual(6.2M, bank.totalInterestPaid());
+        }
+
     }
 }

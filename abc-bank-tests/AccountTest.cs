@@ -26,8 +26,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void CheckingInterest()
-        {
+        public void CheckingInterest() {
             Account checkingAccount = new Account(Account.AccountType.CHECKING);
             checkingAccount.Deposit(100.0M);
 
@@ -35,8 +34,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void SavingsInterest()
-        {
+        public void SavingsInterest() {
             Account savingsAccount = new Account(Account.AccountType.SAVINGS);
             savingsAccount.Deposit(1500.0M);
 
@@ -44,8 +42,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void MaxiSavingsInterest()
-        {
+        public void MaxiSavingsInterest() {
             Account maxiSavingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
             maxiSavingsAccount.Deposit(3000.0M);
 
@@ -54,8 +51,7 @@ namespace abc_bank_tests
         
 
         [TestMethod]
-        public void MaxiSavingsInterestRecentWithdrawl()
-        {
+        public void MaxiSavingsInterestRecentWithdrawl() {
             Account maxiSavingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
 
             maxiSavingsAccount.Deposit(3000.0M);
@@ -74,9 +70,8 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void NoRecentWithdrawls(){
+        public void NoRecentWithdrawls() {
             Account a = new Account(Account.AccountType.CHECKING);
-            
 
             Assert.IsFalse(a.WithdrawlWithinGivenDays(10));
         }
@@ -90,10 +85,9 @@ namespace abc_bank_tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "amount must be greater than zero")]
-        public void WithdrawlAmountUnderZero()
-        {
+        public void WithdrawlAmountUnderZero(){
             Account a = new Account(Account.AccountType.CHECKING);
-            a.Deposit(-10M);
+            a.Withdraw(-5M);
         }
     }
 }
