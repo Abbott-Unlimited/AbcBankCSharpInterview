@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
-    public class DateProvider
+    public class DateProvider : IDateProvider
     {
         private static DateProvider instance = null;
 
