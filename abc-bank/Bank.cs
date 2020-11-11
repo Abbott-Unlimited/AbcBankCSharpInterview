@@ -31,28 +31,33 @@ namespace abc_bank
         //If number passed in is 1 just return the word otherwise add an 's' at the end
         private String format(int number, String word)
         {
-            return number + " " + (number == 1 ? word : word + "s");
+            return number + " " + (number == 1 ? word : word + "s");  // 1 account/ 2 accounts
         }
 
-        public double totalInterestPaid() {
-            double total = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public double totalInterestPaid()
+        {
+            double total = 0.0;
             foreach(Customer c in customers)
                 total += c.TotalInterestEarned();
             return total;
         }
 
-        public String GetFirstCustomer()
+        /// <summary>
+        /// To return the furst customer name
+        /// </summary>
+        /// <returns></returns>
+        public String GetFirstCustomerName()
         {
-            try
-            {
-                customers = null;
+            if (customers.Count > 0
+                && !string.IsNullOrEmpty(customers[0].GetName()))
                 return customers[0].GetName();
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.StackTrace);
-                return "Error";
-            }
+            else
+                return string.Empty;
+
         }
     }
 }

@@ -15,7 +15,8 @@ namespace abc_bank
         public Transaction(double amount) 
         {
             this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            //I think we can simply call DateTime.UtcNow and storing in UTC is a good practice I believe
+            this.transactionDate = DateTime.UtcNow; // DateProvider.getInstance().Now();
         }
     }
 }
