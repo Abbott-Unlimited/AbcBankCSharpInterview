@@ -24,13 +24,13 @@ namespace abc_bank
         {
             String summary = "Customer Summary";
             foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+                summary += "\n - " + c.GetName() + " (" + Format(c.GetNumberOfAccounts(), "account") + ")";
             return summary;
         }
 
         //Make sure correct plural of word is created based on the number passed in:
         //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
+        private String Format(int number, String word)
         {
             return number + " " + (number == 1 ? word : word + "s");
         }

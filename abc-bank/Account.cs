@@ -50,11 +50,7 @@ namespace abc_bank
                     else
                         return 1 + (amount-1000) * 0.002;
                 case MAXI_SAVINGS:
-                    DateTime mostRecentWithdrawalDate = this.transactions
-                        .OrderBy(t => t.GetTransactioDate())
-                        .Where(t => t.amount < 0)
-                        .Select(t => t.GetTransactioDate())
-                        .FirstOrDefault();
+                    DateTime mostRecentWithdrawalDate = MostRecentWidthdrawalDate();
                     if (mostRecentWithdrawalDate != null && mostRecentWithdrawalDate.AddDays(10) < DateProvider.GetInstance().Now())
                       return amount * 0.05;
                     else
@@ -62,6 +58,15 @@ namespace abc_bank
                 default:
                     return amount * 0.001;
             }
+        }
+
+        public DateTime MostRecentWidthdrawalDate()
+        {
+          return this.transactions
+                    .OrderBy(t => t.GetTransactioDate())
+                    .Where(t => t.amount < 0)
+                    .Select(t => t.GetTransactioDate())
+                    .FirstOrDefault();
         }
 
         public double sumTransactions() {
