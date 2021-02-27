@@ -50,11 +50,15 @@ namespace abc_bank
                     else
                         return 1 + (amount-1000) * 0.002;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    DateTime mostRecentWithdrawalDate = this.transactions
+                        .OrderBy(t => t.GetTransactioDate())
+                        .Where(t => t.amount < 0)
+                        .Select(t => t.GetTransactioDate())
+                        .FirstOrDefault();
+                    if (mostRecentWithdrawalDate != null && mostRecentWithdrawalDate.AddDays(10) < DateProvider.GetInstance().Now())
+                      return amount * 0.05;
+                    else
+                      return amount * 0.001;
                 default:
                     return amount * 0.001;
             }
@@ -72,5 +76,10 @@ namespace abc_bank
             return accountType;
         }
 
+        public void TransferToAccount(Account toAccount, double amount)
+        {
+            this.Withdraw(amount);
+            toAccount.Deposit(amount);
+        }
     }
 }

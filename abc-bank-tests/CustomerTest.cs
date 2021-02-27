@@ -7,6 +7,9 @@ namespace abc_bank_tests
     [TestClass]
     public class CustomerTest
     {
+        private static readonly double DOUBLE_DELTA = 1e-15;
+
+
         [TestMethod]
         public void TestStatement()
         {
@@ -64,6 +67,25 @@ namespace abc_bank_tests
             oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
 
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void TestAccountTransfer()
+        {
+            Customer oscar = new Customer("Oscar");
+
+            Account savings = new Account(Account.SAVINGS);
+            Account checking = new Account(Account.CHECKING);
+            oscar.OpenAccount(savings);
+            oscar.OpenAccount(checking);
+
+            savings.Deposit(200.0);
+            checking.Deposit(350.0);
+
+            savings.TransferToAccount(checking, 100.0);
+
+            Assert.AreEqual(100.0, savings.sumTransactions(), DOUBLE_DELTA);
+            Assert.AreEqual(450.0, checking.sumTransactions(), DOUBLE_DELTA);
         }
     }
 }

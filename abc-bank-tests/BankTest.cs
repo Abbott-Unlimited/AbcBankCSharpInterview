@@ -10,7 +10,7 @@ namespace abc_bank_tests
         private static readonly double DOUBLE_DELTA = 1e-15;
 
         [TestMethod]
-        public void CustomerSummary() 
+        public void TestCustomerSummary() 
         {
             Bank bank = new Bank();
             Customer john = new Customer("John");
@@ -21,7 +21,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void CheckingAccount() 
+        public void TestCheckingAccount() 
         {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.CHECKING);
@@ -34,7 +34,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void SavingsAccount() 
+        public void TestSavingsAccount() 
         {
             Bank bank = new Bank();
             Account savingsAcount = new Account(Account.SAVINGS);
@@ -46,7 +46,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void MaxiSavingsAccount() 
+        public void TestMaxiSavingsAccount() 
         {
             Bank bank = new Bank();
             Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
@@ -58,7 +58,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void GetFirstCustomer()
+        public void TestGetFirstCustomer()
         {
             Bank bank = new Bank();
             Customer john = new Customer("John");

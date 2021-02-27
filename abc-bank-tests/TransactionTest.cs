@@ -8,7 +8,7 @@ namespace abc_bank_tests
     public class TransactionTest
     {
         [TestMethod]
-        public void Transaction()
+        public void TestTransactionType()
         {
             Transaction t = new Transaction(5);
 

@@ -15,7 +15,12 @@ namespace abc_bank
         public Transaction(double amount) 
         {
             this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            this.transactionDate = DateProvider.GetInstance().Now();
+        }
+
+        public DateTime GetTransactioDate()
+        {
+            return this.transactionDate;
         }
     }
 }

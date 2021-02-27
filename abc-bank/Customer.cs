@@ -48,14 +48,14 @@ namespace abc_bank
             double total = 0.0;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
+                statement += "\n" + StatementForAccount(a) + "\n";
                 total += a.sumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        private String StatementForAccount(Account a) 
         {
             String s = "";
 
