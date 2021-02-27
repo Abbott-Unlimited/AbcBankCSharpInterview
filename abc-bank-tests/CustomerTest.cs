@@ -36,13 +36,15 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestOneAccount()
         {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
+            Customer oscar = new Customer("Oscar");
+        
+            oscar.OpenAccount(new Account(Account.SAVINGS));
 
             Assert.AreEqual(1, oscar.GetNumberOfAccounts());
         }
 
         [TestMethod]
-        public void TestTwoAccount()
+        public void TestTwoAccounts()
         {
             Customer oscar = new Customer("Oscar");
 

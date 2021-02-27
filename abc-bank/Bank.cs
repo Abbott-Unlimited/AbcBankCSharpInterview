@@ -34,7 +34,7 @@ namespace abc_bank
             return number + " " + (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
+        public double TotalInterestPaid() {
             double total = 0;
             foreach(Customer c in customers)
                 total += c.TotalInterestEarned();
@@ -43,16 +43,10 @@ namespace abc_bank
 
         public String GetFirstCustomer()
         {
-            try
-            {
-                customers = null;
+            if (customers.Count > 0)
                 return customers[0].GetName();
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.StackTrace);
-                return "Error";
-            }
+            else
+                return "No customers";
         }
     }
 }

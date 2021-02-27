@@ -49,9 +49,6 @@ namespace abc_bank
                         return amount * 0.001;
                     else
                         return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.02;
@@ -64,14 +61,9 @@ namespace abc_bank
         }
 
         public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
-        {
             double amount = 0.0;
             foreach (Transaction t in transactions)
-                amount += t.amount;
+              amount += t.amount;
             return amount;
         }
 
