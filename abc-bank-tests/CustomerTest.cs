@@ -8,7 +8,7 @@ namespace abc_bank_tests
     public class CustomerTest
     {
         [TestMethod]
-        public void TestApp()
+        public void TestStatement()
         {
             Account checkingAccount = new Account(Account.CHECKING);
             Account savingsAccount = new Account(Account.SAVINGS);
