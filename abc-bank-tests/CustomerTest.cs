@@ -7,13 +7,24 @@ namespace abc_bank_tests
     [TestClass]
     public class CustomerTest
     {
+        Account checkingAccount;
+        Account savingsAccount;
+        Account maxiSavingsAccount;
+        Customer customer;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            customer = new Customer("Henry");
+            checkingAccount = new Account(AccountType.CHECKING, customer);
+            savingsAccount = new Account(AccountType.SAVINGS, customer);
+            maxiSavingsAccount = new Account(AccountType.MAXI_SAVINGS, customer);
+        }
+
         [TestMethod]
         public void TestApp()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
-            Account savingsAccount = new Account(Account.SAVINGS);
-
-            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+            customer.OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
             checkingAccount.Deposit(100.0);
             savingsAccount.Deposit(4000.0);
@@ -30,33 +41,31 @@ namespace abc_bank_tests
                     "  withdrawal $200.00\n" +
                     "Total $3,800.00\n" +
                     "\n" +
-                    "Total In All Accounts $3,900.00", henry.GetStatement());
+                    "Total In All Accounts $3,900.00", customer.GetStatement());
         }
 
         [TestMethod]
         public void TestOneAccount()
         {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
-            Assert.AreEqual(1, oscar.GetNumberOfAccounts());
+            customer.OpenAccount(savingsAccount);
+            Assert.AreEqual(1, customer.GetNumberOfAccounts());
         }
 
         [TestMethod]
         public void TestTwoAccount()
         {
-            Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(2, oscar.GetNumberOfAccounts());
+            customer.OpenAccount(savingsAccount);
+            customer.OpenAccount(checkingAccount);
+            Assert.AreEqual(2, customer.GetNumberOfAccounts());
         }
 
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
-            Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+            customer.OpenAccount(savingsAccount);
+            customer.OpenAccount(checkingAccount);
+            customer.OpenAccount(maxiSavingsAccount);
+            Assert.AreEqual(3, customer.GetNumberOfAccounts());
         }
     }
 }
