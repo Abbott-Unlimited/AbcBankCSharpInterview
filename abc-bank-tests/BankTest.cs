@@ -7,14 +7,12 @@ namespace abc_bank_tests
     [TestClass]
     public class BankTest
     {
-
         private static readonly double DOUBLE_DELTA = 1e-2;
 
-        Account checkingAccount;
-        Account savingsAccount;
-        Account maxiSavingsAccount;
-
-        Customer customer;
+        private Account checkingAccount;
+        private Account savingsAccount;
+        private Account maxiSavingsAccount;
+        private Customer customer;
 
         [TestInitialize]
         public void Setup()
@@ -28,8 +26,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestCustomerSummary()
         {
-            Bank bank = new Bank();
-
+            var bank = new Bank();
             customer.OpenAccount(checkingAccount);
             bank.AddCustomer(customer);
 
@@ -39,11 +36,10 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestCheckingAccount()
         {
-            Bank bank = new Bank();
+            var bank = new Bank();
             customer.OpenAccount(checkingAccount);
             bank.AddCustomer(customer);
             checkingAccount.Deposit(100.0);
-
 
             Assert.AreEqual(0.10, bank.TotalInterestPaid(DateTime.Now.AddYears(1)), DOUBLE_DELTA);
         }
@@ -51,7 +47,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestSavingsAccount()
         {
-            Bank bank = new Bank();
+            var bank = new Bank();
             bank.AddCustomer(customer.OpenAccount(savingsAccount));
             savingsAccount.Deposit(1500.0);
 

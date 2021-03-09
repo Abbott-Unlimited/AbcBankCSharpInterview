@@ -8,16 +8,16 @@ namespace abc_bank
 {
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
+        private readonly string name;
+        private readonly List<Account> accounts;
 
-        public Customer(String name)
+        public Customer(string custName)
         {
-            this.name = name;
-            this.accounts = new List<Account>();
+            name = custName;
+            accounts = new List<Account>();
         }
 
-        public String GetName()
+        public string GetName()
         {
             return name;
         }
@@ -36,28 +36,27 @@ namespace abc_bank
         public double TotalInterestEarned(DateTime asOfDate)
         {
             double total = 0;
-            foreach (Account a in accounts)
+            foreach (var a in accounts)
                 total += a.InterestEarned(asOfDate);
             return total;
         }
 
-        public String GetStatement()
+        public string GetStatement()
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
+            var statement = "Statement for " + name + "\n";
             double total = 0.0;
-            foreach (Account a in accounts)
+            foreach (var a in accounts)
             {
-                statement += "\n" + statementForAccount(a) + "\n";
+                statement += "\n" + StatementForAccount(a) + "\n";
                 total += a.SumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a)
+        private string StatementForAccount(Account a)
         {
-            String s = "";
+            string s = "";
 
             //Translate to pretty account type
             switch (a.AccountType)
@@ -75,7 +74,7 @@ namespace abc_bank
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.Transactions)
+            foreach (var t in a.Transactions)
             {
                 s += "  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.Amount) + "\n";
                 total += t.Amount;
@@ -84,9 +83,9 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
+        private string ToDollars(double d)
         {
-            return String.Format("{0:C}", Math.Abs(d));
+            return string.Format("{0:C}", Math.Abs(d));
         }
     }
 }

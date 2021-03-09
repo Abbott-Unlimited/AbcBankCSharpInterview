@@ -24,11 +24,11 @@ namespace abc_bank
         {
             String summary = "Customer Summary";
             foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+                summary += "\n - " + c.GetName() + " (" + Format(c.GetNumberOfAccounts(), "account") + ")";
             return summary;
         }
 
-        private String format(int number, String word)
+        private string Format(int number, String word)
         {
             return number + " " + (number == 1 ? word : word + "s");
         }

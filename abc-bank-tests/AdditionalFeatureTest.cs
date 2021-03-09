@@ -8,10 +8,10 @@ namespace abc_bank_tests
     public class AdditionalFeatureTest
     {
         private static readonly double DOUBLE_DELTA = 1e-2;
-        Account checkingAccount;
-        Account savingsAccount;
-        Account maxiSavingsAccount;
-        Customer customer;
+        private Account checkingAccount;
+        private Account savingsAccount;
+        private Account maxiSavingsAccount;
+        private Customer customer;
 
         [TestInitialize]
         public void Setup()
@@ -65,8 +65,8 @@ namespace abc_bank_tests
         public void TestTransferOutsideAccount()
         {
 
-            Customer customer2 = new Customer("Henry2");
-            Account customer2Account = new Account(AccountType.MAXI_SAVINGS, customer2);
+            var customer2 = new Customer("Henry2");
+            var customer2Account = new Account(AccountType.MAXI_SAVINGS, customer2);
             customer2.OpenAccount(customer2Account);
             customer2Account.Deposit(200);
             try
@@ -95,7 +95,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestCompoundInterest()
         {
-            Bank bank = new Bank();
+            var bank = new Bank();
             customer = new Customer("John");
             customer.OpenAccount(checkingAccount);
             bank.AddCustomer(customer);
@@ -110,7 +110,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestMaxiSavingsAccount()
         {
-            Bank bank = new Bank();
+            var bank = new Bank();
             customer = new Customer("Bill");
             bank.AddCustomer(customer.OpenAccount(maxiSavingsAccount));
             maxiSavingsAccount.Deposit(3000.0);
@@ -123,7 +123,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestMaxiSavingsAccountNineDays()
         {
-            Bank bank = new Bank();
+            var bank = new Bank();
             customer = new Customer("Bill");
             bank.AddCustomer(customer.OpenAccount(maxiSavingsAccount));
             maxiSavingsAccount.Deposit(3000.0);
@@ -135,7 +135,7 @@ namespace abc_bank_tests
         #endregion
 
 
-        static double CalculateTotalWithCompoundInterest(double principal, double interestRate, int compoundingPeriodsPerYear, double yearCount)
+        private static double CalculateTotalWithCompoundInterest(double principal, double interestRate, int compoundingPeriodsPerYear, double yearCount)
         {
             return principal * (double)Math.Pow((double)(1 + interestRate / compoundingPeriodsPerYear), compoundingPeriodsPerYear * yearCount) - principal;
         }
