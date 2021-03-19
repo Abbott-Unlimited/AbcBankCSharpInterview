@@ -84,7 +84,32 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            //return String.Format("$%,.2f", Math.Abs(d));
+            return Math.Abs(d).ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+        }
+
+        public void AccountTransfer(Account source, Account destination, double amount)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (destination == null)
+                throw new ArgumentNullException(nameof(destination));
+            if (accounts.Contains(source) == false)
+                throw new BankAppException("The account specified does not belong to this customer.");
+            if (accounts.Contains(destination) == false)
+                throw new BankAppException("The account specified does not belong to this customer.");
+            if (amount <= 0.0)
+                throw new ArgumentOutOfRangeException("The amount to be transfered must be greater than zero.");
+
+            try
+            {
+                source.Withdraw(amount);
+                destination.Deposit(amount);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
