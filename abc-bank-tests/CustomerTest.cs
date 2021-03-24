@@ -15,9 +15,9 @@ namespace abc_bank_tests
 
             Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
-            checkingAccount.Deposit(100.0);
-            savingsAccount.Deposit(4000.0);
-            savingsAccount.Withdraw(200.0);
+            checkingAccount.Deposit(100.00m);
+            savingsAccount.Deposit(4000.00m);
+            savingsAccount.Withdraw(200.00m);
 
             Assert.AreEqual("Statement for Henry\n" +
                     "\n" +

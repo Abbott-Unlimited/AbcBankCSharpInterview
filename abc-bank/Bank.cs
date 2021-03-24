@@ -34,8 +34,8 @@ namespace abc_bank
             return number + " " + (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
-            double total = 0;
+        public decimal totalInterestPaid() {
+            decimal total = 0.00m;
             foreach(Customer c in customers)
                 total += c.TotalInterestEarned();
             return total;

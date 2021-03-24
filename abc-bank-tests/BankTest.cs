@@ -7,9 +7,6 @@ namespace abc_bank_tests
     [TestClass]
     public class BankTest
     {
-
-        private static readonly double DOUBLE_DELTA = 1e-15;
-
         [TestMethod]
         public void CustomerSummary() 
         {
@@ -28,9 +25,9 @@ namespace abc_bank_tests
             Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
             bank.AddCustomer(bill);
 
-            checkingAccount.Deposit(100.0);
+            checkingAccount.Deposit(100.00m);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(0.10m, bank.totalInterestPaid());
         }
 
         [TestMethod]
@@ -39,9 +36,9 @@ namespace abc_bank_tests
             Account checkingAccount = new Account(Account.SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
-            checkingAccount.Deposit(1500.0);
+            checkingAccount.Deposit(1500.00m);
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(2.00m, bank.totalInterestPaid());
         }
 
         [TestMethod]
@@ -50,9 +47,9 @@ namespace abc_bank_tests
             Account checkingAccount = new Account(Account.MAXI_SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
-            checkingAccount.Deposit(3000.0);
+            checkingAccount.Deposit(3000.00m);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(170.00m, bank.totalInterestPaid());
         }
     }
 }

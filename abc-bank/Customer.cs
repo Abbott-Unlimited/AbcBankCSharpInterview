@@ -33,9 +33,9 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public decimal TotalInterestEarned() 
         {
-            double total = 0;
+            decimal total = 0;
             foreach (Account a in accounts)
                 total += a.InterestEarned();
             return total;
@@ -45,7 +45,7 @@ namespace abc_bank
         {
             String statement = null;
             statement = "Statement for " + name + "\n";
-            double total = 0.0;
+            decimal total = 0.00m;
             foreach (Account a in accounts) 
             {
                 statement += "\n" + statementForAccount(a) + "\n";
@@ -73,7 +73,7 @@ namespace abc_bank
             }
 
             //Now total up all the transactions
-            double total = 0.0;
+            decimal total = 0.00m;
             foreach (Transaction t in a.transactions) {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
@@ -82,7 +82,7 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
+        private String ToDollars(decimal d)
         {
             return String.Format("${0:N2}", Math.Abs(d));
         }
