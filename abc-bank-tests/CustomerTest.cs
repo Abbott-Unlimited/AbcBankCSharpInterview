@@ -7,8 +7,11 @@ namespace abc_bank_tests
     [TestClass]
     public class CustomerTest
     {
+        /// <summary>
+        /// Tests that statements are properly generated for account activity.
+        /// </summary>
         [TestMethod]
-        public void TestApp()
+        public void TestStatementGeneration()
         {
             Account checkingAccount = new Account(AccountType.CHECKING);
             Account savingsAccount = new Account(AccountType.SAVINGS);
@@ -33,6 +36,9 @@ namespace abc_bank_tests
                     "Total In All Accounts $3,900.00", henry.GetStatement());
         }
 
+        /// <summary>
+        /// Tests the "number of accounts" functionality when one account exists.
+        /// </summary>
         [TestMethod]
         public void TestOneAccount()
         {
@@ -40,8 +46,11 @@ namespace abc_bank_tests
             Assert.AreEqual(1, oscar.NumberOfAccounts);
         }
 
+        /// <summary>
+        /// Tests the "number of accounts" functionality when two accounts exist.
+        /// </summary>
         [TestMethod]
-        public void TestTwoAccount()
+        public void TestTwoAccounts()
         {
             Customer oscar = new Customer("Oscar")
                  .OpenAccount(new Account(AccountType.SAVINGS));
@@ -49,13 +58,16 @@ namespace abc_bank_tests
             Assert.AreEqual(2, oscar.NumberOfAccounts);
         }
 
+        /// <summary>
+        /// Tests the "number of accounts" functionality when three accounts exist.
+        /// </summary>
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(AccountType.SAVINGS));
             oscar.OpenAccount(new Account(AccountType.CHECKING));
+            oscar.OpenAccount(new Account(AccountType.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.NumberOfAccounts);
         }
     }
