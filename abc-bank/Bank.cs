@@ -33,23 +33,12 @@ namespace abc_bank
         /// <summary>
         /// Generates a summary of this customer's accounts.
         /// </summary>
-        /// <returns>string containing the text of the customer summary.</returns>
+        /// <returns>String containing the text of the customer summary.</returns>
         public string CustomerSummary() {
             string summary = "Customer Summary";
             foreach (Customer c in customers)
-                summary += "\n - " + c.Name + " (" + format(c.NumberOfAccounts, "account") + ")";
+                summary += "\n - " + c.Name + " (" + FormatUtils.pluralize(c.NumberOfAccounts, "account") + ")";
             return summary;
-        }
-
-        /// <summary>
-        /// Attempts to pluralize the given word if the number specified is not 1.
-        /// </summary>
-        /// <param name="number">The number associated with the word.</param>
-        /// <param name="word">The word to pluralize.</param>
-        /// <returns>The given word, pluralized as apporpriate to match the number.</returns>
-        private string format(int number, string word)
-        {
-            return number + " " + (number == 1 ? word : word + "s");
         }
 
         /// <summary>
