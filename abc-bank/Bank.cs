@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// The main class of the bank application.
+    /// </summary>
     public class Bank
     {
         /// <summary>

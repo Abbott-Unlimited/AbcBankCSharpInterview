@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// Contains functions for string formatting.
+    /// </summary>
     static class FormatUtils
     {
         /// <summary>

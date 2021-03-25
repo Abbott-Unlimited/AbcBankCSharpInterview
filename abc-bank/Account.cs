@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// Class representing a single account. A Customer can have multiple accounts.
+    /// </summary>
     public class Account
     {
         /// <summary>

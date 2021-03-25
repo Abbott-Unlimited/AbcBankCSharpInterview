@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// Immutable class representing a single transaction.
+    /// </summary>
     public class Transaction
     {
         /// <summary>

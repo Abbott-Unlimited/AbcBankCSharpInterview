@@ -7,6 +7,9 @@ namespace abc_bank_tests
     [TestClass]
     public class TransactionTest
     {
+        /// <summary>
+        /// Tests that the transaction amount is stored correctly.
+        /// </summary>
         [TestMethod]
         public void TestTransaction()
         {

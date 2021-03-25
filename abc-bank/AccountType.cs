@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// Enum listing the valid account types.
+    /// </summary>
     public enum AccountType
     {
         /// <summary>

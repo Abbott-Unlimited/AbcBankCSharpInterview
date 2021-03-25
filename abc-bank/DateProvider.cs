@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// Singleton class to provide the current timestamp wherever it is needed.
+    /// </summary>
+    /// <remarks>
+    /// This has been left intact; but see PR comments for discussion of better alternatives.
+    /// </remarks>
     public class DateProvider
     {
         /// <summary>
         /// Holds the singleton instance of DateTime.
         /// </summary>
-        /// <remarks>
-        /// This has been left intact; but see PR comments for discussion of better alternatives.
-        /// </remarks>
         private static DateProvider instance = null;
 
         /// <summary>
