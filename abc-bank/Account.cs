@@ -40,6 +40,26 @@ namespace abc_bank
             }
         }
 
+        public void SelfTransfer(double amount, string type1,string type2)
+        {
+            double totalAmount = sumTransactions();
+            if(amount<=0)
+                throw new ArgumentException("amount must be greater than zero");
+            else
+            {
+                //We have exceptions for each cases
+               if(accountType.Equals(type1))
+                {
+                    Withdraw(amount);
+                }
+               else if(accountType.Equals(type2))
+                {
+                    Deposit(amount);
+                }
+
+            }
+        }
+
         public double InterestEarned() 
         {
             double amount = sumTransactions();
@@ -55,10 +75,10 @@ namespace abc_bank
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.02;
-                    if (amount <= 2000)
+                    if (amount > 1000 && amount <= 2000)
                         return 20 + (amount-1000) * 0.05;
                     return 70 + (amount-2000) * 0.1;
-                default:
+                default: 
                     return amount * 0.001;
             }
         }
@@ -74,6 +94,8 @@ namespace abc_bank
                 amount += t.amount;
             return amount;
         }
+
+     
 
         public int GetAccountType() 
         {
