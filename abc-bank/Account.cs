@@ -8,17 +8,15 @@ namespace abc_bank
 {
     public class Account
     {
-
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
+        /// <summary>
+        /// The type of this account.
+        /// </summary>
+        public AccountType Type { get; private set; }
         public List<Transaction> transactions;
 
-        public Account(int accountType) 
+        public Account(AccountType accountType) 
         {
-            this.accountType = accountType;
+            this.Type = accountType;
             this.transactions = new List<Transaction>();
         }
 
@@ -43,8 +41,8 @@ namespace abc_bank
         public decimal InterestEarned() 
         {
             decimal amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
+            switch(Type){
+                case AccountType.SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.001m;
                     else
@@ -52,7 +50,7 @@ namespace abc_bank
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
-                case MAXI_SAVINGS:
+                case AccountType.MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.02m;
                     if (amount <= 2000)
@@ -73,11 +71,5 @@ namespace abc_bank
                 amount += t.Amount;
             return amount;
         }
-
-        public int GetAccountType() 
-        {
-            return accountType;
-        }
-
     }
 }

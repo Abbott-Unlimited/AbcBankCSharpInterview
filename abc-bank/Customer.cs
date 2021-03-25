@@ -89,14 +89,14 @@ namespace abc_bank
             String s = "";
 
            //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
+            switch(a.Type){
+                case AccountType.CHECKING:
                     s += "Checking Account\n";
                     break;
-                case Account.SAVINGS:
+                case AccountType.SAVINGS:
                     s += "Savings Account\n";
                     break;
-                case Account.MAXI_SAVINGS:
+                case AccountType.MAXI_SAVINGS:
                     s += "Maxi Savings Account\n";
                     break;
             }
