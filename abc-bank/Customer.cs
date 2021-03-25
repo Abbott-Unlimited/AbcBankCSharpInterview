@@ -8,31 +8,51 @@ namespace abc_bank
 {
     public class Customer
     {
-        private String name;
+        /// <summary>
+        /// The customer's full name.
+        /// </summary>
+        public String Name { get; }
+
+        /// <summary>
+        /// The number of accounts the customer has.
+        /// </summary>
+        public int NumberOfAccounts
+        {
+            get {
+                return accounts.Count;
+            }
+        }
+
+        /// <summary>
+        /// Accounts the customer owns.
+        /// </summary>
         private List<Account> accounts;
 
+        /// <summary>
+        /// Creates a new Customer.
+        /// </summary>
+        /// <param name="name">The customer's full name.</param>
         public Customer(String name)
         {
-            this.name = name;
+            this.Name = name;
             this.accounts = new List<Account>();
         }
 
-        public String GetName()
-        {
-            return name;
-        }
-
+        /// <summary>
+        /// Associates an account with this customer.
+        /// </summary>
+        /// <param name="account">The account to add.</param>
+        /// <returns>The current Customer object.</returns>
         public Customer OpenAccount(Account account)
         {
             accounts.Add(account);
             return this;
         }
 
-        public int GetNumberOfAccounts()
-        {
-            return accounts.Count;
-        }
-
+        /// <summary>
+        /// Calculates the total amount of interest earned across all the customer's accounts.
+        /// </summary>
+        /// <returns>Total interest earned.</returns>
         public decimal TotalInterestEarned() 
         {
             decimal total = 0;
@@ -41,10 +61,14 @@ namespace abc_bank
             return total;
         }
 
+        /// <summary>
+        /// Generates a statement for this customer's accounts.
+        /// </summary>
+        /// <returns>String containing the statement text.</returns>
         public String GetStatement() 
         {
             String statement = null;
-            statement = "Statement for " + name + "\n";
+            statement = "Statement for " + Name + "\n";
             decimal total = 0.00m;
             foreach (Account a in accounts) 
             {
@@ -55,6 +79,11 @@ namespace abc_bank
             return statement;
         }
 
+        /// <summary>
+        /// Generates a statement for an individual account.
+        /// </summary>
+        /// <param name="a">The account for which to generate the statement.</param>
+        /// <returns>String containing the statement text.</returns>
         private String statementForAccount(Account a) 
         {
             String s = "";
@@ -75,13 +104,18 @@ namespace abc_bank
             //Now total up all the transactions
             decimal total = 0.00m;
             foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
+                s += "  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.Amount) + "\n";
+                total += t.Amount;
             }
             s += "Total " + ToDollars(total);
             return s;
         }
 
+        /// <summary>
+        /// Formats a value as a dollar amount.
+        /// </summary>
+        /// <param name="d">The decimal amount.</param>
+        /// <returns>String representation of the value as a dollar amount.</returns>
         private String ToDollars(decimal d)
         {
             return String.Format("${0:N2}", Math.Abs(d));

@@ -71,7 +71,7 @@ namespace abc_bank
         {
             decimal amount = 0.00m;
             foreach (Transaction t in transactions)
-                amount += t.amount;
+                amount += t.Amount;
             return amount;
         }
 

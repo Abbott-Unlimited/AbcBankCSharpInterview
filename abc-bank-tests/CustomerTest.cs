@@ -37,7 +37,7 @@ namespace abc_bank_tests
         public void TestOneAccount()
         {
             Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
-            Assert.AreEqual(1, oscar.GetNumberOfAccounts());
+            Assert.AreEqual(1, oscar.NumberOfAccounts);
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace abc_bank_tests
             Customer oscar = new Customer("Oscar")
                  .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(2, oscar.GetNumberOfAccounts());
+            Assert.AreEqual(2, oscar.NumberOfAccounts);
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace abc_bank_tests
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+            Assert.AreEqual(3, oscar.NumberOfAccounts);
         }
     }
 }
