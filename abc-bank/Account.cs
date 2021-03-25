@@ -63,12 +63,11 @@ namespace abc_bank
             }
         }
 
+        /// <summary>
+        /// Calculates the sum of all transactions on this account (the current balance).
+        /// </summary>
+        /// <returns>The sum of all transaction amounts.</returns>
         public decimal sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private decimal CheckIfTransactionsExist(bool checkAll) 
-        {
             decimal amount = 0.00m;
             foreach (Transaction t in transactions)
                 amount += t.Amount;
