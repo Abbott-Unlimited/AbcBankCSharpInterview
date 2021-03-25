@@ -53,8 +53,8 @@ namespace abc_bank_tests
         public void TestTwoAccounts()
         {
             Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(AccountType.SAVINGS));
-            oscar.OpenAccount(new Account(AccountType.CHECKING));
+                .OpenAccount(new Account(AccountType.SAVINGS))
+                .OpenAccount(new Account(AccountType.CHECKING));
             Assert.AreEqual(2, oscar.NumberOfAccounts);
         }
 
@@ -65,10 +65,39 @@ namespace abc_bank_tests
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(AccountType.SAVINGS));
-            oscar.OpenAccount(new Account(AccountType.CHECKING));
-            oscar.OpenAccount(new Account(AccountType.MAXI_SAVINGS));
+                .OpenAccount(new Account(AccountType.SAVINGS))
+                .OpenAccount(new Account(AccountType.CHECKING))
+                .OpenAccount(new Account(AccountType.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.NumberOfAccounts);
+        }
+
+        /// <summary>
+        /// Tests that the customer can transfer money between their accounts.
+        /// </summary>
+        [TestMethod]
+        public void TestTransfer()
+        {
+            Account fromAccount = new Account(AccountType.CHECKING);
+            fromAccount.Deposit(1000.00m);
+            Account toAccount = new Account(AccountType.SAVINGS);
+            toAccount.Deposit(500.00m);
+            Customer oscar = new Customer("Oscar")
+                .OpenAccount(fromAccount)
+                .OpenAccount(toAccount);
+            oscar.Transfer(fromAccount, toAccount, 100.00m);
+
+            Assert.AreEqual(900.00m, fromAccount.Balance);
+            Assert.AreEqual(600.00m, toAccount.Balance);
+        }
+
+        /// <summary>
+        /// Tests that the customer cannot transfer money between accounts they do not own.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestRejectMaliciousTransfer()
+        {
+            new Customer("Oscar").Transfer(new Account(AccountType.CHECKING), new Account(AccountType.SAVINGS), 1000000.00m);
         }
     }
 }

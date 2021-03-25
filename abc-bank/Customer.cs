@@ -62,6 +62,24 @@ namespace abc_bank
         }
 
         /// <summary>
+        /// Transfers funds between a customer's accounts.
+        /// </summary>
+        /// <param name="fromAccount">The account to transfer funds out of.</param>
+        /// <param name="toAccount">The account to transfer funds into.</param>
+        /// <param name="amount">The amount to transfer.</param>
+        public void Transfer(Account fromAccount, Account toAccount, decimal amount)
+        {
+            if(!accounts.Contains(fromAccount) || !accounts.Contains(toAccount))
+            {
+                throw new ArgumentException("Accounts must be owned by the customer in order to transfer funds.");
+            }
+
+            // If there are insufficient funds, let that exception bubble up.
+            fromAccount.Withdraw(amount);
+            toAccount.Deposit(amount);
+        }
+
+        /// <summary>
         /// Generates a statement for this customer's accounts.
         /// </summary>
         /// <returns>string containing the statement text.</returns>
