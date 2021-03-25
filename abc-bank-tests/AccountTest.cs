@@ -11,7 +11,7 @@ namespace abc_bank_tests
         /// Tests that balance is correctly calculated when a deposit and withdrawal are made.
         /// </summary>
         [TestMethod]
-        public void Balance()
+        public void TestBalance()
         {
             Account account = new Account(AccountType.CHECKING);
             Assert.AreEqual(account.Balance, 0.00m);
@@ -28,7 +28,7 @@ namespace abc_bank_tests
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void RejectWithdrawal()
+        public void TestRejectOverdraft()
         {
             Account account = new Account(AccountType.CHECKING);
             account.Deposit(100.00m);

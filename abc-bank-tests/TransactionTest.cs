@@ -8,11 +8,10 @@ namespace abc_bank_tests
     public class TransactionTest
     {
         [TestMethod]
-        public void Transaction()
+        public void TestTransaction()
         {
             Transaction t = new Transaction(5);
-            //t instanceOf Transaction
-            Assert.IsTrue(t.GetType() == typeof(Transaction));
+            Assert.AreEqual(5, t.Amount);
         }
     }
 }
