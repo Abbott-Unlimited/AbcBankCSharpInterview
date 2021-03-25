@@ -35,10 +35,10 @@ namespace abc_bank
         /// </summary>
         /// <returns>String containing the text of the customer summary.</returns>
         public string CustomerSummary() {
-            string summary = "Customer Summary";
+            StringBuilder summary = new StringBuilder("Customer Summary");
             foreach (Customer c in customers)
-                summary += "\n - " + c.Name + " (" + FormatUtils.pluralize(c.NumberOfAccounts, "account") + ")";
-            return summary;
+                summary.Append(Environment.NewLine + " - " + c.Name + " (" + c.NumberOfAccounts + ( c.NumberOfAccounts == 1 ? " account" : " accounts") + ")");
+            return summary.ToString();
         }
 
         /// <summary>
