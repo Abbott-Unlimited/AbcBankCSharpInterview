@@ -21,7 +21,7 @@ namespace abc_bank
         /// <summary>
         /// This account's transaction history.
         /// </summary>
-        public List<Transaction> transactions;
+        private List<Transaction> transactions;
 
         /// <summary>
         /// Creates a new account of the specified type.
@@ -85,6 +85,39 @@ namespace abc_bank
                 default:
                     return Balance * 0.001m;
             }
+        }
+
+        /// <summary>
+        /// Generates a statement for this account.
+        /// </summary>
+        /// <returns>String containing the statement text.</returns>
+        public string GenerateStatement()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            //Translate to pretty account type
+            switch (this.Type)
+            {
+                case AccountType.CHECKING:
+                    sb.AppendLine("Checking Account");
+                    break;
+                case AccountType.SAVINGS:
+                    sb.AppendLine("Savings Account");
+                    break;
+                case AccountType.MAXI_SAVINGS:
+                    sb.AppendLine("Maxi Savings Account");
+                    break;
+            }
+
+            //Now total up all the transactions
+            decimal total = 0.00m;
+            foreach (Transaction t in this.transactions)
+            {
+                sb.AppendLine("  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + FormatUtils.ToDollars(t.Amount));
+                total += t.Amount;
+            }
+            sb.Append("Total " + FormatUtils.ToDollars(total));
+            return sb.ToString();
         }
     }
 }

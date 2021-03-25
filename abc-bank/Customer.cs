@@ -67,58 +67,18 @@ namespace abc_bank
         /// <returns>string containing the statement text.</returns>
         public string GetStatement() 
         {
-            string statement = null;
-            statement = "Statement for " + Name + "\n";
+            StringBuilder statement = new StringBuilder();
+            statement.AppendLine("Statement for " + Name);
             decimal total = 0.00m;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
+                statement.AppendLine();
+                statement.AppendLine(a.GenerateStatement());
                 total += a.Balance;
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
-            return statement;
-        }
-
-        /// <summary>
-        /// Generates a statement for an individual account.
-        /// </summary>
-        /// <param name="a">The account for which to generate the statement.</param>
-        /// <returns>string containing the statement text.</returns>
-        private string statementForAccount(Account a) 
-        {
-            string s = "";
-
-           //Translate to pretty account type
-            switch(a.Type){
-                case AccountType.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case AccountType.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case AccountType.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
-
-            //Now total up all the transactions
-            decimal total = 0.00m;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.Amount) + "\n";
-                total += t.Amount;
-            }
-            s += "Total " + ToDollars(total);
-            return s;
-        }
-
-        /// <summary>
-        /// Formats a value as a dollar amount.
-        /// </summary>
-        /// <param name="d">The decimal amount.</param>
-        /// <returns>string representation of the value as a dollar amount.</returns>
-        private string ToDollars(decimal d)
-        {
-            return string.Format("${0:N2}", Math.Abs(d));
+            statement.AppendLine();
+            statement.Append("Total In All Accounts " + FormatUtils.ToDollars(total));
+            return statement.ToString();
         }
     }
 }
