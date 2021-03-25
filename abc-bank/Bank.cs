@@ -33,9 +33,9 @@ namespace abc_bank
         /// <summary>
         /// Generates a summary of this customer's accounts.
         /// </summary>
-        /// <returns>String containing the text of the customer summary.</returns>
-        public String CustomerSummary() {
-            String summary = "Customer Summary";
+        /// <returns>string containing the text of the customer summary.</returns>
+        public string CustomerSummary() {
+            string summary = "Customer Summary";
             foreach (Customer c in customers)
                 summary += "\n - " + c.Name + " (" + format(c.NumberOfAccounts, "account") + ")";
             return summary;
@@ -47,7 +47,7 @@ namespace abc_bank
         /// <param name="number">The number associated with the word.</param>
         /// <param name="word">The word to pluralize.</param>
         /// <returns>The given word, pluralized as apporpriate to match the number.</returns>
-        private String format(int number, String word)
+        private string format(int number, string word)
         {
             return number + " " + (number == 1 ? word : word + "s");
         }
@@ -67,7 +67,7 @@ namespace abc_bank
         /// Returns the bank's first customer.
         /// </summary>
         /// <returns>The bank's first customer.</returns>
-        public String GetFirstCustomer()
+        public string GetFirstCustomer()
         {
             try
             {

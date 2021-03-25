@@ -11,7 +11,7 @@ namespace abc_bank
         /// <summary>
         /// The customer's full name.
         /// </summary>
-        public String Name { get; }
+        public string Name { get; }
 
         /// <summary>
         /// The number of accounts the customer has.
@@ -32,7 +32,7 @@ namespace abc_bank
         /// Creates a new Customer.
         /// </summary>
         /// <param name="name">The customer's full name.</param>
-        public Customer(String name)
+        public Customer(string name)
         {
             this.Name = name;
             this.accounts = new List<Account>();
@@ -64,10 +64,10 @@ namespace abc_bank
         /// <summary>
         /// Generates a statement for this customer's accounts.
         /// </summary>
-        /// <returns>String containing the statement text.</returns>
-        public String GetStatement() 
+        /// <returns>string containing the statement text.</returns>
+        public string GetStatement() 
         {
-            String statement = null;
+            string statement = null;
             statement = "Statement for " + Name + "\n";
             decimal total = 0.00m;
             foreach (Account a in accounts) 
@@ -83,10 +83,10 @@ namespace abc_bank
         /// Generates a statement for an individual account.
         /// </summary>
         /// <param name="a">The account for which to generate the statement.</param>
-        /// <returns>String containing the statement text.</returns>
-        private String statementForAccount(Account a) 
+        /// <returns>string containing the statement text.</returns>
+        private string statementForAccount(Account a) 
         {
-            String s = "";
+            string s = "";
 
            //Translate to pretty account type
             switch(a.Type){
@@ -115,10 +115,10 @@ namespace abc_bank
         /// Formats a value as a dollar amount.
         /// </summary>
         /// <param name="d">The decimal amount.</param>
-        /// <returns>String representation of the value as a dollar amount.</returns>
-        private String ToDollars(decimal d)
+        /// <returns>string representation of the value as a dollar amount.</returns>
+        private string ToDollars(decimal d)
         {
-            return String.Format("${0:N2}", Math.Abs(d));
+            return string.Format("${0:N2}", Math.Abs(d));
         }
     }
 }
