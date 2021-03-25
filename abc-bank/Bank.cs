@@ -54,23 +54,5 @@ namespace abc_bank
                 total += c.TotalInterestEarned();
             return total;
         }
-
-        /// <summary>
-        /// Returns the bank's first customer.
-        /// </summary>
-        /// <returns>The bank's first customer.</returns>
-        public string GetFirstCustomer()
-        {
-            try
-            {
-                customers = null;
-                return customers[0].Name;
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.StackTrace);
-                return "Error";
-            }
-        }
     }
 }
