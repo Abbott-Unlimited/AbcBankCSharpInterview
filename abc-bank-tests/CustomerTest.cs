@@ -15,9 +15,9 @@ namespace abc_bank_tests
 
             Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
-            checkingAccount.Deposit(100.0);
-            savingsAccount.Deposit(4000.0);
-            savingsAccount.Withdraw(200.0);
+            checkingAccount.Deposit(100.0m);
+            savingsAccount.Deposit(4000.0m);
+            savingsAccount.Withdraw(200.0m);
 
             Assert.AreEqual("Statement for Henry\n" +
                     "\n" +
@@ -50,12 +50,13 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
+        //[Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
