@@ -74,8 +74,16 @@ namespace abc_bank
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
+            foreach (Transaction t in a.transactions)
+            {
+                //s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
+                s += "  ";
+                if (t.depositType == (int)Transaction.DepositType.DEPOSIT)
+                    s += "deposit";
+                else if (t.depositType == (int)Transaction.DepositType.WITHDRAW)
+                    s += "withdrawal";
+                s += " ";
+                s += ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
             s += "Total " + ToDollars(total);
@@ -84,7 +92,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return string.Format("{0:C}", Math.Abs(d));
         }
     }
 }

@@ -27,16 +27,19 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(amount));
+                transactions.Add(new Transaction(amount, Transaction.DepositType.DEPOSIT));
             }
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(double amount)
         {
-            if (amount <= 0) {
+            if (amount <= 0)
+            {
                 throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
+            }
+            else
+            {
+                transactions.Add(new Transaction(-amount, Transaction.DepositType.WITHDRAW));
             }
         }
 

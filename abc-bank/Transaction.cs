@@ -12,8 +12,17 @@ namespace abc_bank
 
         private DateTime transactionDate;
 
-        public Transaction(double amount) 
+        public enum DepositType
         {
+            DEPOSIT = 1,
+            WITHDRAW = 2
+        }
+
+        public readonly int depositType;
+
+        public Transaction(double amount, DepositType depositType)
+        {
+            this.depositType = (int)depositType;
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
         }
