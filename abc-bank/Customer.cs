@@ -58,17 +58,21 @@ namespace abc_bank
         private String statementForAccount(Account a) 
         {
             String s = "";
+            //StringBuilder str = new StringBuilder(" ");
 
            //Translate to pretty account type
             switch(a.GetAccountType()){
                 case Account.CHECKING:
                     s += "Checking Account\n";
+                    //str.Append("Checking Account\n");
                     break;
                 case Account.SAVINGS:
                     s += "Savings Account\n";
+                    //str.Append("Savings Account\n");
                     break;
                 case Account.MAXI_SAVINGS:
                     s += "Maxi Savings Account\n";
+                    //str.Append("Maxi Savings Account\n");
                     break;
             }
 
@@ -78,16 +82,23 @@ namespace abc_bank
             {
                 //s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 s += "  ";
+                //str.Append("  ");
                 if (t.depositType == (int)Transaction.DepositType.DEPOSIT)
                     s += "deposit";
+                    //str.Append("deposit");
                 else if (t.depositType == (int)Transaction.DepositType.WITHDRAW)
                     s += "withdrawal";
+                    //str.Append("withdrawal");
                 s += " ";
+                //str.Append(" ");
                 s += ToDollars(t.amount) + "\n";
+                //str.Append(ToDollars(t.amount) + "\n");
                 total += t.amount;
             }
             s += "Total " + ToDollars(total);
+            //str.Append("Total " + ToDollars(total));
             return s;
+            //return str.ToString();
         }
 
         private String ToDollars(double d)
