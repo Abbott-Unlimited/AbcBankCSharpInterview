@@ -10,6 +10,13 @@ namespace abc_bank_tests
 
         private static readonly double DOUBLE_DELTA = 1e-15;
 
+        public DateTime currentdate;
+        [TestInitialize]
+        public void Setup()
+        {
+            currentdate = DateProvider.getInstance().Now();
+        }
+
         [TestMethod]
         public void CustomerSummary() 
         {
@@ -28,7 +35,7 @@ namespace abc_bank_tests
             Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
             bank.AddCustomer(bill);
 
-            checkingAccount.Deposit(100.0);
+            checkingAccount.Deposit(100.0, currentdate);
 
             Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
@@ -39,7 +46,7 @@ namespace abc_bank_tests
             Account checkingAccount = new Account(Account.SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
-            checkingAccount.Deposit(1500.0);
+            checkingAccount.Deposit(1500.0, currentdate);
 
             Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
@@ -50,9 +57,23 @@ namespace abc_bank_tests
             Account checkingAccount = new Account(Account.MAXI_SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
-            checkingAccount.Deposit(3000.0);
+            checkingAccount.Deposit(3000.0, currentdate);
 
             Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
+
+        [TestMethod]
+        public void Test_New_Maxi_savings_account()
+        {
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+
+            checkingAccount.Deposit(3000.0, DateTime.Today.AddDays(-12));
+            checkingAccount.Deposit(1000.0, currentdate);
+
+            Assert.AreEqual(53, bank.totalInterestPaid(), DOUBLE_DELTA);
+        }
+
     }
 }

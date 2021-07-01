@@ -43,6 +43,7 @@ namespace abc_bank
 
         public String GetStatement() 
         {
+            //"Statement for Henry\n\nChecking Account\n  deposit $%,.2f\nTotal $%,.2f\n\nSavings Account\n  deposit $%,.2f\n  withdrawal $%,.2f\nTotal $%,.2f\n\nTotal In All Accounts $%,.2f"
             String statement = null;
             statement = "Statement for " + name + "\n";
             double total = 0.0;
@@ -84,7 +85,20 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0, 0:C2}", Math.Abs(d));
+        }
+
+        public Boolean InternalTransfer(Account fromAccount, Account toAccount, double amt)
+        {
+            if (fromAccount.sumTransactions() >= amt)
+            {
+                toAccount.Deposit(amt, DateProvider.getInstance().Now());
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
