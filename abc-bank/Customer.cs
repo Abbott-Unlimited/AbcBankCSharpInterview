@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ namespace abc_bank
     {
         private String name;
         private List<Account> accounts;
+      
 
         public Customer(String name)
         {
@@ -24,8 +25,57 @@ namespace abc_bank
 
         public Customer OpenAccount(Account account)
         {
+            account.accountNumber = (GetNumberOfAccounts() + 1);
             accounts.Add(account);
             return this;
+        }
+
+        public String Transfer(decimal amount, int fromacct, int toacct)
+        {
+            int x = 0;
+            int confirmedfrom = -1;
+            int confirmedto = -1;
+
+            if (amount < 0.01m)
+                return "ERROR: Transfer amount cannot be less than 1 cent.";
+
+
+            if (fromacct == toacct)
+                return "ERROR: Sending and receiving account numbers are the same.";
+
+            foreach (Account a in accounts)
+            {
+                if (confirmedfrom == -1)
+                {
+                    if (a.accountNumber == fromacct)
+                    { 
+                        if (a.sumTransactions() < amount)                     
+                            return "ERROR: Insufficient funds.";                     
+                        confirmedfrom = x;
+                    }
+                }
+
+                if (confirmedto == -1)
+                {
+                    if (a.accountNumber == toacct)
+                    {
+                        confirmedto = x;
+                    }
+                }
+                if ((confirmedfrom >=0) && (confirmedto >=0))
+                {
+                    break;
+                }
+                x += 1;
+            }
+            if ((confirmedfrom >= 0) && (confirmedto >= 0))
+                {
+                accounts[confirmedfrom].Withdraw(amount);
+                accounts[confirmedto].Deposit(amount);
+                return "Transfer complete.";
+            }
+            else           
+                return "ERROR: One or more account numbers are invalid.";  
         }
 
         public int GetNumberOfAccounts()
@@ -33,11 +83,11 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public decimal TotalInterestEarned() 
         {
-            double total = 0;
+            decimal total = 0;
             foreach (Account a in accounts)
-                total += a.InterestEarned();
+                total += a.totalInterest;
             return total;
         }
 
@@ -45,7 +95,7 @@ namespace abc_bank
         {
             String statement = null;
             statement = "Statement for " + name + "\n";
-            double total = 0.0;
+            decimal total = 0;
             foreach (Account a in accounts) 
             {
                 statement += "\n" + statementForAccount(a) + "\n";
@@ -58,9 +108,11 @@ namespace abc_bank
         private String statementForAccount(Account a) 
         {
             String s = "";
+            s += "#" + a.accountNumber.ToString("X8") + ": ";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
+            //Translate to pretty account type
+            switch (a.GetAccountType()){
+                 
                 case Account.CHECKING:
                     s += "Checking Account\n";
                     break;
@@ -73,18 +125,20 @@ namespace abc_bank
             }
 
             //Now total up all the transactions
-            double total = 0.0;
+            decimal total = 0.0m;
             foreach (Transaction t in a.transactions) {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
+            total += a.totalInterest;
+            s += "Total Interest Earned: " + ToDollars(a.totalInterest) + "\n";
             s += "Total " + ToDollars(total);
             return s;
         }
 
-        private String ToDollars(double d)
+        private String ToDollars(decimal d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C}", Math.Abs(d));
         }
     }
 }
