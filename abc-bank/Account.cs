@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +8,22 @@ namespace abc_bank
 {
     public class Account
     {
-
         public const int CHECKING = 0;
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
-
         private readonly int accountType;
+        public int accountNumber;
+        public decimal totalInterest = 0;
+        public decimal todayInterest = 0;
         public List<Transaction> transactions;
-
-        public Account(int accountType) 
+        public Account(int accountType, int accountNumber = 0) 
         {
             this.accountType = accountType;
+            this.accountNumber = accountNumber;
             this.transactions = new List<Transaction>();
         }
 
-        public void Deposit(double amount) 
+        public void Deposit(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
@@ -31,7 +32,7 @@ namespace abc_bank
             }
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
@@ -40,39 +41,63 @@ namespace abc_bank
             }
         }
 
-        public double InterestEarned() 
+        public decimal InterestEarned() 
         {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
-                    else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
-                default:
-                    return amount * 0.001;
+                    return totalInterest;
+            
+        }
+
+        public decimal AddDailyInterest()
+        {
+            todayInterest = 0;
+            decimal balance = (sumTransactions());
+            bool maxiprimerate = true;
+
+            if (accountType == SAVINGS)
+            {
+                if (balance <= 1000)
+                    todayInterest = balance * (0.001m / 365);
+           
+                else
+                {
+                    todayInterest = 1000 * (0.001m / 365);
+                    todayInterest += (balance - 1000) * (0.002m / 365);
+                }
             }
+            else if (accountType == MAXI_SAVINGS)
+            {
+                foreach (Transaction t in transactions)
+                {
+                   if ((t.transactionDate - DateTime.Now).TotalDays < 5 && t.amount < 0)
+                        maxiprimerate = false;
+                }
+
+                if (maxiprimerate)
+                    todayInterest = balance * (0.05m / 365);
+                else
+                    todayInterest = balance * (0.001m / 365);
+            }
+            else
+            {
+                todayInterest = balance * (0.001m / 365);
+            }
+            if (todayInterest < 0)
+                todayInterest = 0;
+            totalInterest += todayInterest;
+            return todayInterest;
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
+
+        public decimal sumTransactions() {
+           return CheckIfTransactionsExist();
         }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        private decimal CheckIfTransactionsExist() 
         {
-            double amount = 0.0;
+            decimal amount = 0;
             foreach (Transaction t in transactions)
                 amount += t.amount;
-            return amount;
+            return amount + totalInterest;
         }
 
         public int GetAccountType() 
