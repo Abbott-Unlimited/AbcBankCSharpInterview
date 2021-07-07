@@ -2,6 +2,7 @@
 using abc_bank.Entities;
 using abc_bank.Enums;
 using abc_bank.Services;
+using abc_bank.Helpers;
 
 
 namespace abc_bank_tests
@@ -166,7 +167,27 @@ namespace abc_bank_tests
             Customer waylen = new Customer("Waylen");
             bs.AddCustomer(waylen);
 
-            Assert.AreEqual(bs.GetFirstCustomer(), "Billy");
+            Assert.AreEqual("Billy", bs.GetFirstCustomer());
+        }
+        [TestMethod]
+        public void MaxiSavingsAccountTransferTest()
+        {
+            BankServices bs = new BankServices();
+            Account maxiSavings = new Account(AccountTypeEnum.MAXI_SAVINGS);
+            var cust = new Customer("Bill");
+            bs.AddCustomer(cust);
+            bs.OpenAccount(cust, maxiSavings);
+
+            Account savingsAccount = new Account(AccountTypeEnum.SAVINGS);
+            bs.OpenAccount(cust, savingsAccount);
+
+            bs.Deposit(maxiSavings, 3000.00);
+            bs.Deposit(savingsAccount, 400.00);
+
+            bs.Transfer(maxiSavings, savingsAccount, 600.00);
+
+            Assert.AreEqual(2400.00, InterestCalculations.SumTransactions(maxiSavings), DOUBLE_DELTA);
+            Assert.AreEqual(1000.00, InterestCalculations.SumTransactions(savingsAccount), DOUBLE_DELTA);
         }
     }
 }

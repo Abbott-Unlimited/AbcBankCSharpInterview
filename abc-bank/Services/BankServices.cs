@@ -86,5 +86,21 @@ namespace abc_bank.Services
                 account.Transactions.Add(new Transaction(-amount));
             }
         }
+
+        public void Transfer(Account accountFrom, Account accountTo, double amount)
+        {
+            // We could check here to determine whether there is enough in accountFrom to cover the 
+            // transfer, but banks today will let you overdraw your accounts... Prolly the best bet
+            // is a message back to the user through the U.I. for confirmation of impending NSF charges.
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+            else
+            {
+                accountTo.Transactions.Add(new Transaction(amount));
+                accountFrom.Transactions.Add(new Transaction(-amount));
+            }
+        }
     }
 }

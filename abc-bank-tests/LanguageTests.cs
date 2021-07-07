@@ -10,19 +10,19 @@ namespace abc_bank_tests
         [TestMethod]
         public void FormatPluralTestPositive()
         {
-            Assert.AreEqual(Language.FormatPlural(2, "Duck"), "2 Ducks");
+            Assert.AreEqual("2 Ducks", Language.FormatPlural(2, "Duck"));
         }
 
         [TestMethod]
         public void FormatPluralTestNegative()
         {
-            Assert.AreEqual(Language.FormatPlural(1, "Duck"), "1 Duck");
+            Assert.AreEqual("1 Duck", Language.FormatPlural(1, "Duck"));
         }
 
         [TestMethod]
         public void ToDollarsTest()
         {
-            Assert.AreEqual(Language.ToDollars(456.10), "$456.10");
+            Assert.AreEqual("$456.10", Language.ToDollars(456.10));
         }
 
     }
