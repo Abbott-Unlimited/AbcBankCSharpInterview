@@ -1,90 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace abc_bank
+﻿namespace ABC_bank
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
+        private readonly string name;
+        private readonly List<Account> accounts;
 
-        public Customer(String name)
+        public Customer(string name)
         {
             this.name = name;
             this.accounts = new List<Account>();
         }
 
-        public String GetName()
+        public string GetName()
         {
-            return name;
+            return this.name;
         }
 
         public Customer OpenAccount(Account account)
         {
-            accounts.Add(account);
+            this.accounts.Add(account);
             return this;
         }
 
         public int GetNumberOfAccounts()
         {
-            return accounts.Count;
+            return this.accounts.Count;
         }
 
         public double TotalInterestEarned() 
         {
             double total = 0;
-            foreach (Account a in accounts)
+            foreach (Account a in this.accounts)
+            {
                 total += a.InterestEarned();
+            }
+
             return total;
         }
 
-        public String GetStatement() 
+        public string GetStatement() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
+            string statement = "Statement for " + this.name + Environment.NewLine;
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (Account a in this.accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statement += Environment.NewLine + this.StatementForAccount(a) + Environment.NewLine;
+                total += a.SumTransactions();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
+
+            statement += Environment.NewLine + "Total In All Accounts " + this.ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        private string StatementForAccount(Account a) 
         {
-            String s = "";
+            string s = string.Empty;
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
+            // Translate to pretty account type
+            switch (a.GetAccountType())
+            {
                 case Account.CHECKING:
-                    s += "Checking Account\n";
+                    s = "Checking Account" + Environment.NewLine;
                     break;
                 case Account.SAVINGS:
-                    s += "Savings Account\n";
+                    s = "Savings Account" + Environment.NewLine;
                     break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
+                case Account.MAXISAVINGS:
+                    s = "Maxi Savings Account" + Environment.NewLine;
                     break;
             }
 
-            //Now total up all the transactions
+            // Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
+            foreach (Transaction t in a.Transactions)
+            {
+                s += "  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + this.ToDollars(t.Amount) + Environment.NewLine;
+                total += t.Amount;
             }
-            s += "Total " + ToDollars(total);
+
+            s += "Total " + this.ToDollars(total);
             return s;
         }
 
-        private String ToDollars(double d)
+        private string ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return string.Format("{0:C}", Math.Abs(d));
         }
     }
 }
