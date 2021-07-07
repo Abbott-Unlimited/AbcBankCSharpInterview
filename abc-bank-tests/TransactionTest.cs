@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using abc_bank;
+using ABC_bank;
 
-namespace abc_bank_tests
+namespace ABC_bank_tests
 {
     [TestClass]
     public class TransactionTest
