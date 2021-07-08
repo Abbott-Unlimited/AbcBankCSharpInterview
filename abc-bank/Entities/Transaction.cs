@@ -6,7 +6,7 @@ namespace abc_bank.Entities
     {
         public readonly double amount;
 
-        private readonly DateTime transactionDate;
+        public readonly DateTime transactionDate;
 
         public Transaction(double amount)
         {

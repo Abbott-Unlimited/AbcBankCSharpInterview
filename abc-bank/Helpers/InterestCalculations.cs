@@ -1,4 +1,6 @@
-﻿using abc_bank.Entities;
+﻿using System;
+using abc_bank.Entities;
+using System.Linq;
 using abc_bank.Enums;
 
 namespace abc_bank.Helpers
@@ -23,18 +25,23 @@ namespace abc_bank.Helpers
                         return amount * 0.001;
                     else
                         return 1 + (amount - 1000) * 0.002;
-                //            case SUPER_SAVINGS:
-                //                if (amount <= 4000)
-                //                    return 20;
                 case AccountTypeEnum.MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount - 1000) * 0.05;
-                    return 70 + (amount - 2000) * 0.1;
+                    return GetMaxiSavingsInterest(amount, account);
                 default:
                     return amount * 0.001;
             }
+        }
+
+        private static double GetMaxiSavingsInterest(double amount, Account account)
+        {
+            var trans = account.Transactions.Where(a=> a.amount < 0).OrderByDescending(t => t.transactionDate).FirstOrDefault();
+
+            if (trans != null && (DateTime.Now.Date - trans.transactionDate.Date).TotalDays <= 10 && trans.amount <= 0)
+            {
+                return amount * .001;
+            }
+            else
+                return amount * .05;       
         }
 
         public static double SumTransactions(Account account)

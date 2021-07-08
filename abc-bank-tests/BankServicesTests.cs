@@ -20,7 +20,7 @@ namespace abc_bank_tests
             Customer billy = new Customer("Billy");
             bs.AddCustomer(billy);
 
-            Assert.AreEqual(bs.GetFirstCustomer(), "Billy");
+            Assert.AreEqual("Billy", bs.GetFirstCustomer());
         }
 
         [TestMethod]
@@ -52,12 +52,12 @@ namespace abc_bank_tests
         public void SavingsAccountDepositTest()
         {
             BankServices bs = new BankServices();
-            Account checkingAccount = new Account(AccountTypeEnum.SAVINGS);
+            Account savingsAccount = new Account(AccountTypeEnum.SAVINGS);
             var cust = new Customer("Bill");
             bs.AddCustomer(cust);
-            bs.OpenAccount(cust, checkingAccount);
+            bs.OpenAccount(cust, savingsAccount);
 
-            bs.Deposit(checkingAccount, 1500.0);
+            bs.Deposit(savingsAccount, 1500.0);
 
             Assert.AreEqual(2.0, bs.TotalInterestPaid(), DOUBLE_DELTA);
         }
@@ -66,14 +66,14 @@ namespace abc_bank_tests
         public void MaxiSavingsAccountDepositTest()
         {
             BankServices bs = new BankServices();
-            Account checkingAccount = new Account(AccountTypeEnum.MAXI_SAVINGS);
+            Account maxiSavings = new Account(AccountTypeEnum.MAXI_SAVINGS);
             var cust = new Customer("Bill");
             bs.AddCustomer(cust);
-            bs.OpenAccount(cust, checkingAccount);
+            bs.OpenAccount(cust, maxiSavings);
 
-            bs.Deposit(checkingAccount, 3000.00);
+            bs.Deposit(maxiSavings, 3000.00);
 
-            Assert.AreEqual(170.0, bs.TotalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(150.0, bs.TotalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
@@ -94,13 +94,13 @@ namespace abc_bank_tests
         public void SavingsAccountWithdrawTest()
         {
             BankServices bs = new BankServices();
-            Account checkingAccount = new Account(AccountTypeEnum.SAVINGS);
+            Account savingsAccount = new Account(AccountTypeEnum.SAVINGS);
             var cust = new Customer("Bill");
             bs.AddCustomer(cust);
-            bs.OpenAccount(cust, checkingAccount);
-            checkingAccount.Transactions.Add(new Transaction(1700.00));
+            bs.OpenAccount(cust, savingsAccount);
+            savingsAccount.Transactions.Add(new Transaction(1700.00));
 
-            bs.Withdraw(checkingAccount, 200.00);
+            bs.Withdraw(savingsAccount, 200.00);
 
             Assert.AreEqual(2.0, bs.TotalInterestPaid(), DOUBLE_DELTA);
         }
@@ -109,15 +109,15 @@ namespace abc_bank_tests
         public void MaxiSavingsAccountWithdrawTest()
         {
             BankServices bs = new BankServices();
-            Account checkingAccount = new Account(AccountTypeEnum.MAXI_SAVINGS);
+            Account maxiSavings = new Account(AccountTypeEnum.MAXI_SAVINGS);
             var cust = new Customer("Bill");
             bs.AddCustomer(cust);
-            bs.OpenAccount(cust, checkingAccount);
-            checkingAccount.Transactions.Add(new Transaction(3200.00));
+            bs.OpenAccount(cust, maxiSavings);
+            maxiSavings.Transactions.Add(new Transaction(3200.00));
 
-            bs.Withdraw(checkingAccount, 200.00);
+            bs.Withdraw(maxiSavings, 200.00);
 
-            Assert.AreEqual(170.0, bs.TotalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(3, bs.TotalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
