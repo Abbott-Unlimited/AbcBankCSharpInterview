@@ -33,26 +33,38 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public Customer TransferMoney(string withdrawAccount, string depositAccount, int amount)
+        public Customer TransferMoney(string withdrawAccountName, string depositAccountName, int amount)
         {
-            bool withdrawn, deposited;
-            withdrawn = deposited = false;
+            Account withdrawAccount, depositAccount;
+            withdrawAccount = depositAccount = null;
 
-            foreach (Account a in accounts)
+            bool successful = false;
+            foreach(Account a in accounts)
             {
-                if (a.accountName == withdrawAccount && !withdrawn)
+                if (a.accountName == withdrawAccountName && withdrawAccount == null)
                 {
-                    a.Withdraw(amount);
-                    withdrawn = true;
+                    withdrawAccount = a;
                 }
-                else if (a.accountName == depositAccount && !deposited)
+                else if (a.accountName == depositAccountName && depositAccount == null)
                 {
-                    a.Deposit(amount);
-                    deposited = true;
+                    depositAccount = a;
                 }
 
-                if (withdrawn && deposited)
+                if (withdrawAccount != null && depositAccount != null)
+                {
+                    withdrawAccount.Withdraw(amount);
+                    depositAccount.Deposit(amount);
+                    successful = true;
                     break;
+                }
+            }
+
+            if (!successful)
+            {
+                if(withdrawAccount == null)
+                    throw new ArgumentException("withdraw account not found");
+                else
+                    throw new ArgumentException("deposit account not found");
             }
 
             return this;

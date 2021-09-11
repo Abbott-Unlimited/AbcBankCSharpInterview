@@ -58,5 +58,18 @@ namespace abc_bank_tests
             
             Assert.AreEqual(2.8, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "amount would exceed current balance")]
+        public void Exceed_account_withdrawal() {
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(Account.SAVINGS);
+            bank.AddCustomer(new Customer("Jomb").OpenAccount(checkingAccount));
+
+            checkingAccount.Deposit(10.0);
+            checkingAccount.Withdraw(20.0);
+
+            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        }
     }
 }

@@ -43,6 +43,8 @@ namespace abc_bank
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
+            } else if (SumTransactions() < amount) {
+                throw new ArgumentException("amount would exceed current balance");
             } else {
                 transactions.Add(new Transaction(-amount));
             }

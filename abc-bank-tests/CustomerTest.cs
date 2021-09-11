@@ -60,6 +60,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "deposit account not found")]
         public void TestTransfer()
         {
 
@@ -86,6 +87,21 @@ namespace abc_bank_tests
                     "Total $50.00\n" +
                     "\n" +
                     "Total In All Accounts $200.00", jorge.GetStatement());
+        }
+
+        [TestMethod]
+        public void TestTransferException()
+        {
+
+            Account checkingAccount = new Account(Account.CHECKING, "Borge Checking");
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer jorge = new Customer("Borge").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(100.0);
+
+            jorge.TransferMoney("Savings", "Borge Bank", 50);
         }
     }
 }
