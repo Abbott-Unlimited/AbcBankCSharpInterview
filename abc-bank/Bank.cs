@@ -20,7 +20,8 @@ namespace abc_bank
             customers.Add(customer);
         }
 
-        public String CustomerSummary() {
+        public String CustomerSummary()
+        {
             String summary = "Customer Summary";
             foreach (Customer c in customers)
                 summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
@@ -31,15 +32,11 @@ namespace abc_bank
         //If number passed in is 1 just return the word otherwise add an 's' at the end
         private String format(int number, String word)
         {
+            //TODO: Fix parse issue.
             return number + " " + (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
-            double total = 0;
-            foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
-            return total;
-        }
+        public double TotalInterestPaid() => customers.Sum(x => x.TotalInterestEarned());
 
         public String GetFirstCustomer()
         {

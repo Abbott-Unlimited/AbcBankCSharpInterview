@@ -1,84 +1,99 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
     public class Account
     {
+        public AccountType AccountType { get; }
+        public List<Transaction> Transactions { get; }
+        private DateTime _accountAge;
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
-        public List<Transaction> transactions;
-
-        public Account(int accountType) 
+        public Account(AccountType accountType)
         {
-            this.accountType = accountType;
-            this.transactions = new List<Transaction>();
+            AccountType = accountType;
+            Transactions = new List<Transaction>();
+
+            _accountAge = DateTime.Now;
         }
 
-        public void Deposit(double amount) 
+        public TimeSpan GetAccountAge() =>
+            DateTime.Now.Subtract(_accountAge);
+
+        // For testing only.
+        public void SetAccountAge(int days) => _accountAge = DateTime.Now.Subtract(TimeSpan.FromDays(days)).Date;
+
+        public void Deposit(double amount, DateTime date)
         {
-            if (amount <= 0) {
+            if (amount <= 0)
+            {
                 throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(amount));
             }
+
+            Transactions.Add(new Transaction(amount, TransactionType.Deposit, date));
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(double amount, DateTime date)
         {
-            if (amount <= 0) {
+            if (amount <= 0)
+            {
                 throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
+            }
+
+            Transactions.Add(new Transaction(-amount, TransactionType.Withdraw, date));
+        }
+
+        public double InterestEarned()
+        {
+            var amount = SumTransactions();
+            const double savingsLow = 0.000027;
+            const double savingsHigh = 0.000055;
+            const double maxiSavings = 0.00014;
+            const double checking = 0.000027;
+
+            // Helper pure function to calculate more easily. Only used here so shouldn't be in outer scope.
+            double CalcRate(double rate, double accountAmount, int days) => accountAmount * (rate * days);
+
+            // Interest accrues over days.
+            if (AccountType == AccountType.Savings)
+            {
+                if (amount <= 1000)
+                {
+                    return CalcRate(savingsLow, amount, GetAccountAge().Days);
+                }
+
+                return CalcRate(savingsLow, 1000, GetAccountAge().Days) +
+                       CalcRate(savingsHigh, amount - 1000, GetAccountAge().Days);
+            }
+
+            if (AccountType == AccountType.MaxiSavings)
+            {
+                if (!Transactions.Exists(x =>
+                    x.TransactionType == TransactionType.Withdraw &&
+                    x.TransactionDate > DateTime.Now.Subtract(TimeSpan.FromDays(10))))
+                {
+                    return CalcRate(maxiSavings, amount, GetAccountAge().Days);
+                }
+            }
+
+            return CalcRate(checking, amount, GetAccountAge().Days);
+        }
+
+        public double SumTransactions() => Transactions.Sum(x => x.Amount);
+
+        // Customer can transfer between accounts, I'm assuming they mean money.
+        public void Transfer(double amount, Account account)
+        {
+            // Transfer can only go one way, if you want to take money from the other account use the 
+            // method on that account.
+            if (amount > 0)
+            {
+                account.Deposit(amount, DateTime.Now);
+
+                // Implicit this.
+                Withdraw(amount, DateTime.Now);
             }
         }
-
-        public double InterestEarned() 
-        {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
-                    else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
-                default:
-                    return amount * 0.001;
-            }
-        }
-
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
-        {
-            double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
-            return amount;
-        }
-
-        public int GetAccountType() 
-        {
-            return accountType;
-        }
-
     }
 }

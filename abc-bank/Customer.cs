@@ -33,58 +33,71 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
-        {
-            double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
-            return total;
-        }
+        public double TotalInterestEarned() => accounts.Sum(x => x.InterestEarned());
 
-        public String GetStatement() 
+        public string GetStatement()
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
-            double total = 0.0;
-            foreach (Account a in accounts) 
+            // Had to change all of my appendlines to \n. What was most likely happening is it was adding in a different
+            // kind of line break, such as \n\r or carriage return.
+            var statementBuilder = new StringBuilder();
+            var total = 0.0;
+
+            statementBuilder.Append($"Statement for {name}\n\n");
+
+            foreach (var account in accounts)
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statementBuilder.Append($"{StatementForAccount(account)}\n");
+                total += account.SumTransactions();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
-            return statement;
+
+            statementBuilder.Append($"Total In All Accounts {ToDollars(total)}");
+            return statementBuilder.ToString();
         }
 
-        private String statementForAccount(Account a) 
+        private String StatementForAccount(Account account)
         {
-            String s = "";
+            // Switch to string builder to save memory, strings are immutable.
+            var statementBuilder = new StringBuilder();
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
+            //Translate to pretty account type
+            switch (account.AccountType)
+            {
+                case AccountType.Checking:
+                    statementBuilder.Append("Checking Account\n");
                     break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
+                case AccountType.Savings:
+                    statementBuilder.Append("Savings Account\n");
                     break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
+                case AccountType.MaxiSavings:
+                    statementBuilder.Append("Maxi Savings Account\n");
                     break;
             }
 
             //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
+            var total = 0.0;
+            var counter = 0;
+
+            foreach (var transaction in account.Transactions)
+            {
+                var transactionType = transaction.TransactionType == TransactionType.Deposit ? "deposit" : "withdrawal";
+                statementBuilder.Append($"  {transactionType} {ToDollars(transaction.Amount)}");
+
+                // There are simpler ways to do this but in the interest of time I am going to have it just add lines 
+                // after transactions until it hits the end of the list.
+                counter += 1;
+                if (counter != account.Transactions.Count)
+                {
+                    statementBuilder.Append("\n");
+                }
+
+                total += transaction.Amount;
             }
-            s += "Total " + ToDollars(total);
-            return s;
+
+            statementBuilder.Append("\n");
+            statementBuilder.Append($"Total {ToDollars(total)}\n");
+            return statementBuilder.ToString();
         }
 
-        private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
-        }
+        private static string ToDollars(double amount) => $"{Math.Abs(amount):C}";
     }
 }
