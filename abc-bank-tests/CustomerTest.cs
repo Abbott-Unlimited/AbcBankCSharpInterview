@@ -60,7 +60,6 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "deposit account not found")]
         public void TestTransfer()
         {
 
@@ -90,6 +89,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "deposit account not found")]
         public void TestTransferException()
         {
 
