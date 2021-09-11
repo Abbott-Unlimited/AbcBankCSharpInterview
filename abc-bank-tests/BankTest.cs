@@ -53,6 +53,10 @@ namespace abc_bank_tests
             checkingAccount.Deposit(3000.0);
 
             Assert.AreEqual(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+            checkingAccount.Withdraw(200.0);
+            
+            Assert.AreEqual(2.8, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }
