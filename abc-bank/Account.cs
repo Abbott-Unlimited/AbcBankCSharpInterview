@@ -42,7 +42,7 @@ namespace abc_bank
 
         public double InterestEarned() 
         {
-            double amount = sumTransactions();
+            double amount = SumTransactions();
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
@@ -53,17 +53,35 @@ namespace abc_bank
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    bool hasWithdrawn = false;
+
+    //              Get the date from 10 days ago for easier comparing
+                    DateTime cutoff = DateProvider.getInstance().Now().AddDays(-10);
+
+    //              Reverse the transaction list to check the last transactions first, should be faster
+                    List<Transaction> reversedTransactions = transactions;
+                    reversedTransactions.Reverse();
+
+                    foreach (Transaction t in reversedTransactions)
+                    {
+                        if(t.amount < 0 && DateTime.Compare(t.transactionDate, cutoff) > 0)
+                        {
+                            hasWithdrawn = true;
+    //                      if any withdrawal is within cutoff, we can bail out. No need to check the rest
+                            break;
+                        }
+                    }
+                    if (hasWithdrawn)
+                        return amount * 0.001;
+                    else
+                        return amount * 0.05;
                 default:
+    //              defaults to Checking account logic
                     return amount * 0.001;
             }
         }
 
-        public double sumTransactions() {
+        public double SumTransactions() {
            return CheckIfTransactionsExist(true);
         }
 
