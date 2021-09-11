@@ -16,9 +16,17 @@ namespace abc_bank
         private readonly int accountType;
         public List<Transaction> transactions;
 
-        public Account(int accountType) 
+        public string accountName { get; private set; }
+
+        public Account(int accountType, string accountName = "") 
         {
             this.accountType = accountType;
+    //      Very rudimentary account naming system. Ideally, this would check for duplicate names and prevent that but that's outside the scope of this.
+            if (accountName == "")
+                this.accountName = this.GetAccountTypeName();
+            else
+                this.accountName = accountName;
+
             this.transactions = new List<Transaction>();
         }
 
@@ -96,6 +104,20 @@ namespace abc_bank
         public int GetAccountType() 
         {
             return accountType;
+        }
+
+        private string GetAccountTypeName()
+        {
+            switch (accountType)
+            {
+                case CHECKING:
+                    return "Checking";
+                case SAVINGS:
+                    return "Savings";
+                default:
+                    return "Maxi-Savings";
+            }
+                
         }
 
     }

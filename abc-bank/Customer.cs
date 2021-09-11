@@ -33,6 +33,31 @@ namespace abc_bank
             return accounts.Count;
         }
 
+        public Customer TransferMoney(string withdrawAccount, string depositAccount, int amount)
+        {
+            bool withdrawn, deposited;
+            withdrawn = deposited = false;
+
+            foreach (Account a in accounts)
+            {
+                if (a.accountName == withdrawAccount && !withdrawn)
+                {
+                    a.Withdraw(amount);
+                    withdrawn = true;
+                }
+                else if (a.accountName == depositAccount && !deposited)
+                {
+                    a.Deposit(amount);
+                    deposited = true;
+                }
+
+                if (withdrawn && deposited)
+                    break;
+            }
+
+            return this;
+        }
+
         public double TotalInterestEarned() 
         {
             double total = 0;

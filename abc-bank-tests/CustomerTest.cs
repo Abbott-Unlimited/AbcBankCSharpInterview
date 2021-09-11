@@ -58,5 +58,34 @@ namespace abc_bank_tests
             oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
+
+        [TestMethod]
+        public void TestTransfer()
+        {
+
+            Account checkingAccount = new Account(Account.CHECKING, "Jorge Checking");
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer jorge = new Customer("Jorge").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(100.0);
+
+            jorge.TransferMoney("Savings", "Jorge Checking", 50);
+
+            Assert.AreEqual("Statement for Jorge\n" +
+                    "\n" +
+                    "Checking Account\n" +
+                    "  deposit $100.00\n" +
+                    "  deposit $50.00\n" +
+                    "Total $150.00\n" +
+                    "\n" +
+                    "Savings Account\n" +
+                    "  deposit $100.00\n" +
+                    "  withdrawal $50.00\n" +
+                    "Total $50.00\n" +
+                    "\n" +
+                    "Total In All Accounts $200.00", jorge.GetStatement());
+        }
     }
 }
