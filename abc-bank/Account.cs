@@ -13,6 +13,20 @@ namespace abc_bank
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
 
+        //Savings rate
+        private const double SavingFirstThoRate = 0.001;
+        private const double SavingRemainingRate = 0.002;
+
+        //Maxi Saving rates
+        private const double MaxiSavingFirstThoRate = 0.02;
+        private const double MaxiSavingSecondThoRate = 0.05;
+        private const double MaxiSavingRemainingRate = 0.1;
+        private const double MaxiSavingWithdrawal10DaysRate = 0.001;
+        private const double MaxiSavingNoWithdrawalRate = 0.05;
+
+        //Checking's flat rate
+        private const double CheckingRate = 0.001;
+        
         private readonly int accountType;
         public List<Transaction> transactions;
 
@@ -42,24 +56,27 @@ namespace abc_bank
 
         public double InterestEarned() 
         {
+            //I changed the various rates to constants in the top of the page, because I am way to used to those things changing.  I don't think that this will
+            //   add siginificant CPU time and makes it more stable if someone tries to change the rate % over the years.
+            //If for an unchanging or more complex item, I would leave the values hardcoded, but use polymorphism with each class as a different banking option.
+            //I changed the switch's default value to a warning method, incase someone in the future tries to add an un-supported type,
+            //   instead of it seeming to flow though properly.  With the Checking account type as its own dedicated case now.
             double amount = sumTransactions();
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return amount * SavingFirstThoRate;
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
+                        return (SavingFirstThoRate * 1000) + ((amount-1000) * SavingRemainingRate);
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    if (MaxiDaysSinceWithdrawal(10)<=10)
+                        return amount * MaxiSavingWithdrawal10DaysRate;                    
+                    else
+                        return amount * MaxiSavingNoWithdrawalRate;
+                case CHECKING:
+                    return amount * CheckingRate;
                 default:
-                    return amount * 0.001;
+                    throw new Exception("Warning: Unknown account type. Interest unable to calculate.");
             }
         }
 
@@ -73,6 +90,34 @@ namespace abc_bank
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
+        }
+        public int MaxiDaysSinceWithdrawal(int outerLimit = 10)
+        {
+            int? days = null;
+            int checkDays = 0;
+            foreach (Transaction t in transactions)
+            {
+                if (t.amount > 0) continue;
+                checkDays = t.DaysSinceTransaction();
+                if (checkDays < outerLimit)
+                    return checkDays;
+                else if (days == null || days < checkDays)
+                    days = checkDays;
+            }
+            return (int)(days == null ? 0 : days);
+        }
+
+        public int MaxiDaysSinceLastTransaction()
+        {
+            int? days = null;
+            int checkDays = 0;
+            foreach (Transaction t in transactions)
+            {
+                checkDays = t.DaysSinceTransaction();
+                if (days == null || days < checkDays)
+                    days = checkDays;
+            }
+            return (int)(days == null ? 0 : days);
         }
 
         public int GetAccountType() 

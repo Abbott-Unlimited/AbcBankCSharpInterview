@@ -17,5 +17,17 @@ namespace abc_bank
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
         }
+
+        //Only for testing, so transactions can be backdated.
+        public Transaction(double amount, DateTime testingDate)
+        {
+            this.amount = amount;
+            this.transactionDate = testingDate;
+        }
+
+        public int DaysSinceTransaction()
+        {
+            return Math.Abs(DateProvider.getInstance().Now().Subtract(this.transactionDate).Days);
+        }
     }
 }

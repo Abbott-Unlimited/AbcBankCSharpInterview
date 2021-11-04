@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
+using System.Diagnostics;
 
 namespace abc_bank_tests
 {
@@ -28,7 +29,15 @@ namespace abc_bank_tests
             Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
             bank.AddCustomer(bill);
 
+
             checkingAccount.Deposit(100.0);
+            Assert.AreEqual(0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+            checkingAccount.transactions.Clear();
+            DateTime currentTime = DateProvider.getInstance().Now();
+            DateTime lastYear = new DateTime(currentTime.Year - 1, currentTime.Month, currentTime.Day);
+            checkingAccount.transactions.Add(new Transaction(100.00, lastYear));
+            //Debug.WriteLine(lastYear.ToShortDateString());
 
             Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
@@ -39,7 +48,10 @@ namespace abc_bank_tests
             Account checkingAccount = new Account(Account.SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
-            checkingAccount.Deposit(1500.0);
+            checkingAccount.transactions.Clear();
+            DateTime currentTime = DateProvider.getInstance().Now();
+            DateTime lastYear = currentTime.AddDays(-365);
+            checkingAccount.transactions.Add(new Transaction(1500.0, lastYear));
 
             Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
@@ -50,9 +62,18 @@ namespace abc_bank_tests
             Account checkingAccount = new Account(Account.MAXI_SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
-            checkingAccount.Deposit(3000.0);
+            checkingAccount.transactions.Clear();
+            DateTime currentTime = DateProvider.getInstance().Now();
+            DateTime lastYear = currentTime.AddDays(-182);
+            checkingAccount.transactions.Add(new Transaction(3000.0, lastYear));
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(1.5, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+            checkingAccount.transactions.Clear();
+            lastYear = new DateTime(currentTime.Year - 1, currentTime.Month, currentTime.Day);
+            checkingAccount.transactions.Add(new Transaction(3000.0, lastYear));
+
+            Assert.AreEqual(3, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }
