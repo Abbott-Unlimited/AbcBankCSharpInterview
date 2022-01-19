@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,6 +38,7 @@ namespace abc_bank
             double total = 0;
             foreach (Account a in accounts)
                 total += a.InterestEarned();
+                //total += Math.Round((a.InterestEarned() / 365) * a.MaxiDaysSinceLastTransaction(), 2);
             return total;
         }
 
@@ -84,7 +85,8 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            //return String.Format("$%,.2f", Math.Abs(d));
+            return Math.Abs(d).ToString("C2");
         }
     }
 }
