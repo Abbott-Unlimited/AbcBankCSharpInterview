@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,20 @@ namespace abc_bank
         public const int CHECKING = 0;
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
+
+        // Checking Account Rate
+        private const double CheckingAccountFlatRate = 0.001;
+
+        // Savings Account Rates
+        private const double SavingsAccountFirstRate = 0.001;
+        private const double SavingsAccountSecondRate = 0.002;
+
+        // Maxi Savings Account Rates
+        private const double OriginalMaxiFirstRate = 0.02;
+        private const double OriginalMaxiSecondRate = 0.05;
+        private const double OriginalMaxiThirdRate = 0.1;
+        private const double MaxiSavingsNoWithdrawl10Days = 0.05;
+        private const double MaxiSavingsWithdrawlPast10Days = 0.001;
 
         private readonly int accountType;
         public List<Transaction> transactions;
@@ -44,22 +58,29 @@ namespace abc_bank
         {
             double amount = sumTransactions();
             switch(accountType){
+                case CHECKING:
+                    return amount * CheckingAccountFlatRate;
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return amount * SavingsAccountFirstRate;
                     else
-                        return 1 + (amount-1000) * 0.002;
+                        return (SavingsAccountFirstRate * 1000) + ((amount - 1000) * SavingsAccountSecondRate);
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    //if (amount <= 1000)
+                    //    return amount * OriginalMaxiFirstRate;
+                    //if (amount <= 2000)
+                    //    return 20 + (amount-1000) * OriginalMaxiSecondRate;
+                    //return 70 + (amount-2000) * OriginalMaxiThirdRate;
+
+                    if (MaxiDaysSinceLastWithdrawl(10) <= 10)
+                        return amount * MaxiSavingsNoWithdrawl10Days;
+                    else
+                        return amount * MaxiSavingsWithdrawlPast10Days;
                 default:
-                    return amount * 0.001;
+                    throw new Exception("Warning: Unknown account type. Interest not calculated.");
             }
         }
 
@@ -78,6 +99,38 @@ namespace abc_bank
         public int GetAccountType() 
         {
             return accountType;
+        }
+
+        public int MaxiDaysSinceLastWithdrawl(int maxDays = 10)
+        {
+            int? days = null;
+            int checkDays = 0;
+
+            foreach (Transaction t in transactions)
+            {
+                if (t.amount > maxDays) continue;
+
+                checkDays = t.DaysSinceTransaction();
+                if (checkDays < maxDays)
+                    return checkDays;
+                else if (days == null || days < checkDays)
+                    days = checkDays;
+            }
+            return (int)(days == null ? 0 : days);
+        }
+
+        public int MaxiDaysSinceLastTransaction()
+        {
+            int? days = null;
+            int checkDays = 0;
+
+            foreach (Transaction t in transactions)
+            {
+                checkDays = t.DaysSinceTransaction();
+                if (days == null || days < checkDays)
+                    days = checkDays;
+            }
+            return (int)(days == null ? 0 : days);
         }
 
     }
