@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using abc_bank.Accounts;
 
 namespace abc_bank
 {
@@ -49,7 +50,7 @@ namespace abc_bank
             foreach (Account a in accounts) 
             {
                 statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                total += a.SumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
@@ -61,20 +62,20 @@ namespace abc_bank
 
            //Translate to pretty account type
             switch(a.GetAccountType()){
-                case Account.CHECKING:
+                case Account.AccountType.Checking:
                     s += "Checking Account\n";
                     break;
-                case Account.SAVINGS:
+                case Account.AccountType.Savings:
                     s += "Savings Account\n";
                     break;
-                case Account.MAXI_SAVINGS:
+                case Account.AccountType.MaxiSavings:
                     s += "Maxi Savings Account\n";
                     break;
             }
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
+            foreach (Transaction t in a) {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }

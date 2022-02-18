@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
+using abc_bank.Accounts;
 
 namespace abc_bank_tests
 {
@@ -10,8 +11,8 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestApp()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
-            Account savingsAccount = new Account(Account.SAVINGS);
+            Account checkingAccount = Account.Create(Account.AccountType.Checking);
+            Account savingsAccount = Account.Create(Account.AccountType.Savings);
 
             Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
@@ -36,7 +37,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestOneAccount()
         {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
+            Customer oscar = new Customer("Oscar").OpenAccount(Account.Create(Account.AccountType.Savings));
             Assert.AreEqual(1, oscar.GetNumberOfAccounts());
         }
 
@@ -44,8 +45,8 @@ namespace abc_bank_tests
         public void TestTwoAccount()
         {
             Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
+                 .OpenAccount(Account.Create(Account.AccountType.Savings));
+            oscar.OpenAccount(Account.Create(Account.AccountType.Checking));
             Assert.AreEqual(2, oscar.GetNumberOfAccounts());
         }
 
@@ -53,10 +54,28 @@ namespace abc_bank_tests
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS))
-                    .OpenAccount(new Account(Account.CHECKING))
-                    .OpenAccount(new Account(Account.MAXI_SAVINGS));
+                    .OpenAccount(Account.Create(Account.AccountType.Savings))
+                    .OpenAccount(Account.Create(Account.AccountType.Checking))
+                    .OpenAccount(Account.Create(Account.AccountType.MaxiSavings));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void TestTransferOfAmountFromAccountAToAccountB()
+        {
+            Account checkingAccount = Account.Create(Account.AccountType.Checking);
+            Account savingsAccount = Account.Create(Account.AccountType.Savings);
+
+            checkingAccount.Deposit(200.0);
+            savingsAccount.Deposit(500.0);
+
+            savingsAccount.Transfer(200.0, checkingAccount);
+
+            double savingsSum = savingsAccount.SumTransactions();
+            double checkingSum = checkingAccount.SumTransactions();
+
+            Assert.IsTrue(savingsSum == 300.00 && checkingSum == 400.00);
+
         }
     }
 }
