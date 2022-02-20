@@ -50,11 +50,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AccountTests\CheckingAccountTest.cs" />
+    <Compile Include="AccountTests\MaxiSavingsAccountTest.cs" />
+    <Compile Include="MockObjects\MockDateProvider.cs" />
+    <Compile Include="AccountTests\SavingsAccountTest.cs" />
     <Compile Include="BankTest.cs" />
     <Compile Include="CustomerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionTest.cs" />
-    <Compile Include="AccountTest.cs" />
+    <Compile Include="AccountTests\AccountTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\abc-bank\abc-bank.csproj">

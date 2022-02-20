@@ -45,9 +45,10 @@
     <Compile Include="Bank.cs" />
     <Compile Include="Accounts\CheckingAccount.cs" />
     <Compile Include="Customer.cs" />
-    <Compile Include="DateProvider.cs" />
+    <Compile Include="Utilities\Date\DateProvider.cs" />
+    <Compile Include="Utilities\Date\IDateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Transaction.cs" />
+    <Compile Include="Accounts\Transaction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

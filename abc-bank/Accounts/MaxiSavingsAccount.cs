@@ -8,7 +8,6 @@ namespace abc_bank.Accounts
 {
     public class MaxiSavingsAccount : Account
     {
-
         public override double InterestEarned()
         {
             double amount = SumTransactions();

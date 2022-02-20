@@ -2,8 +2,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
 using abc_bank.Accounts;
+using abc_bank.Utilities.Date;
+using abc_bank_tests.MockObjects;
 
-namespace abc_bank_tests
+namespace abc_bank_tests.AccountTests
 {
     [TestClass]
     public class BankTest
@@ -14,9 +16,10 @@ namespace abc_bank_tests
         [TestMethod]
         public void CustomerSummary() 
         {
+            IDateProvider dateProvider = new DateProvider();
             Bank bank = new Bank();
             Customer john = new Customer("John");
-            john.OpenAccount(Account.Create(Account.AccountType.Checking));
+            john.OpenAccount(Account.Create(MockDateProvider.Instance, Account.AccountType.Checking));
             bank.AddCustomer(john);
 
             Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary());
@@ -25,7 +28,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void CheckingAccount() {
             Bank bank = new Bank();
-            Account checkingAccount = Account.Create(Account.AccountType.Checking);
+            Account checkingAccount = Account.Create(DateProvider.Instance, Account.AccountType.Checking);
             Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
             bank.AddCustomer(bill);
 
@@ -37,7 +40,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void Savings_account() {
             Bank bank = new Bank();
-            Account checkingAccount = Account.Create(Account.AccountType.Savings);
+            Account checkingAccount = Account.Create(DateProvider.Instance, Account.AccountType.Savings);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(1500.0);
@@ -48,7 +51,7 @@ namespace abc_bank_tests
         [TestMethod]
         public void Maxi_savings_account() {
             Bank bank = new Bank();
-            Account checkingAccount = Account.Create(Account.AccountType.MaxiSavings);
+            Account checkingAccount = Account.Create(DateProvider.Instance, Account.AccountType.MaxiSavings);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(3000.0);

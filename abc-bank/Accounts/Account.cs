@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using abc_bank.Utilities.Date;
 
 namespace abc_bank.Accounts
 {
@@ -18,12 +19,14 @@ namespace abc_bank.Accounts
             MaxiSavings
         }
 
+        private IDateProvider _dateProvider;
+
         /// <summary>
         /// Returns an Account-derived instance based on the AccountType parameter.
         /// </summary>
         /// <param name="accountType"></param>
         /// <returns>An instance of Account</returns>
-        public static Account Create(AccountType accountType) 
+        public static Account Create(IDateProvider dateProvider, AccountType accountType) 
         {
             Account account = null;
             switch (accountType)
@@ -40,7 +43,7 @@ namespace abc_bank.Accounts
                 default:
                     throw new ArgumentException(accountType.ToString() + " is not a known AccountType");
             }
-
+            account._dateProvider = dateProvider;
             return account;
         }
 
@@ -56,7 +59,7 @@ namespace abc_bank.Accounts
             } 
             else 
             {
-                this.Add(new Transaction(amount));
+                this.Add(new Transaction(_dateProvider, amount));
             }
         }
 
@@ -72,7 +75,7 @@ namespace abc_bank.Accounts
             } 
             else 
             {
-                this.Add(new Transaction(-amount));
+                this.Add(new Transaction(_dateProvider, -amount));
             }
         }
 
@@ -88,8 +91,8 @@ namespace abc_bank.Accounts
             }
             else
             {
-                this.Add(new Transaction(-amount));
-                toAccount.Add(new Transaction(amount));
+                this.Add(new Transaction(_dateProvider, -amount));
+                toAccount.Add(new Transaction(_dateProvider, amount));
             }
         }
 
