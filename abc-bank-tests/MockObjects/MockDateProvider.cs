@@ -29,7 +29,7 @@ namespace abc_bank_tests.MockObjects
 
         public DateTime Now()
         {
-            return DateTime.Now;
+            return _current;
         }
     }
 }

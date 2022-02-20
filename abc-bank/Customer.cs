@@ -76,8 +76,8 @@ namespace abc_bank
             //Now total up all the transactions
             double total = 0.0;
             foreach (Transaction t in a) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
+                s += "  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.Amount) + "\n";
+                total += t.Amount;
             }
             s += "Total " + ToDollars(total);
             return s;

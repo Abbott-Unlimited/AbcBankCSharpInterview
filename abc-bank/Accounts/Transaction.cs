@@ -9,14 +9,23 @@ namespace abc_bank.Accounts
 {
     public class Transaction
     {
-        public readonly double amount;
-
-        private DateTime transactionDate;
-
-        public Transaction(IDateProvider dateProvider, double amount) 
+        public enum TransactionType
         {
-            this.amount = amount;
-            this.transactionDate = dateProvider.Now();
+            Deposit,
+            Withdrawal
+        }
+        
+        public readonly double Amount;
+
+        public DateTime TransactionDate { get; private set; }
+
+        public TransactionType Type { get; private set; }
+
+        public Transaction(IDateProvider dateProvider, double amount, TransactionType type) 
+        {
+            this.Amount = amount;
+            this.Type = type;
+            this.TransactionDate = dateProvider.Now();
         }
     }
 }

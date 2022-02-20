@@ -8,6 +8,20 @@ namespace abc_bank_tests.AccountTests
     [TestClass]
     public class AccountTest
     {
+
+        [TestMethod]
+        public void Create_DateProviderNotIncluded_ReturnsArgumentNullException()
+        {
+            try
+            {
+                Account acct = Account.Create(null, Account.AccountType.MaxiSavings);
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex is ArgumentNullException);
+            }
+        }
+
         [TestMethod]
         public void CreateCheckingAccount()
         {

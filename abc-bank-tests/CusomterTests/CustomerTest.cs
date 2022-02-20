@@ -4,7 +4,7 @@ using abc_bank;
 using abc_bank.Accounts;
 using abc_bank_tests.MockObjects;
 
-namespace abc_bank_tests
+namespace abc_bank_tests.CustomerTests
 {
     [TestClass]
     public class CustomerTest
