@@ -52,13 +52,14 @@
   <ItemGroup>
     <Compile Include="AccountTests\CheckingAccountTest.cs" />
     <Compile Include="AccountTests\MaxiSavingsAccountTest.cs" />
-    <Compile Include="MockObjects\MockDateProvider.cs" />
     <Compile Include="AccountTests\SavingsAccountTest.cs" />
+    <Compile Include="MockObjects\MockDateProvider.cs" />
     <Compile Include="BankTests\BankTest.cs" />
     <Compile Include="CusomterTests\CustomerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionTests\TransactionTest.cs" />
     <Compile Include="AccountTests\AccountTest.cs" />
+    <Compile Include="UtilitiesTests\DateProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\abc-bank\abc-bank.csproj">

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace abc_bank.Accounts
 {
+    /// <summary>
+    /// An abstraction for the AccountType MaxiSavingsAccount, derived from Account.
+    /// </summary>
     public class MaxiSavingsAccount : Account
     {
         // number of days since last withdrawal for max interest accrual
@@ -20,10 +23,10 @@ namespace abc_bank.Accounts
 
         protected override double GetCurrentRate(DateTime latestWithdrawDate, DateTime currentDate)
         {
-            double currentInterestRate = 0.0;
+            double currentInterestRate;
             TimeSpan daysDelta = new TimeSpan(DAYS_DELTA, 0, 0, 0);
 
-            if (latestWithdrawDate != default(DateTime))
+            if (latestWithdrawDate != default)
             {
                 if (currentDate - latestWithdrawDate < daysDelta)
                 {

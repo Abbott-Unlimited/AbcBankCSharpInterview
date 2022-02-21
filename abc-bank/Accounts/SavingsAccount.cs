@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace abc_bank.Accounts
 {
+    /// <summary>
+    /// An abstraction for the AccountType SavingsAccount, derived from Account.
+    /// </summary>
     public class SavingsAccount : Account
     {
         private const double MAX_RATE = .002;
@@ -17,7 +20,7 @@ namespace abc_bank.Accounts
             return AccountType.Savings;
         }
 
-        protected override double GetCurrentRate(DateTime latestWithdrawDate, DateTime currentDate)
+        protected override double GetCurrentRate(DateTime latestWithdrawDate = default, DateTime currentDate = default)
         {
             double amount = SumTransactions();
             double rate = MIN_RATE;

@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace abc_bank.Utilities.Date
 {
+    /// <summary>
+    /// A singleton to be injected to provide DateTime services.
+    /// </summary>
     public class DateProvider : IDateProvider
     {
         private static DateProvider _instance = null;
+
+        // there should only be one instance
+        private DateProvider() { }
 
         public static DateProvider Instance
         {

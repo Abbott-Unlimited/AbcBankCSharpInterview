@@ -44,7 +44,7 @@
     <Compile Include="Accounts\SavingsAccount.cs" />
     <Compile Include="Bank.cs" />
     <Compile Include="Accounts\CheckingAccount.cs" />
-    <Compile Include="Customer.cs" />
+    <Compile Include="Customers\Customer.cs" />
     <Compile Include="Utilities\Date\DateProvider.cs" />
     <Compile Include="Utilities\Date\IDateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

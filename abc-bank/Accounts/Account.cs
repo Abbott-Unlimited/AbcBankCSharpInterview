@@ -7,8 +7,14 @@ using abc_bank.Utilities.Date;
 
 namespace abc_bank.Accounts
 {
+    /// <summary>
+    /// The super class of all account classes.
+    /// </summary>
     public abstract class Account : List<Transaction>
     {
+        private protected IDateProvider dateProvider;
+        private protected DateTime dateOpened;
+
         /// <summary>
         /// The available account types that can be created through the Account factory.
         /// </summary>
@@ -19,22 +25,15 @@ namespace abc_bank.Accounts
             MaxiSavings
         }
 
-        private protected IDateProvider dateProvider;
-        private protected DateTime dateOpened;
-
         /// <summary>
         /// Returns an Account-derived instance based on the AccountType parameter.
         /// </summary>
-        /// <param name="accountType"></param>
-        /// <returns>An instance of Account</returns>
+        /// <param name="dateProvider">A date provider interface to retrieve transaction dates</param>
+        /// <param name="accountType">Indicates the account type to create</param>
+        /// <returns>An instance of a class derived from Account</returns>
         public static Account Create(IDateProvider dateProvider, AccountType accountType) 
         {
-            if (dateProvider == null)
-            {
-                throw new ArgumentNullException("dateProvider can't be null.");
-            }
-
-            Account account = null;
+            Account account;
             switch (accountType)
             {
                 case AccountType.Checking:
@@ -49,13 +48,13 @@ namespace abc_bank.Accounts
                 default:
                     throw new ArgumentException(accountType.ToString() + " is not a known AccountType");
             }
-            account.dateProvider = dateProvider;
+            account.dateProvider = dateProvider ?? throw new ArgumentNullException("dateProvider can't be null.");
             account.dateOpened = dateProvider.Now();
             return account;
         }
 
         /// <summary>
-        /// Saves the amount as a transaction to the account.
+        /// Saves the amount as a transaction in this account.
         /// </summary>
         /// <param name="amount">The amount of the deposit. Must be greater than 0.</param>
         public void Deposit(double amount) 
@@ -73,7 +72,7 @@ namespace abc_bank.Accounts
         /// <summary>
         /// Saves the amount as a negative transaction to the account.
         /// </summary>
-        /// <param name="amount">The amount of the withdraw. Must be greater than 0</param>
+        /// <param name="amount">The amount of the withdraw. Must be greater than 0.</param>
         public void Withdraw(double amount) 
         {
             if (amount <= 0) 
@@ -87,7 +86,7 @@ namespace abc_bank.Accounts
         }
 
         /// <summary>
-        /// Deposits the amount as a positive transaction to the this instance, and a withdraw of the amount from toAccount.
+        /// Withdraws the amount from this account, and deposits the amount in toAccount.
         /// </summary>
         /// <param name="amount">The amount of the transfer. Must be greater than 0</param>
         public void Transfer(double amount, Account toAccount)
@@ -104,10 +103,10 @@ namespace abc_bank.Accounts
         }
 
         /// <summary>
-        /// Returns the sum of all the transactions in the account.
+        /// Returns the sum of all transactions in the account.
         /// </summary>
-        /// <returns>The sum of transactions as a double.</returns>
-        public double SumTransactions(TimeSpan delta = default(TimeSpan))
+        /// <returns>The sum of all transactions.</returns>
+        public double SumTransactions()
         {
             double amount = 0.0;
             foreach (Transaction transaction in this)
@@ -118,7 +117,7 @@ namespace abc_bank.Accounts
         /// <summary>
         /// Calculates the total daily interest accrual for the account.
         /// </summary>
-        /// <returns>The total daily interest accrued</returns>
+        /// <returns>The total daily interest accrued. 0.0 if no transactions exist.</returns>
         public virtual double InterestEarned()
         {
             // if no transactions exist then no interest earned
@@ -127,7 +126,7 @@ namespace abc_bank.Accounts
             // initialize variables
             double totalInterestAccrual = 0.0; // return value
             double accountSum = 0.0; // sum of transactions up through current iteration
-            DateTime latestWithdrawDate = default(DateTime); // last withdraw date
+            DateTime latestWithdrawDate = default; // last withdraw date
             int totalDaysOpen = GetDaysSinceAccountOpen(); // number of days since opening account
 
             // initialize enumerator and get the first transaction
@@ -156,17 +155,34 @@ namespace abc_bank.Accounts
             return Math.Round(totalInterestAccrual, 2);
         }
 
-
+        /// <summary>
+        /// Returns the number of days the account has been open.
+        /// </summary>
+        /// <returns>An integer with total number of days the account has been open.</returns>
         private int GetDaysSinceAccountOpen()
         {
             return this.dateProvider.Now().Subtract(this.dateOpened).Days;
         }
 
+        /// <summary>
+        /// Calculates the interest given an account sum and a rate.
+        /// </summary>
+        /// <param name="accountSum">A double with the amount the interest rate should be applied.</param>
+        /// <param name="rate"></param>
+        /// <returns></returns>
         private double CalculateDailyInterestAccrual(double accountSum, double rate)
         {
             return accountSum * (rate / 365.0);
         }
 
+        /// <summary>
+        /// Sums the transactions for the current date referenced by the enumerator.
+        /// </summary>
+        /// <param name="currentDate">The date to check for transactions in the account.</param>
+        /// <param name="latestWithdrawDate">A reference to the latest withdraw datetime enumerated.</param>
+        /// <param name="enumeratedTransaction">A reference to the most recent transaction enumerated.</param>
+        /// <param name="transactions">This Account's enumerator to iterate through the transactions.</param>
+        /// <returns>The sum of all transactions for DateTime defined by currentDate.</returns>
         private double SumTransactionsForDate(DateTime currentDate, ref DateTime latestWithdrawDate, ref Transaction enumeratedTransaction, ref Enumerator transactions)
         {
             double sum = 0.0;
@@ -205,12 +221,18 @@ namespace abc_bank.Accounts
             return sum;
         }
 
-        protected abstract double GetCurrentRate(DateTime latestWithdrawDate, DateTime currentDate);
+        /// <summary>
+        /// Gets the current interest rate defined by the deriving class.
+        /// </summary>
+        /// <param name="latestWithdrawDate"></param>
+        /// <param name="currentDate"></param>
+        /// <returns></returns>
+        protected abstract double GetCurrentRate(DateTime latestWithdrawDate = default, DateTime currentDate = default);
 
         /// <summary>
-        /// 
+        /// Gets the AccountType defined by the deriving class.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An Account.AccountType indicating what kind of account it is.</returns>
         public abstract AccountType GetAccountType();
     }
 }

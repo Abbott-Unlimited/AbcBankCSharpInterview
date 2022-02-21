@@ -23,6 +23,11 @@ namespace abc_bank.Accounts
 
         public Transaction(IDateProvider dateProvider, double amount, TransactionType type) 
         {
+            if (amount < double.MinValue || amount > double.MaxValue)
+            {
+                throw new ArgumentOutOfRangeException("Amount is out of the range of the type double.");
+            }
+            
             this.Amount = amount;
             this.Type = type;
             this.TransactionDate = dateProvider.Now();
