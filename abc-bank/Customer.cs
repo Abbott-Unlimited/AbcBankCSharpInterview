@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace abc_bank
 {
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
+        private readonly String name;
+        private readonly List<Account> accounts;
 
         public Customer(String name)
         {
@@ -43,19 +44,34 @@ namespace abc_bank
 
         public String GetStatement() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
+            String statement = "Statement for " + name + "\n";
             double total = 0.0;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statement += "\n" + StatementForAccount(a) + "\n";
+                total += a.GetBalance();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        public void Transfer(double amount, Account fromAccount, Account toAccount)
+        {
+            if (amount <= 0)
+                throw new Exception("amount must be greater than 0");
+
+            if (amount > fromAccount.GetBalance())
+                throw new Exception("account does not have enough to transfer");
+
+            if (!accounts.Contains(fromAccount) || !accounts.Contains(toAccount))
+                throw new Exception("customer does not own the provided accounts");
+
+            fromAccount.Withdraw(amount);
+            toAccount.Deposit(amount);
+        }
+
+
+        private String StatementForAccount(Account a) 
         {
             String s = "";
 
@@ -72,19 +88,17 @@ namespace abc_bank
                     break;
             }
 
-            //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
+            foreach (Transaction t in a.GetTransactions()) {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
             }
-            s += "Total " + ToDollars(total);
+
+            s += "Total " + ToDollars(a.GetBalance());
             return s;
         }
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return Math.Abs(d).ToString("C", CultureInfo.CurrentCulture);
         }
     }
 }

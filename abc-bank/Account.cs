@@ -14,12 +14,15 @@ namespace abc_bank
         public const int MAXI_SAVINGS = 2;
 
         private readonly int accountType;
-        public List<Transaction> transactions;
+
+        private readonly List<Transaction> transactions;
+        private double balance;
 
         public Account(int accountType) 
         {
             this.accountType = accountType;
             this.transactions = new List<Transaction>();
+            this.balance = 0.0;
         }
 
         public void Deposit(double amount) 
@@ -27,7 +30,7 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(amount));
+                AddTransaction(new Transaction(amount));
             }
         }
 
@@ -36,43 +39,43 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(-amount));
+                AddTransaction(new Transaction(-amount));               
             }
         }
 
         public double InterestEarned() 
-        {
-            double amount = sumTransactions();
+        {            
             switch(accountType){
                 case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
+                    if (balance <= 1000)
+                        return balance * 0.001;
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
+                        return 1 + (balance - 1000) * 0.002;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    var withdrawls = transactions.Where(t => t.amount < 0).ToList();
+                    if (withdrawls.Exists(t => t.GetDate() >= DateProvider.GetInstance().Now().AddDays(-10)))
+                        return balance * 0.001;
+                    else
+                        return balance * 0.05;
                 default:
-                    return amount * 0.001;
+                    return balance * 0.001;
             }
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
+        public void AddTransaction(Transaction transaction)
+        {
+            transactions.Add(transaction);
+            balance += transaction.amount;
         }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        public double GetBalance() 
         {
-            double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
-            return amount;
+            return balance;
+        }
+
+        public List<Transaction> GetTransactions()
+        {
+            return transactions;
         }
 
         public int GetAccountType() 
