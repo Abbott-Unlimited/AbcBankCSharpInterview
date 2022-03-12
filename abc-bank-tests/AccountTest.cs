@@ -66,39 +66,6 @@ namespace abc_bank_tests
             Assert.AreEqual(3.0, account.InterestEarned());
         }
 
-/*        [TestMethod]
-        [Ignore]
-        public void InterestEarnedMaxiBelow1000()
-        {
-            var account = new Account(Account.MAXI_SAVINGS);
-            account.Deposit(1000);
-
-            Assert.AreEqual(20.0, account.InterestEarned());
-        }*/
-
-/*        [TestMethod]
-        [Ignore]
-        public void InterestEarnedMaxiAbove1000Below2000()
-        {
-            var account = new Account(Account.MAXI_SAVINGS);
-            account.Deposit(1000);
-            account.Deposit(500);
-
-            Assert.AreEqual(20.0 + 25.0, account.InterestEarned());
-        }*/
-
-/*        [TestMethod]
-        [Ignore]
-        public void InterestEarnedMaxiAbout2000()
-        {
-            var account = new Account(Account.MAXI_SAVINGS);
-            account.Deposit(1000);
-            account.Deposit(500);
-            account.Deposit(1000);
-
-            Assert.AreEqual(20.0 + 50.0 + 50.0, account.InterestEarned());
-        }*/
-
         [TestMethod]
         public void InterestEarnedMaxiWithdralInPast10Days()
         {
