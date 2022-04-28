@@ -24,6 +24,10 @@ namespace abc_bank
 
         public Customer OpenAccount(Account account)
         {
+            if(accounts.Any(a => a.GetAccountType() == account.GetAccountType()))
+            {
+                throw new ArgumentException("cannot open multiple accounts of the same type.");
+            }
             accounts.Add(account);
             return this;
         }
