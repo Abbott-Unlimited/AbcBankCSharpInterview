@@ -22,11 +22,24 @@ namespace abc_bank
             return name;
         }
 
+        public void Transfer(Account from, Account to, double amount)
+        {
+            if(from.sumTransactions() - amount >= 0)
+            {
+                from.Withdraw(amount);
+                to.Deposit(amount);
+            }
+            else
+            {
+                throw new Exception("not enough money in account to transfer.");
+            }
+        }
+
         public Customer OpenAccount(Account account)
         {
             if(accounts.Any(a => a.GetAccountType() == account.GetAccountType()))
             {
-                throw new ArgumentException("cannot open multiple accounts of the same type.");
+                throw new Exception("cannot open multiple accounts of the same type.");
             }
             accounts.Add(account);
             return this;

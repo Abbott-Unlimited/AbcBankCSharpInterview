@@ -58,5 +58,23 @@ namespace abc_bank_tests
             oscar.OpenAccount(new Account(Account.MAXI_SAVINGS)); //added new account to correctly represent test.
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
+
+        [TestMethod]
+        public void TestTransfer()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(4000.0);
+            savingsAccount.Withdraw(200.0);
+
+            henry.Transfer(savingsAccount, checkingAccount, 3800); 
+            //not sure what entity should control this process
+            //figured as the customer, they are managing their accounts.
+
+            Assert.AreEqual(3900.0, checkingAccount.sumTransactions());
+        }
     }
 }
