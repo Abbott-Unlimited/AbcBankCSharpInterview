@@ -108,7 +108,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-			// mn6473 - Negative amount will be wrapped in parentheses. For example, ($500.25) instead of -$500.25.
+			// Negative amount will be wrapped in parentheses. For example, ($500.25) instead of -$500.25.
 			return String.Format($"{d:C}");		
 //            return String.Format("$%,.2f", Math.Abs(d));
         }

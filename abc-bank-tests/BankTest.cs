@@ -39,10 +39,8 @@ namespace abc_bank_tests
         [TestMethod]
         public void Savings_account() {
             Bank bank = new Bank();
-			// mn6473 - Changed variable name from 'checkingAccount'. It is not important because
-			// this is only a test method but the name 'checkingAccount' caused confusion for me
-			// when I was looking through the code.
             Account savingsAccount = new Account(Account.SAVINGS);
+
             bank.AddCustomer(new Customer("Bill").OpenAccount(savingsAccount));
 
 			savingsAccount.Deposit(1500.0);
@@ -53,16 +51,17 @@ namespace abc_bank_tests
         [TestMethod]
         public void Maxi_savings_account() {
             Bank bank = new Bank();
-			// mn6473 - Changed variable name from 'checkingAccount'
 			Account maxiSavings = new Account(Account.MAXI_SAVINGS);
+
             bank.AddCustomer(new Customer("Bill").OpenAccount(maxiSavings));
 
             maxiSavings.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
-        }
+// Updated to reflect implementation of how MaxiSavings interest is calculated
+//			Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+			Assert.AreEqual(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+		}
 
-		// mn6473
 		[TestMethod]
 		public void GetAllCustomers()
 		{

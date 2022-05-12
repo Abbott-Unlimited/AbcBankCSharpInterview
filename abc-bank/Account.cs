@@ -8,7 +8,6 @@ namespace abc_bank
 {
     public class Account
     {
-
         public const int CHECKING = 0;
         public const int SAVINGS = 1;
         public const int MAXI_SAVINGS = 2;
@@ -33,17 +32,10 @@ namespace abc_bank
 
         public void Withdraw(double amount) 
         {
-			//if (amount <= 0) {
-			//    throw new ArgumentException("amount must be greater than zero");
-			//} else {
-			//    transactions.Add(new Transaction(-amount));
-			//}
-
 			if (amount <= 0)
 			{
 				throw new ArgumentException("amount must be greater than zero");
 			}
-			// mn6473 - Make sure account has sufficient funds
 			else if (amount > this.sumTransactions())
 			{
 				throw new Exception("attempt to withdraw more than is contained in the account");
@@ -57,21 +49,30 @@ namespace abc_bank
 		public double InterestEarned() 
         {
             double amount = sumTransactions();
-            switch(accountType){
+
+            switch(accountType)
+			{
                 case SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.001;
                     else
                         return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
+
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+					// Interest rate is 0.1% if there are any withdrawals in past 10 days. Otherwise, 5%.
+					int withdrawalsInPastTenDaysCount = transactions.Where(t => t.amount < 0 && t.TransactionDate > DateTime.Today.AddDays(-10)).Count();
+
+					double interestPercent = (withdrawalsInPastTenDaysCount > 0) ? 0.001 : 0.05;
+
+					return amount * interestPercent;
+
+				//  --- Original code. Commented out for implementation of new rate calculation above ---
+                //    if (amount <= 1000)
+                //        return amount * 0.02;
+                //    if (amount <= 2000)
+                //        return 20 + (amount-1000) * 0.05;
+                //    return 70 + (amount-2000) * 0.1;
+
                 default:
                     return amount * 0.001;
             }

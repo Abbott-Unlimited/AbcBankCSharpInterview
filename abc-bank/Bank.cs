@@ -55,7 +55,6 @@ namespace abc_bank
             }
         }
 
-		// Get all customers
 		// mn6473 - Added this method per requirement "A bank manager can get a report showing the list of customers and how many accounts they have."
 		public List<Customer> Customers => customers;
 
