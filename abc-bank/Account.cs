@@ -33,14 +33,28 @@ namespace abc_bank
 
         public void Withdraw(double amount) 
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
-            }
-        }
+			//if (amount <= 0) {
+			//    throw new ArgumentException("amount must be greater than zero");
+			//} else {
+			//    transactions.Add(new Transaction(-amount));
+			//}
 
-        public double InterestEarned() 
+			if (amount <= 0)
+			{
+				throw new ArgumentException("amount must be greater than zero");
+			}
+			// mn6473 - Make sure account has sufficient funds
+			else if (amount > this.sumTransactions())
+			{
+				throw new Exception("attempt to withdraw more than is contained in the account");
+			}
+			else
+			{
+				transactions.Add(new Transaction(-amount));
+			}
+		}
+
+		public double InterestEarned() 
         {
             double amount = sumTransactions();
             switch(accountType){
