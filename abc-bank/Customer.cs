@@ -55,6 +55,30 @@ namespace abc_bank
             return statement;
         }
 
+		// mn6473 - Added this method per Additional Feature requirement to allow a customer to transfer between funds
+		public void Transfer(int fromAccountType, int toAccountType, double amount)
+		{
+			Account fromAccount = accounts.Where(a => a.GetAccountType() == fromAccountType).SingleOrDefault();
+
+			if (fromAccount != null)
+			{
+				Account toAccount = accounts.Where(a => a.GetAccountType() == toAccountType).SingleOrDefault();
+
+				if (toAccount == null)
+				{
+					toAccount = new Account(toAccountType);
+					OpenAccount(toAccount);
+				}
+
+				fromAccount.Withdraw(amount);
+				toAccount.Deposit(amount);
+			}
+			else
+			{
+				throw (new Exception($"Attempt to transfer from a non-existent account: account type {fromAccountType}"));
+			}
+		}
+
         private String statementForAccount(Account a) 
         {
             String s = "";
@@ -84,7 +108,9 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+			// Negative amount will be wrapped in parentheses. For example, ($500.25) instead of -$500.25.
+			return String.Format($"{d:C}");		
+//            return String.Format("$%,.2f", Math.Abs(d));
         }
     }
 }
