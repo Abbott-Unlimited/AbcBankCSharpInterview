@@ -7,8 +7,7 @@ namespace abc_bank_tests
     [TestClass]
     public class BankTest
     {
-
-        private static readonly double DOUBLE_DELTA = 1e-15;
+        // This DOUBLE_DELTA is unnecessary, decimals are precise enough
 
         [TestMethod]
         public void CustomerSummary() 
@@ -28,9 +27,9 @@ namespace abc_bank_tests
             Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
             bank.AddCustomer(bill);
 
-            checkingAccount.Deposit(100.0);
+            checkingAccount.Deposit(100.0M);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(0.1M, bank.totalInterestPaid());
         }
 
         [TestMethod]
@@ -39,20 +38,26 @@ namespace abc_bank_tests
             Account checkingAccount = new Account(Account.SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
-            checkingAccount.Deposit(1500.0);
+            checkingAccount.Deposit(1500.0M);
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(2.0M, bank.totalInterestPaid());
         }
 
+        // Changing how Maxi-Savings accounts work changes the expected results from 170
         [TestMethod]
         public void Maxi_savings_account() {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+            Account maxiAccount = new Account(Account.MAXI_SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            bank.AddCustomer(new Customer("Logan").OpenAccount(maxiAccount));
 
-            checkingAccount.Deposit(3000.0);
+            checkingAccount.Deposit(3000.0M);
+            maxiAccount.Deposit(1500.0M);
+            maxiAccount.Withdraw(500.0M);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            // Expecting 150 from Bill's account and 1 from Logan's due to recent withdrawal
+            Assert.AreEqual(151.0M, bank.totalInterestPaid());
         }
     }
 }

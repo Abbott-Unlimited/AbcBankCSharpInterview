@@ -8,16 +8,16 @@ namespace abc_bank
 {
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
+        private readonly string name;
+        private readonly List<Account> accounts;
 
-        public Customer(String name)
+        public Customer(string name)
         {
             this.name = name;
             this.accounts = new List<Account>();
         }
 
-        public String GetName()
+        public string GetName()
         {
             return name;
         }
@@ -28,36 +28,48 @@ namespace abc_bank
             return this;
         }
 
+        public void Transfer(Account fromAccount, Account toAccount, decimal amount)
+        {
+            if (!accounts.Contains(fromAccount) || !accounts.Contains(toAccount))
+            {
+                throw new ArgumentException("at least one account does not exist");
+            } else {
+                fromAccount.Withdraw(amount);
+                toAccount.Deposit(amount);
+            }
+        }
+
         public int GetNumberOfAccounts()
         {
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public decimal TotalInterestEarned() 
         {
-            double total = 0;
+            decimal total = 0;
             foreach (Account a in accounts)
                 total += a.InterestEarned();
             return total;
         }
 
-        public String GetStatement() 
+        public string GetStatement() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
-            double total = 0.0;
+            // Setting a string to null can lead to NullReference Exceptions, so I'm opting to implement a StringBuilder 
+            var buffer = new StringBuilder($"Statement for {name}\n");
+            // Decimals are more procise for currency than using a double
+            decimal total = 0.0M;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                buffer = buffer.Append($"\n{StatementForAccount(a)}\n");
+                total += a.SumTransactions();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
-            return statement;
+            buffer = buffer.Append($"\nTotal In All Accounts {ToDollars(total)}");
+            return buffer.ToString();
         }
 
-        private String statementForAccount(Account a) 
+        private string StatementForAccount(Account a) 
         {
-            String s = "";
+            string s = "";
 
            //Translate to pretty account type
             switch(a.GetAccountType()){
@@ -73,7 +85,7 @@ namespace abc_bank
             }
 
             //Now total up all the transactions
-            double total = 0.0;
+            decimal total = 0.0M;
             foreach (Transaction t in a.transactions) {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
@@ -82,9 +94,9 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
+        private string ToDollars(decimal d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return string.Format("{0:C}", Math.Abs(d));
         }
     }
 }

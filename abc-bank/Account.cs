@@ -22,7 +22,7 @@ namespace abc_bank
             this.transactions = new List<Transaction>();
         }
 
-        public void Deposit(double amount) 
+        public void Deposit(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
@@ -31,7 +31,7 @@ namespace abc_bank
             }
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
@@ -40,36 +40,51 @@ namespace abc_bank
             }
         }
 
-        public double InterestEarned() 
+        public decimal InterestEarned() 
         {
-            double amount = sumTransactions();
+            // It's better to replace magic numbers with constants
+            const decimal CheckingsInterest = 0.001M;
+            const decimal SavingsInterest = 0.002M;
+            const decimal MaxiSavings = 0.05M;
+
+            decimal amount = SumTransactions();
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return amount * CheckingsInterest;
                     else
-                        return 1 + (amount-1000) * 0.002;
+                        return 1 + (amount-1000) * SavingsInterest;
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    var qualify = true;
+                    foreach (Transaction t in this.transactions)
+                    {
+                        if (t.amount < 0 && t.transactionDate > System.DateTime.Now.AddDays(-10))
+                        {
+                            qualify = false;
+                            break;
+                        }
+                    }
+                    if (qualify == true)
+                        return amount * MaxiSavings;
+                    else
+                        return amount * CheckingsInterest;
                 default:
-                    return amount * 0.001;
+                    return amount * CheckingsInterest;
+
+                
             }
         }
 
-        public double sumTransactions() {
+        public decimal SumTransactions() {
            return CheckIfTransactionsExist(true);
         }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        private decimal CheckIfTransactionsExist(bool checkAll) 
         {
-            double amount = 0.0;
+            decimal amount = 0.0M;
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
