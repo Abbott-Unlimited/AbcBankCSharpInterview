@@ -84,7 +84,20 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:c}", Math.Abs(d));
+        }
+
+        public bool Transfer(Account fromAccount, Account toAcccount, double amount)
+        {
+            bool success = false;
+            //if balance of fromAccountType >=
+            if (fromAccount.sumTransactions() >= amount)
+            {
+                fromAccount.Withdraw(amount);
+                toAcccount.Deposit(amount);
+                success = true;
+            }
+            return success;
         }
     }
 }
