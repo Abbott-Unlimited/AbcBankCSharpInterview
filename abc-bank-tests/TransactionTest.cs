@@ -4,9 +4,15 @@ using abc_bank;
 
 namespace abc_bank_tests
 {
+    /// <summary>
+    /// Transaction Test Object
+    /// </summary>
     [TestClass]
     public class TransactionTest
     {
+        /// <summary>
+        /// Transaction instance.
+        /// </summary>
         [TestMethod]
         public void Transaction()
         {

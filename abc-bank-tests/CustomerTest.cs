@@ -4,9 +4,15 @@ using abc_bank;
 
 namespace abc_bank_tests
 {
+    /// <summary>
+    /// Customer Test Object
+    /// </summary>
     [TestClass]
     public class CustomerTest
     {
+        /// <summary>
+        /// Tests the application.
+        /// </summary>
         [TestMethod]
         public void TestApp()
         {
@@ -18,6 +24,10 @@ namespace abc_bank_tests
             checkingAccount.Deposit(100.0);
             savingsAccount.Deposit(4000.0);
             savingsAccount.Withdraw(200.0);
+
+            //Following duplicated in Assert.  Not necessary.
+            //henry.GetStatement();
+
 
             Assert.AreEqual("Statement for Henry\n" +
                     "\n" +
@@ -33,6 +43,9 @@ namespace abc_bank_tests
                     "Total In All Accounts $3,900.00", henry.GetStatement());
         }
 
+        /// <summary>
+        /// Tests the one account.
+        /// </summary>
         [TestMethod]
         public void TestOneAccount()
         {
@@ -40,6 +53,9 @@ namespace abc_bank_tests
             Assert.AreEqual(1, oscar.GetNumberOfAccounts());
         }
 
+        /// <summary>
+        /// Tests the two account.
+        /// </summary>
         [TestMethod]
         public void TestTwoAccount()
         {
@@ -49,13 +65,18 @@ namespace abc_bank_tests
             Assert.AreEqual(2, oscar.GetNumberOfAccounts());
         }
 
+        /// <summary>
+        /// Tests the three accounts.
+        /// </summary>
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
+
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }

@@ -1,0 +1,10 @@
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\bin\Debug\abc-bank-tests.dll
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\bin\Debug\abc-bank-tests.pdb
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\bin\Debug\abc-bank.dll
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\bin\Debug\abc-bank.pdb
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\obj\Debug\abc-bank-tests.csproj.AssemblyReference.cache
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\obj\Debug\abc-bank-tests.csproj.CoreCompileInputs.cache
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\obj\Debug\abc-bank-tests.csproj.CopyComplete
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\obj\Debug\abc-bank-tests.dll
+C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank-tests\obj\Debug\abc-bank-tests.pdb
