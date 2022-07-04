@@ -4,3 +4,9 @@ C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank\obj\Debug\abc-b
 C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank\obj\Debug\abc-bank.csproj.CoreCompileInputs.cache
 C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank\obj\Debug\abc-bank.dll
 C:\Projects\ABC Bank\AbcBankCSharpInterview-development\abc-bank\obj\Debug\abc-bank.pdb
+C:\Users\stova\Source\Repos\stovallpl27\AbcBankCSharpInterview\abc-bank\bin\Debug\abc-bank.dll
+C:\Users\stova\Source\Repos\stovallpl27\AbcBankCSharpInterview\abc-bank\bin\Debug\abc-bank.pdb
+C:\Users\stova\Source\Repos\stovallpl27\AbcBankCSharpInterview\abc-bank\obj\Debug\abc-bank.csproj.AssemblyReference.cache
+C:\Users\stova\Source\Repos\stovallpl27\AbcBankCSharpInterview\abc-bank\obj\Debug\abc-bank.csproj.CoreCompileInputs.cache
+C:\Users\stova\Source\Repos\stovallpl27\AbcBankCSharpInterview\abc-bank\obj\Debug\abc-bank.dll
+C:\Users\stova\Source\Repos\stovallpl27\AbcBankCSharpInterview\abc-bank\obj\Debug\abc-bank.pdb

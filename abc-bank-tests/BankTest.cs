@@ -57,7 +57,7 @@ namespace abc_bank_tests
         }
 
         /// <summary>
-        /// Test the Maxi Savings Account. 
+        /// Test the Maxi Savings Account.
         /// </summary>
         [TestMethod]
         public void Maxi_savings_account() {
@@ -67,7 +67,7 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(3000.0);
 
-            Assert.AreEqual(130, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(150, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }

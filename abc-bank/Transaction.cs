@@ -28,7 +28,7 @@ namespace abc_bank
         /// <summary>
         /// Days since the transaction.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>number of days of transaction</returns>
         public int DaysSinceTransaction()
         {
             return Math.Abs(DateProvider.getInstance().Now().Subtract(this.transactionDate).Days);

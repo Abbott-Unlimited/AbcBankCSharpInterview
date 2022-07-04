@@ -85,19 +85,17 @@ namespace abc_bank
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (CheckforDepositsOnly()) //if all the transactions are deposits then calculate the interest accordingly.
-                    {
-                        if (amount <= 1000)
-                            return amount * MaxiInterestRateFirstThousdand;
-                        if (amount <= 2000)
-                            return (MaxiInterestRateFirstThousdand * 1000) + (amount - 1000) * MaxiInterestRateAboveThousand;
-                        return (((MaxiInterestRateFirstThousdand * 1000) + (amount - 1000) * MaxiInterestRateAboveThousand) + (amount - 2000) * MaxiInterestRateAboveTwoThousand);
-                    }
+                        //if (amount <= 1000)
+                            //return amount * MaxiInterestRateFirstThousdand;
+                        //if (amount <= 2000)
+                            //return (MaxiInterestRateFirstThousdand * 1000) + (amount - 1000) * MaxiInterestRateAboveThousand;
+                        //return (((MaxiInterestRateFirstThousdand * 1000) + (amount - 1000) * MaxiInterestRateAboveThousand) + (amount - 2000) * MaxiInterestRateAboveTwoThousand);
 
-                    if (MaxiDaysGreaterThan(10)) // if the withdrawals are more than 10 days ago then calculate the Interested properly.
+
+                    if (MaxiDaysGreaterThan(10)) // if there are no withdrawals are more than 10 days ago then calculate the Interested at 5%.
                         return amount * MaxiInterestRateNoWD10Days;
                     else
-                        return amount * MaxiInterestRateWDPast10Days;  // if the withdrawals are within the last 10 days then calculate the Interest properly.
+                        return amount * MaxiInterestRateWDPast10Days;  // if the withdrawals are within the last 10 days then calculate the Interest at 0.1%.
                 default:
                     return amount * 0.001;
             }
@@ -151,32 +149,15 @@ namespace abc_bank
                         break;
                     }
                 }
+                else
+                {
+                    // this is a deposit and we aren't concerned with the transaction day being over/under the max days.
+                    over10Days = true;
+                }
 
             }
             return (over10Days);
         }
 
-        /// <summary>Checks to see if the transactions are all deposits.</summary>
-        /// <returns>
-        ///   True or False
-        /// </returns>
-        public bool CheckforDepositsOnly()
-        {
-            bool onlyDeposits = false;
-
-            foreach (Transaction t in transactions)
-            {
-                if (t.amount > 0)
-                    onlyDeposits = true;
-                else
-                {
-                    onlyDeposits = false;
-                    break;
-                }
-
-            }
-
-            return onlyDeposits;
-        }
     }
 }
