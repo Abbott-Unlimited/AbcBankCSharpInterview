@@ -44,15 +44,30 @@ namespace abc_bank_tests
             Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
+
+        //RPM 20220726 - changing amt and name, due to changes for MAXI-SAVINGS_ACCT
         [TestMethod]
-        public void Maxi_savings_account() {
+        public void Maxi_savings_account_no10DayWithdraw() {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            bank.AddCustomer(new Customer("Bert").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(150.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void Maxi_savings_account_10DayWithdraw()
+        {
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Ernie").OpenAccount(checkingAccount));
+
+            checkingAccount.Deposit(3000.0);
+            checkingAccount.Withdraw(1000.0);
+
+            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }

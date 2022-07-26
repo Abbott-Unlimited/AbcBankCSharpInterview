@@ -16,9 +16,12 @@ namespace abc_bank
         private readonly int accountType;
         public List<Transaction> transactions;
 
+        public string accountNumber;
+
         public Account(int accountType) 
         {
             this.accountType = accountType;
+            this.accountNumber = GenerateAccountNumber();
             this.transactions = new List<Transaction>();
         }
 
@@ -27,7 +30,7 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(amount));
+                transactions.Add(new Transaction(amount, Transaction.DEPOSIT));
             }
         }
 
@@ -35,8 +38,30 @@ namespace abc_bank
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
+            } else if (amount > this.sumTransactions()) {
+                throw new ArgumentException("insufficient funds to make this withdraw");
             } else {
-                transactions.Add(new Transaction(-amount));
+                transactions.Add(new Transaction(-amount, Transaction.WITHDRAW));
+            }
+        }
+
+        public void Transfer(double amount, Account toAcct)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            } else if (amount > this.sumTransactions())
+            {
+                throw new ArgumentException("insufficient funds to make this transfer");
+            }
+            else if (toAcct == this)
+            {
+                throw new ArgumentException("cannot tranfer to the same account");
+            }
+            else
+            {
+                transactions.Add(new Transaction(-amount, Transaction.TRANSFER));
+                toAcct.transactions.Add(new Transaction(amount, Transaction.TRANSFER));
             }
         }
 
@@ -49,15 +74,11 @@ namespace abc_bank
                         return amount * 0.001;
                     else
                         return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    bool last10 = transactions.Any(x => x.transactionDate.AddDays(10) > DateTime.Now && x.transactionType == Transaction.WITHDRAW);
+                    if (last10) 
+                        return amount * 0.001;
+                    return amount * 0.05;
                 default:
                     return amount * 0.001;
             }
@@ -78,6 +99,18 @@ namespace abc_bank
         public int GetAccountType() 
         {
             return accountType;
+        }
+
+        private string GenerateAccountNumber()
+        {
+            string s = "";
+            Random r = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                int n = r.Next(10);
+                s += n.ToString();
+            }
+            return s;
         }
 
     }
