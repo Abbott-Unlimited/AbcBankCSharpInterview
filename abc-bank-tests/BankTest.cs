@@ -7,7 +7,6 @@ namespace abc_bank_tests
     [TestClass]
     public class BankTest
     {
-
         private static readonly double DOUBLE_DELTA = 1e-15;
 
         [TestMethod]

@@ -6,16 +6,29 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    /// <summary>
+    /// Describes a Bank Transaction
+    /// </summary>
     public class Transaction
-    {
-        public readonly double amount;
-
-        private DateTime transactionDate;
-
-        public Transaction(double amount) 
+    {        
+        public Transaction(DateTime date, Account account, double amount) 
         {
-            this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            AccountNumber = account.AccountNumber;
+            StartingBalance = account.CurrentBalance;
+            Amount = amount;
+
+            // If you are adding a transaction retroactively (i.e., to correct an error), the date may NOT be the current date
+            TransactionDate = date == null ? DateProvider.getInstance().Now() : date;
+        }
+
+        public DateTime? TransactionDate { get; set; }
+        public int AccountNumber { get; set; }
+        public double StartingBalance { get; set; }
+        public double Amount { get; set; }
+
+        public virtual double Execute()
+        {
+            return Amount;
         }
     }
 }
