@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,59 +9,54 @@ namespace abc_bank
 {
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
-
-        public Customer(String name)
+        public Customer(string name)
         {
-            this.name = name;
-            this.accounts = new List<Account>();
+            Name = name;
+            Accounts = new List<Account>();
         }
 
-        public String GetName()
-        {
-            return name;
-        }
+        public string Name { get; set; }
+        public List<Account> Accounts { get; set; }
 
         public Customer OpenAccount(Account account)
         {
-            accounts.Add(account);
+            Accounts.Add(account);
             return this;
         }
 
         public int GetNumberOfAccounts()
         {
-            return accounts.Count;
+            return Accounts.Count;
         }
 
         public double TotalInterestEarned() 
         {
             double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
+            foreach (Account a in Accounts)
+                total += a.InterestEarned(Accounts);
             return total;
         }
 
-        public String GetStatement() 
+        public string GetStatement() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
+            var statement = new StringBuilder();
+            statement.Append("Statement for " + Name + "\n");
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (Account a in Accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
+                statement.Append("\n" + StatementForAccount(a) + "\n");
                 total += a.sumTransactions();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
-            return statement;
+            statement.Append("\nTotal In All Accounts " + ToDollars(total));
+            return statement.ToString();
         }
 
-        private String statementForAccount(Account a) 
+        private string StatementForAccount(Account a) 
         {
-            String s = "";
-
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
+            string s = "";
+            
+            //Translate to pretty account type
+            switch (a.GetAccountType()){
                 case Account.CHECKING:
                     s += "Checking Account\n";
                     break;
@@ -82,9 +78,10 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
+        private string ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            //return string.Format("$%,.2f", Math.Abs(d));
+            return d.ToString("c", CultureInfo.CurrentCulture);
         }
     }
 }
