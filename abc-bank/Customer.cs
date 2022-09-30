@@ -46,11 +46,13 @@ namespace abc_bank
             String statement = null;
             statement = "Statement for " + name + "\n";
             double total = 0.0;
+
             foreach (Account a in accounts) 
             {
                 statement += "\n" + statementForAccount(a) + "\n";
                 total += a.sumTransactions();
             }
+
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
@@ -83,8 +85,8 @@ namespace abc_bank
         }
 
         private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
+        { 
+            return $"{Math.Abs(d):C2}";
         }
     }
 }
