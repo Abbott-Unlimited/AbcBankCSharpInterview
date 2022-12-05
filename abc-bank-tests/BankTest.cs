@@ -11,7 +11,7 @@ namespace abc_bank_tests
         private static readonly double DOUBLE_DELTA = 1e-15;
 
         [TestMethod]
-        public void CustomerSummary() 
+        public void CustomerSummary()
         {
             Bank bank = new Bank();
             Customer john = new Customer("John");
@@ -22,7 +22,8 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void CheckingAccount() {
+        public void CheckingAccount()
+        {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.CHECKING);
             Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
@@ -30,29 +31,66 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(100.0);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(0.1, bank.TotalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
-        public void Savings_account() {
+        public void Savings_account()
+        {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(1500.0);
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(2.0, bank.TotalInterestPaid(), DOUBLE_DELTA);
         }
 
+        /// <summary>
+        /// Existing Implementation is commented and Additional feature is coded
+        /// with a TestMethod defined below.
+        /// </summary>
         [TestMethod]
-        public void Maxi_savings_account() {
+        [Ignore]
+        public void Maxi_savings_account()
+        {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.MAXI_SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(170.0, bank.TotalInterestPaid(), DOUBLE_DELTA);
         }
+
+        #region | Integrated: Maxi-Savings Additional Feature |
+        /// <summary>
+        /// interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%.
+        /// </summary>
+        [TestMethod]
+        public void Maxi_savings_account_no_withdrawal()
+        {
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+
+            checkingAccount.Deposit(3000.0);
+
+            Assert.AreEqual(150.0, bank.TotalInterestPaid(), DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void Maxi_savings_account_withdrawal()
+        {
+            Bank bank = new Bank();
+            Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiAccount));
+
+            maxiAccount.Deposit(6000.0);
+            maxiAccount.Withdraw(3000.0);
+
+            Assert.AreEqual(3.0, bank.TotalInterestPaid(), DOUBLE_DELTA);
+        }
+        #endregion
     }
 }
