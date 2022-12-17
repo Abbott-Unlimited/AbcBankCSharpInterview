@@ -1,25 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
     public class DateProvider
     {
+        #region | Globals |
         private static DateProvider instance = null;
+        #endregion
 
-        public static DateProvider getInstance()
+        #region | GetInstance |
+        public static DateProvider GetInstance()
         {
             if (instance == null)
                 instance = new DateProvider();
             return instance;
         }
+        #endregion
 
+        #region | Now |
         public DateTime Now()
         {
             return DateTime.Now;
         }
+        #endregion
     }
 }

@@ -50,13 +50,61 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
+        //[Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void TransferFunds()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer dominic = new Customer("Dominic");
+            dominic.OpenAccount(checkingAccount);
+            dominic.OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(6000.0);
+            savingsAccount.Deposit(4000.0);
+
+            Assert.IsTrue(dominic.TransferFunds(Account.CHECKING, Account.SAVINGS, 1000)); 
+        }
+
+        [TestMethod]
+        public void TransferFundsWithExceededAmount()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer dominic = new Customer("Dominic");
+            dominic.OpenAccount(checkingAccount);
+            dominic.OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(6000.0);
+            savingsAccount.Deposit(4000.0);
+
+            Assert.IsTrue(dominic.TransferFunds(Account.CHECKING, Account.SAVINGS, 10000));
+        }
+
+        [TestMethod]
+        public void TransferFundsWithNonExistingAccount()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer dominic = new Customer("Dominic");
+            dominic.OpenAccount(checkingAccount);
+            dominic.OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(6000.0);
+            savingsAccount.Deposit(4000.0);
+
+            Assert.IsTrue(dominic.TransferFunds(Account.MAXI_SAVINGS, Account.SAVINGS, 10000));
         }
     }
 }

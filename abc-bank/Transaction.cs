@@ -1,21 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
     public class Transaction
     {
+        #region | Globals |
         public readonly double amount;
 
-        private DateTime transactionDate;
+        //private DateTime transactionDate;
 
-        public Transaction(double amount) 
+        /// <summary>
+        /// The field is readonly to be only initialized in Constructor.
+        /// The field is public to make transactionDate accessible in other Classes.
+        /// </summary>
+        public readonly DateTime transactionDate;
+        #endregion
+
+        #region | Constructors |
+        public Transaction(double amount)
         {
             this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            this.transactionDate = DateProvider.GetInstance().Now();
         }
+        #endregion
     }
 }
