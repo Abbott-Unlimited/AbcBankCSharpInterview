@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace abc_bank
 {
@@ -59,7 +60,10 @@ namespace abc_bank
         /// </summary>
         public double InterestEarned()
         {
-            double amount = SumTransactions();
+            double amount = SumTransactions();            
+            DateTime tenDaysAgo = DateProvider.GetInstance().Now().AddDays(-10);
+            bool hasWithdrawnWithinLast10Days = transactions.Any(x => x.transactionDate > tenDaysAgo);
+
             switch (accountType)
             {
                 case CHECKING:
@@ -72,6 +76,8 @@ namespace abc_bank
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * TWO_PERCENT_INTEREST;
+                    if (hasWithdrawnWithinLast10Days)
+                        return amount * POINT_ONE_PERCENT_INTEREST;
                     if (amount <= 2000)
                         return amount * FIVE_PERCENT_INTEREST;
                     return amount * TEN_PERCENT_INTEREST;
