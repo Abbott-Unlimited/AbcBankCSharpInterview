@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
@@ -20,24 +17,30 @@ namespace abc_bank
             customers.Add(customer);
         }
 
-        public String CustomerSummary() {
+        public String CustomerSummary()
+        {
             String summary = "Customer Summary";
-            foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+            foreach (Customer customer in customers)
+            {
+                var numberOfAccounts = customer.GetNumberOfAccounts();
+                summary += "\n - " + customer.GetName() + " (" + numberOfAccounts + MakeWordPlural(numberOfAccounts, "account") + ")";
+            }
+
             return summary;
         }
 
         //Make sure correct plural of word is created based on the number passed in:
         //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
+        private String MakeWordPlural(int number, String word)
         {
-            return number + " " + (number == 1 ? word : word + "s");
+            return (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
+        public double TotalInterestPaid()
+        {
             double total = 0;
-            foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
+            foreach (Customer customer in customers)
+                total += customer.TotalInterestEarned();
             return total;
         }
 

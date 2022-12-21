@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
@@ -33,34 +30,35 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public double TotalInterestEarned()
         {
             double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
+            foreach (Account account in accounts)
+                total += account.InterestEarned();
             return total;
         }
 
-        public String GetStatement() 
+        public String GetStatement()
         {
             String statement = null;
             statement = "Statement for " + name + "\n";
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (Account account in accounts)
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statement += "\n" + StatementForAccount(account) + "\n";
+                total += account.SumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        private String StatementForAccount(Account account)
         {
             String s = "";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
+            //Translate to pretty account type
+            switch (account.GetAccountType())
+            {
                 case Account.CHECKING:
                     s += "Checking Account\n";
                     break;
@@ -74,7 +72,8 @@ namespace abc_bank
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
+            foreach (Transaction t in account.transactions)
+            {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
