@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace abc_bank.Utilities
+namespace AbcCompanyEstablishmentApp.Utilities
 {
-    public class BankValues
+    public class AbcCustomValues
     {
         public const double POINT_ONE_PERCENT_INTEREST = 0.001;
         public const double POINT_TWO_PERCENT_INTEREST = 0.002;
@@ -21,7 +21,18 @@ namespace abc_bank.Utilities
             MAXI_SAVINGS = 2
         }
 
+        public enum TransactionType
+        {
+            DEPOSIT = 0,
+            WITHDRAWAL = 1
+        }
 
-
+        public enum EstablishmentType
+        {
+            BANK = 0,
+            RENTAL_AGENCY = 1,
+            LOAN_ORIGINATION_FIRM = 2,
+            LOAN_SERVICER = 3
+        }
     }
 }

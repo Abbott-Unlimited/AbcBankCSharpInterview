@@ -1,11 +1,11 @@
-﻿using abc_bank.Utilities;
+﻿using AbcCompanyEstablishmentApp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace abc_bank.Controllers
+namespace AbcCompanyEstablishmentApp.Controllers
 {
     public static class CustomerController
     {
@@ -37,10 +37,5 @@ namespace abc_bank.Controllers
         {
             return Customers.FirstOrDefault(x => x.AccountID == customerID).Accounts.Count;
         }
-
-        
-
-
-
     }
 }

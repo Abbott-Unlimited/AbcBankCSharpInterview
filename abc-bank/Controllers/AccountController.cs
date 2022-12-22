@@ -1,21 +1,21 @@
-﻿using abc_bank.Utilities;
+﻿using AbcCompanyEstablishmentApp.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static abc_bank.Utilities.BankValues;
+using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
-namespace abc_bank.Controllers
+namespace AbcCompanyEstablishmentApp.Controllers
 {
     internal static class AccountController
     {
-        public static List<Account> Accounts;
+        public static List<Account> Accounts = new List<Account>();
 
         public static Guid AddAccount(AccountType accountType, string ownerName, double creationAmount)
         {
             var newAccount = new Account(
-                accountType: (int)accountType, 
+                accountType: accountType, 
                 creationAmount: creationAmount, 
                 ownerName: ownerName
                 );

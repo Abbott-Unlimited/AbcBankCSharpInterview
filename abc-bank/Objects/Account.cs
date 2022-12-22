@@ -1,10 +1,10 @@
-﻿using abc_bank.Controllers;
+﻿using AbcCompanyEstablishmentApp.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static abc_bank.Utilities.BankValues;
+using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
-namespace abc_bank
+namespace AbcCompanyEstablishmentApp
 {
     public class Account
     {
@@ -23,9 +23,9 @@ namespace abc_bank
             set { if (TransactionController.ValidateTransaction(this, value)) { accountAmount = value; } }
         }
 
-        public Account(int accountType, double creationAmount, string ownerName)
+        public Account(AccountType accountType, double creationAmount, string ownerName)
         {
-            Type = (AccountType)accountType;
+            Type = accountType;
             AccountID = Guid.NewGuid();            
             AccountAmount = creationAmount;
             OwnerName = ownerName;

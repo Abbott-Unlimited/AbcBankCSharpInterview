@@ -1,10 +1,10 @@
-﻿using abc_bank.Controllers;
-using abc_bank.Utilities;
+﻿using AbcCompanyEstablishmentApp.Controllers;
+using AbcCompanyEstablishmentApp.Utilities;
 using System;
 using System.Collections.Generic;
-using static abc_bank.Utilities.BankValues;
+using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
-namespace abc_bank
+namespace AbcCompanyEstablishmentApp
 {
     public class Customer
     {
@@ -21,7 +21,7 @@ namespace abc_bank
         public List<AccountType> AccountTypes = new List<AccountType>();
         public Dictionary<Guid, AccountType> Accounts = new Dictionary<Guid, AccountType>();
 
-        public Customer(int accountType, double creationAmount, string firstName, string lastName)
+        public Customer(AccountType accountType, double creationAmount, string firstName, string lastName)
         {
             AccountID = Guid.NewGuid();
             FirstName = firstName;

@@ -1,11 +1,13 @@
-﻿using abc_bank.Utilities;
+﻿using AbcCompanyEstablishmentApp.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace abc_bank.Controllers
+namespace AbcCompanyEstablishmentApp.Controllers
 {
     internal class TransactionController
     {
@@ -75,6 +77,18 @@ namespace abc_bank.Controllers
                 return false;
             }
             return true;
+        }
+
+        public static double TotalTransactions(List<Transaction> transactions, string workingString = "")
+        {            
+            double total = 0.0;
+
+            foreach (Transaction transaction in transactions)
+            {
+                total += transaction.amount;
+            }
+
+            return total;
         }
     }
 }

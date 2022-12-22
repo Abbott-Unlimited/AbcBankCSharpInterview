@@ -1,7 +1,7 @@
-﻿using abc_bank;
+﻿using AbcCompanyEstablishmentApp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace abc_bank_tests
+namespace AbcCompanyEstablishmentAppTests
 {
     [TestClass]
     public class TransactionTest

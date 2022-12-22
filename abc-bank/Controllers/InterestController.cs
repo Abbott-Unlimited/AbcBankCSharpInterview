@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static abc_bank.Utilities.BankValues;
+using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
-namespace abc_bank.Controllers
+namespace AbcCompanyEstablishmentApp.Controllers
 {
     internal class InterestController
     {

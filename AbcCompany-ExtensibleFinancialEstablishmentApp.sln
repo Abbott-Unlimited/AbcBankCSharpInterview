@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "abc-bank", "abc-bank\abc-bank.csproj", "{C8A5871B-EEFA-49EB-84A0-5B021D13E233}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbcCompany-ExtensibleFinancialEstablishment-Core", "abc-bank\AbcCompany-ExtensibleFinancialEstablishment-Core.csproj", "{C8A5871B-EEFA-49EB-84A0-5B021D13E233}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "abc-bank-tests", "abc-bank-tests\abc-bank-tests.csproj", "{36E8C1E7-37D3-4365-91E5-4FD57A1256BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbcCompany-ExtensibleFinancialEstablishment-Tests", "abc-bank-tests\AbcCompany-ExtensibleFinancialEstablishment-Tests.csproj", "{36E8C1E7-37D3-4365-91E5-4FD57A1256BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78F11791-01C2-408A-8465-1A0DEDA3576A}
 	EndGlobalSection
 EndGlobal

@@ -51,15 +51,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BankTests\BankTest.cs" />
+    <Compile Include="AbcTestFunctions\Random.cs" />
+    <Compile Include="EstablishmentTests\EstablishmentTest.cs" />
     <Compile Include="CustomerTests\CustomerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionTests\TransactionTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\abc-bank\abc-bank.csproj">
+    <ProjectReference Include="..\abc-bank\AbcCompany-ExtensibleFinancialEstablishment-Core.csproj">
       <Project>{c8a5871b-eefa-49eb-84a0-5b021d13e233}</Project>
-      <Name>abc-bank</Name>
+      <Name>AbcCompany-ExtensibleFinancialEstablishment-Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace abc_bank
+namespace AbcCompanyEstablishmentApp
 {
     public class DateProvider
     {

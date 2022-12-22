@@ -1,7 +1,8 @@
-﻿using abc_bank;
+﻿using AbcCompanyEstablishmentApp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
-namespace abc_bank_tests
+namespace AbcCompanyEstablishmentAppTests
 {
     [TestClass]
     public class CustomerTest
@@ -9,8 +10,8 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestApp()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
-            Account savingsAccount = new Account(Account.SAVINGS);
+            Account checkingAccount = new Account(AccountType.CHECKING, 0, "");
+            Account savingsAccount = new Account(AccountType.SAVINGS, 0, "");
 
             Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 

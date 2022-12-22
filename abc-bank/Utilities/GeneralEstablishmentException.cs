@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace abc_bank.Utilities
+namespace AbcCompanyEstablishmentApp.Utilities
 {
     [Serializable]
-    public class GeneralBankException : Exception
+    public class GeneralEstablishmentException : Exception
     {
-        public GeneralBankException() : base() { }
-        public GeneralBankException(string message) : base(message) { }
-        public GeneralBankException(string message, Exception inner) : base(message, inner) { }
+        public GeneralEstablishmentException() : base() { }
+        public GeneralEstablishmentException(string message) : base(message) { }
+        public GeneralEstablishmentException(string message, Exception inner) : base(message, inner) { }
     }
 
     [Serializable]

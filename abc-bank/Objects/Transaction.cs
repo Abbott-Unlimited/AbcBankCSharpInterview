@@ -1,6 +1,7 @@
 ﻿using System;
+using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
-namespace abc_bank
+namespace AbcCompanyEstablishmentApp
 {
     public class Transaction
     {
@@ -8,6 +9,7 @@ namespace abc_bank
         public readonly Account accountChanged;
         public readonly double amount;
         public readonly DateTime transactionDate;
+        public readonly TransactionType transactionType;
 
         public Transaction(double amount, Account accountChanged)
         {
@@ -15,6 +17,7 @@ namespace abc_bank
             this.transactionDate = DateProvider.GetInstance().Now();
             this.transactionID = new Guid();
             this.accountChanged = accountChanged;
+            this.transactionType = amount > 0 ? TransactionType.DEPOSIT : TransactionType.WITHDRAWAL;
         }
     }
 }
