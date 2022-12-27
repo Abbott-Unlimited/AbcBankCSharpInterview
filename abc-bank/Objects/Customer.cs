@@ -21,7 +21,7 @@ namespace AbcCompanyEstablishmentApp
         public List<AccountType> AccountTypes = new List<AccountType>();
         public Dictionary<Guid, AccountType> Accounts = new Dictionary<Guid, AccountType>();
 
-        public Customer(AccountType accountType, double creationAmount, string firstName, string lastName)
+        public Customer(AccountType accountType, decimal creationAmount, string firstName, string lastName)
         {
             AccountID = Guid.NewGuid();
             FirstName = firstName;

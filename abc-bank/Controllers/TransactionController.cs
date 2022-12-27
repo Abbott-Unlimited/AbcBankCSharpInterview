@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace AbcCompanyEstablishmentApp.Controllers
 {
-    internal class TransactionController
+    public static class TransactionController
     {
         public static List<Transaction> transactions = new List<Transaction>();
 
-        private static void ProcessTransaction(Transaction transaction)
+        private static decimal ProcessTransaction(Transaction transaction)
         {
             transaction.accountChanged.Transactions.Add(transaction);
             transaction.accountChanged.AccountAmount += transaction.amount;
+            return transaction.accountChanged.AccountAmount;
         }
 
-        public static void Deposit(Guid accountID, double amount)
+        public static decimal Deposit(Guid accountID, decimal amount)
         {
-            var account = AccountController.GetAccountByID(accountID);
-
+            var account = AccountController.GetAccountByID(accountID);            
             if (amount <= 0)
             {
                 throw new AmountLessThanZeroException("Amount must be greater than zero");
@@ -30,12 +30,12 @@ namespace AbcCompanyEstablishmentApp.Controllers
             else
             {
                 var transaction = new Transaction(amount, account);
-                transactions.Add(transaction);
-                ProcessTransaction(transaction);
+                transactions.Add(transaction);                
+                return ProcessTransaction(transaction);                
             }
         }
 
-        public static void Withdraw(Guid accountID, double amount)
+        public static void Withdraw(Guid accountID, decimal amount)
         {
             var account = AccountController.GetAccountByID(accountID);
 
@@ -51,7 +51,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
             }
         }
 
-        public static void Transfer(Guid accountToTransferFrom, Guid accountToTransferTo, double amount)
+        public static void Transfer(Guid accountToTransferFrom, Guid accountToTransferTo, decimal amount)
         {
             if (amount <= 0)
                 throw new AmountLessThanZeroException("Amount must be greater than zero");
@@ -59,18 +59,18 @@ namespace AbcCompanyEstablishmentApp.Controllers
             ValidateTransfer(accountToTransferFrom, accountToTransferTo, amount);
         }
 
-        private static void ValidateTransfer(Guid accountToTransferFrom, Guid accountToTransferTo, double amount)
+        private static void ValidateTransfer(Guid accountToTransferFrom, Guid accountToTransferTo, decimal amount)
         {
             var fromAccount = AccountController.GetAccountByID(accountToTransferFrom);
             var toAccount = AccountController.GetAccountByID(accountToTransferTo);
-            if (fromAccount.OwnerName == toAccount.OwnerName)
+            if (fromAccount.Owner == toAccount.Owner)
             {
                 ProcessTransaction(new Transaction(amount, toAccount));
                 ProcessTransaction(new Transaction(-amount, fromAccount));
             }
         }
 
-        public static bool ValidateTransaction(Account account, double amount)
+        public static bool ValidateTransaction(Account account, decimal amount)
         {
             if ((account.AccountAmount += amount) <= 0)
             {
@@ -79,9 +79,9 @@ namespace AbcCompanyEstablishmentApp.Controllers
             return true;
         }
 
-        public static double TotalTransactions(List<Transaction> transactions, string workingString = "")
+        public static decimal TotalTransactionsForCustomer(List<Transaction> transactions, string workingString = "")
         {            
-            double total = 0.0;
+            decimal total = 0.0M;
 
             foreach (Transaction transaction in transactions)
             {

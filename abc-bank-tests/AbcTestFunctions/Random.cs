@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
 namespace abc_bank_tests.AbcTestFunctions
 {
@@ -34,6 +35,14 @@ namespace abc_bank_tests.AbcTestFunctions
                 );
         }
 
-
+        public static Customer GetRandomCustomer()
+        {
+            return new Customer(                            
+                AccountType.CHECKING,
+                0,
+                GetRandomString(10),
+                GetRandomString(10)
+            );
+        }
     }
 }

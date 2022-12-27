@@ -8,16 +8,24 @@ using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
 namespace AbcCompanyEstablishmentApp.Controllers
 {
-    internal static class AccountController
+    public static class AccountController
     {
         public static List<Account> Accounts = new List<Account>();
 
-        public static Guid AddAccount(AccountType accountType, string ownerName, double creationAmount)
+        public static decimal GetAccountAmount(Account account)
+        {
+            decimal returnValue = (AccountController.GetAccountByID(account.AccountID).AccountAmount);
+
+
+            return returnValue;
+        }
+
+        public static Guid AddAccount(AccountType accountType, Customer owner, decimal creationAmount)
         {
             var newAccount = new Account(
                 accountType: accountType, 
                 creationAmount: creationAmount, 
-                ownerName: ownerName
+                owner: owner
                 );
 
             Accounts.Add(newAccount);
@@ -31,35 +39,31 @@ namespace AbcCompanyEstablishmentApp.Controllers
             Accounts.Remove(account);
             return Accounts.Any(x => x.AccountID == accountID);
         }
-        public static bool DeleteAccount(string ownerName)
+        public static bool DeleteAccount(Customer ownerName)
         {
-            var account = Accounts.FirstOrDefault(x => x.OwnerName == ownerName);
+            var account = Accounts.FirstOrDefault(x => x.Owner == ownerName);
             Accounts.Remove(account);
-            return Accounts.Any(x => x.OwnerName == ownerName);
+            return Accounts.Any(x => x.Owner == ownerName);
         }
-
         public static Account GetAccountByID(Guid accountID)
         {
             return Accounts.FirstOrDefault(x => x.AccountID == accountID);
         }
-
-        public static double GetAccountAmountStatus(Guid accountID)
+        public static decimal GetAccountAmount(Guid accountID)
         {
             return Accounts.FirstOrDefault(x => x.AccountID == accountID).AccountAmount;
         }
-        public static double GetAccountAmountStatus(string ownerName)
+        public static decimal GetAccountAmount(Customer owner)
         {
-            return Accounts.FirstOrDefault(x => x.OwnerName== ownerName).AccountAmount;
+            return Accounts.FirstOrDefault(x => x.Owner == owner).AccountAmount;
         }
-
-        public static Guid GetAccountIDByOwnerName(string ownerName)
+        public static Guid GetAccountIDByCustomer(Customer owner)
         {
-            return Accounts.FirstOrDefault(x => x.OwnerName == ownerName).AccountID;
+            return Accounts.FirstOrDefault(x => x.Owner == owner).AccountID;
         }
-
-        public static string GetAccountOwnerNameByID(Guid guid)
+        public static Customer GetCustomerByID(Guid guid)
         {
-            return Accounts.FirstOrDefault(x => x.AccountID == guid).OwnerName;
+            return Accounts.FirstOrDefault(x => x.AccountID == guid).Owner;
         }
     }
 }

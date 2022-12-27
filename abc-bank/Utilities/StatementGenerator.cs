@@ -4,14 +4,14 @@ using AbcCompanyEstablishmentApp.Utilities;
 
 namespace AbcCompanyEstablishmentApp.Controllers
 {
-    internal static class StatementGenerator
+    public static class StatementGenerator
     {
         public static string GetCustomerStatementByID(Guid customerID)
         {
             var customer = CustomerController.GetCustomerByID(customerID);
             string statement = "";
             statement = "Statement for " + customer.FullName + "\n";
-            double total = 0.0;
+            decimal total = 0.0M;
             foreach (Guid guid in customer.Accounts.Keys)
             {
                 var account = AccountController.GetAccountByID(guid);
@@ -27,7 +27,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
             string workingString = "";
 
             workingString += AbcFunctions.GenerateAccountTypeString(account.Type);
-            var total = TransactionController.TotalTransactions(account.Transactions);
+            var total = TransactionController.TotalTransactionsForCustomer(account.Transactions);
             
             foreach (Transaction transaction in account.Transactions)
             {

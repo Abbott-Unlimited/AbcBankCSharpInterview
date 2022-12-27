@@ -8,11 +8,11 @@ namespace AbcCompanyEstablishmentApp.Utilities
 {
     public class AbcCustomValues
     {
-        public const double POINT_ONE_PERCENT_INTEREST = 0.001;
-        public const double POINT_TWO_PERCENT_INTEREST = 0.002;
-        public const double TWO_PERCENT_INTEREST = 0.02;
-        public const double FIVE_PERCENT_INTEREST = 0.05;
-        public const double TEN_PERCENT_INTEREST = 0.1;
+        public const decimal POINT_ONE_PERCENT_INTEREST = 0.001M;
+        public const decimal POINT_TWO_PERCENT_INTEREST = 0.002M;
+        public const decimal TWO_PERCENT_INTEREST = 0.001M;
+        public const decimal FIVE_PERCENT_INTEREST = 0.001M;
+        public const decimal TEN_PERCENT_INTEREST = 0.001M;
 
         public enum AccountType
         {

@@ -15,11 +15,11 @@ namespace AbcCompanyEstablishmentApp.Controllers
         /// Savings accounts have a rate of 0.1% for the first $1,000 then 0.2% - X        
         /// Maxi-Savings accounts have an interest rate of 5% if no withdrawals in the past 10 days otherwise 0.1%
         /// </summary>
-        public static double CalculateInterestEarned(Guid accountID)
+        public static decimal CalculateInterestEarned(Guid accountID)
         {
             var account = AccountController.GetAccountByID(accountID);
 
-            double amount = account.AccountAmount;
+            decimal amount = account.AccountAmount;
             DateTime tenDaysAgo = DateProvider.GetInstance().Now().AddDays(-10);
             bool hasWithdrawnWithinLast10Days = account.Transactions.Any(x => x.transactionDate > tenDaysAgo);
             var interest = 0.0d;

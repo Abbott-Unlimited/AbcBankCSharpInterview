@@ -8,7 +8,7 @@ namespace AbcCompanyEstablishmentApp.Utilities
 {
     public static class AbcFunctions
     {
-        public static string ToDollars(double d)
+        public static string ToDollars(decimal d)
         {
             return string.Format("$%,.2f", Math.Abs(d));
         }

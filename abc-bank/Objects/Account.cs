@@ -11,24 +11,24 @@ namespace AbcCompanyEstablishmentApp
         public readonly AccountType Type;
         public Guid AccountID;
         public DateTime CreateTimeStamp;
-        public string OwnerName;
+        public Customer Owner;
         public List<Transaction> Transactions;
-        public double TotalInterestEarned = 0;
+        public decimal TotalInterestEarned = 0;
 
-        private double accountAmount;
+        private decimal accountAmount;
 
-        public double AccountAmount
+        public decimal AccountAmount
         {
             get { return accountAmount; }
             set { if (TransactionController.ValidateTransaction(this, value)) { accountAmount = value; } }
         }
 
-        public Account(AccountType accountType, double creationAmount, string ownerName)
+        public Account(AccountType accountType, decimal creationAmount, Customer owner)
         {
             Type = accountType;
             AccountID = Guid.NewGuid();            
             AccountAmount = creationAmount;
-            OwnerName = ownerName;
+            Owner = owner;
             CreateTimeStamp = DateProvider.GetInstance().Now();
         }
     }

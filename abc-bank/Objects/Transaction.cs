@@ -7,11 +7,11 @@ namespace AbcCompanyEstablishmentApp
     {
         public readonly Guid transactionID;
         public readonly Account accountChanged;
-        public readonly double amount;
+        public readonly decimal amount;
         public readonly DateTime transactionDate;
         public readonly TransactionType transactionType;
 
-        public Transaction(double amount, Account accountChanged)
+        public Transaction(decimal amount, Account accountChanged)
         {
             this.amount = amount;
             this.transactionDate = DateProvider.GetInstance().Now();
