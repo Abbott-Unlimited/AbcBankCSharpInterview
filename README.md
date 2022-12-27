@@ -22,13 +22,14 @@ In the future, we can move to different tests based on conditionals considering 
 
 ## Things I'd Like to Improve in this Repo
 
--This project did not have a front end, but if I were to implement one, I'd probably build an API infrastructure with Controllers that were accessible from the UI app. I'd build that app today in Razor, more than likely, implementing .NET 5. I choose 5 because I've ran into some issues in 6 and 7 that seem to still need time to work out, and 5 is the most stable. That said, I'd probably still use top-level statements for my entry point. I think I like that implementation on the global entry point.
+-This project should probably be updated to at least .NET 5.0 so as to implement the new foundational changes in structure. I say 5 because I've had some issues in 6 and 7 that still need time to work out, but migrating to 5 will build the foundation to move to 6 or 7 eventually without the big leap from 4.8 to those newer versions. The migration to the new technology may contain risks that require time that are beyond the scope of this task for me, so I won't implement that here, but from a business perspective, it should happen almost immediately and prior to a production launch.
 
--This solution needs to quickly be moved to a modern technology like .NET 5, at least. 4.8.1 is very far behind. The migration to the new technology may contain risks that require time that are beyond the scope of this task for me, so I won't implement that here, but from a business perspective, it should happen almost immediately and prior to a production launch.
+-This project did not have a front end, but if I were to implement one, I'd probably build an API infrastructure with Controllers for this app that were accessible from the UI app. I'd build that app today in Razor, more than likely, implementing .NET 5. I choose 5 because I've ran into some issues in 6 and 7 that seem to still need time to work out.
 
--I personally am a proponent for the idea that OOP has been misunderstood in that we should not be passing objects but rather messages between objects. I like to build my objects in my more personal projects to have methods on them rather than having methods in Controllers or etc that manipulate those objects so as to implement a more message oriented flow.
+-I personally am a proponent for the idea that OOP has been misunderstood in that we should not be passing objects but rather messages between objects. I like to build my objects in my more personal projects to have methods on them rather than having methods in Controllers or etc that manipulate those objects so as to implement a more message oriented flow. I'd probably begin to implement that here as the application evolved.
 
 ##
+Everything beyond this point was as I found it when it was delivered to me.
 
 ## Programming Test
 
