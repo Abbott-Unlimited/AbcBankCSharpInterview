@@ -28,6 +28,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
                 owner: owner
                 );
 
+            owner.Accounts.Add(newAccount.AccountID, accountType);
             Accounts.Add(newAccount);
 
             return newAccount.AccountID;
@@ -52,11 +53,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
         public static decimal GetAccountAmount(Guid accountID)
         {
             return Accounts.FirstOrDefault(x => x.AccountID == accountID).AccountAmount;
-        }
-        public static decimal GetAccountAmount(Customer owner)
-        {
-            return Accounts.FirstOrDefault(x => x.Owner == owner).AccountAmount;
-        }
+        }     
         public static Guid GetAccountIDByCustomer(Customer owner)
         {
             return Accounts.FirstOrDefault(x => x.Owner == owner).AccountID;
@@ -65,5 +62,18 @@ namespace AbcCompanyEstablishmentApp.Controllers
         {
             return Accounts.FirstOrDefault(x => x.AccountID == guid).Owner;
         }
+
+        public static decimal GetAccountAmountByAccountType(AccountType accountType, Customer owner)
+        {
+            return Accounts.FirstOrDefault(x => x.Owner.CustomerID == owner.CustomerID && x.AccountType == accountType).AccountAmount;
+        }
+
+        public static decimal GetTotalForAllAccounts(Customer owner)
+        {
+            var savingsAmount = AccountController.GetAccountAmountByAccountType(AccountType.SAVINGS, owner);
+            var checkingAmount = AccountController.GetAccountAmountByAccountType(AccountType.CHECKING, owner);
+            return savingsAmount + checkingAmount;
+        }
+
     }
 }

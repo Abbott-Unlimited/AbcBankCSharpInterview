@@ -11,7 +11,6 @@ namespace AbcCompanyEstablishmentApp
         public readonly Guid CustomerID;
         public readonly AccountType TypeOfAccount;
         public readonly DateTime CreateTimeStamp;
-        public readonly Guid AccountID;
 
         public string FirstName;
         public string LastName;
@@ -23,7 +22,7 @@ namespace AbcCompanyEstablishmentApp
 
         public Customer(AccountType accountType, decimal creationAmount, string firstName, string lastName)
         {
-            AccountID = Guid.NewGuid();
+            CustomerID = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
             FullName = $"{firstName} {lastName}";

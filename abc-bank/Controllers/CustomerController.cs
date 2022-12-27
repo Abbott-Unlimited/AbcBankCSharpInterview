@@ -11,7 +11,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
     {
         public static List<Customer> Customers = new List<Customer>();
 
-        public static Customer GetCustomerByID(Guid customerID)
+        public static Customer GetCustomerByCustomerID(Guid customerID)
         {
             return Customers.FirstOrDefault(x => x.CustomerID == customerID);
         }
@@ -30,12 +30,12 @@ namespace AbcCompanyEstablishmentApp.Controllers
 
         public static string GetCustomerNameByID(Guid customerID)
         {
-            return Customers.FirstOrDefault(x => x.AccountID == customerID).FullName;
+            return Customers.FirstOrDefault(x => x.CustomerID == customerID).FullName;
         }
 
         public static int GetNumberOfAccountsByID(Guid customerID)
         {
-            return Customers.FirstOrDefault(x => x.AccountID == customerID).Accounts.Count;
+            return Customers.FirstOrDefault(x => x.CustomerID == customerID).Accounts.Count;
         }
     }
 }

@@ -21,10 +21,10 @@ namespace AbcCompanyEstablishmentApp.Controllers
 
             decimal amount = account.AccountAmount;
             DateTime tenDaysAgo = DateProvider.GetInstance().Now().AddDays(-10);
-            bool hasWithdrawnWithinLast10Days = account.Transactions.Any(x => x.transactionDate > tenDaysAgo);
-            var interest = 0.0d;
+            bool hasWithdrawnWithinLast10Days = account.Transactions.Any(x => x.TransactionDate > tenDaysAgo);
+            var interest = 0.0M;
 
-            switch (account.Type)
+            switch (account.AccountType)
             {
                 case AccountType.CHECKING:
                     interest = amount * POINT_ONE_PERCENT_INTEREST;

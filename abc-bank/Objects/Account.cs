@@ -8,26 +8,20 @@ namespace AbcCompanyEstablishmentApp
 {
     public class Account
     {
-        public readonly AccountType Type;
+        public readonly AccountType AccountType;
         public Guid AccountID;
         public DateTime CreateTimeStamp;
         public Customer Owner;
-        public List<Transaction> Transactions;
+        public List<Transaction> Transactions = new List<Transaction>();
         public decimal TotalInterestEarned = 0;
-
-        private decimal accountAmount;
-
-        public decimal AccountAmount
-        {
-            get { return accountAmount; }
-            set { if (TransactionController.ValidateTransaction(this, value)) { accountAmount = value; } }
-        }
+        public decimal AccountAmount;
+        
 
         public Account(AccountType accountType, decimal creationAmount, Customer owner)
         {
-            Type = accountType;
+            AccountType = accountType;
             AccountID = Guid.NewGuid();            
-            AccountAmount = creationAmount;
+            AccountAmount += creationAmount;
             Owner = owner;
             CreateTimeStamp = DateProvider.GetInstance().Now();
         }

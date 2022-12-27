@@ -14,9 +14,7 @@ namespace AbcCompanyEstablishmentAppTests
         public void AppStartupTest()
         {
             Customer henry = Random.GetRandomCustomer();
-
-            Account checkingAccount = new Account(AccountType.CHECKING, 0, henry);
-            Account savingsAccount = new Account(AccountType.SAVINGS, 0, henry);
+            CustomerController.Customers.Add(henry);
 
             var henryCheckingID = AccountController.AddAccount(AccountType.CHECKING, henry, 0);
             var henrySavingID = AccountController.AddAccount(AccountType.SAVINGS, henry, 0);
@@ -29,14 +27,17 @@ namespace AbcCompanyEstablishmentAppTests
             TransactionController.Deposit(henrySavingID, depositValue2);
             TransactionController.Withdraw(henrySavingID, withdrawalValue);
 
-            var transaction1Amount = TransactionController.transactions[0].amount.ToString("C");
-            var transaction2Amount = TransactionController.transactions[1].amount.ToString("C");
-            var transaction3Amount = TransactionController.transactions[2].amount.ToString("C");
+            var transaction1Amount = TransactionController.transactions[0].AccountAmount.ToString("C");
+            var transaction2Amount = TransactionController.transactions[1].AccountAmount.ToString("C");
+            var transaction3Amount = TransactionController.transactions[2].AccountAmount.ToString("C");
             var checkingAccountTotal = AccountController.GetAccountAmount(henryCheckingID).ToString("C");
             var savingAccountTotal = AccountController.GetAccountAmount(henrySavingID).ToString("C");
+            var totalInAccounts = AccountController.GetTotalForAllAccounts(henry).ToString("C");
 
-            var expected = $"Statement for {henry.FullName}\n\nChecking Account\n  deposit {transaction1Amount}\nTotal {checkingAccountTotal}\n\nSavings Account\n  deposit $4,000.00\n  withdrawal $200.00\nTotal $3,800.00\n\nTotal In All Accounts $3,900.00";
-            var actual = StatementGenerator.GetCustomerStatementByID(henry.AccountID);
+            var expected = $"Statement for {henry.FullName}\n\nChecking Account\n  deposit {transaction1Amount}\nTotal {checkingAccountTotal}\n\nSavings Account\n  deposit {transaction2Amount}\n  withdrawal {transaction3Amount}\nTotal {savingAccountTotal}\n\nTotal In All Accounts {totalInAccounts}";
+
+            var queryCustomer = CustomerController.GetCustomerByCustomerID(henry.CustomerID);
+            var actual = StatementGenerator.GetCustomerStatementByID(queryCustomer);
 
             Assert.AreEqual(expected, actual);
         }

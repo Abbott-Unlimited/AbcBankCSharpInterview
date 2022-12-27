@@ -15,9 +15,9 @@ namespace AbcCompanyEstablishmentApp.Controllers
 
         private static decimal ProcessTransaction(Transaction transaction)
         {
-            transaction.accountChanged.Transactions.Add(transaction);
-            transaction.accountChanged.AccountAmount += transaction.amount;
-            return transaction.accountChanged.AccountAmount;
+            transaction.AccountChanged.Transactions.Add(transaction);
+            transaction.AccountChanged.AccountAmount += transaction.AccountAmount;
+            return transaction.AccountChanged.AccountAmount;
         }
 
         public static decimal Deposit(Guid accountID, decimal amount)
@@ -72,7 +72,8 @@ namespace AbcCompanyEstablishmentApp.Controllers
 
         public static bool ValidateTransaction(Account account, decimal amount)
         {
-            if ((account.AccountAmount += amount) <= 0)
+            var amountToCheck = account.AccountAmount += amount;
+            if (amountToCheck <= 0)
             {
                 return false;
             }
@@ -85,7 +86,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
 
             foreach (Transaction transaction in transactions)
             {
-                total += transaction.amount;
+                total += transaction.AccountAmount;
             }
 
             return total;

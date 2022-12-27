@@ -6,9 +6,8 @@ namespace AbcCompanyEstablishmentApp.Controllers
 {
     public static class StatementGenerator
     {
-        public static string GetCustomerStatementByID(Guid customerID)
+        public static string GetCustomerStatementByID(Customer customer)
         {
-            var customer = CustomerController.GetCustomerByID(customerID);
             string statement = "";
             statement = "Statement for " + customer.FullName + "\n";
             decimal total = 0.0M;
@@ -26,12 +25,12 @@ namespace AbcCompanyEstablishmentApp.Controllers
         {
             string workingString = "";
 
-            workingString += AbcFunctions.GenerateAccountTypeString(account.Type);
+            workingString += AbcFunctions.GenerateAccountTypeString(account.AccountType);
             var total = TransactionController.TotalTransactionsForCustomer(account.Transactions);
             
             foreach (Transaction transaction in account.Transactions)
             {
-                workingString += "  " + transaction.transactionType + " " + AbcFunctions.ToDollars(transaction.amount) + "\n";
+                workingString += "  " + transaction.TransactionType + " " + AbcFunctions.ToDollars(transaction.AccountAmount) + "\n";
             }
 
             workingString += "Total " + AbcFunctions.ToDollars(total);
