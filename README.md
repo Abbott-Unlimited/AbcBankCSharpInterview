@@ -15,6 +15,8 @@ To compound on that, I added an infrastructure based on our classic OOP notion. 
 
 I believe that the new configuration allows the application to be much more dynamic and extensible while providing a solid, modern foundation to continue to improve on.
 
+You can find my commits to this repo here: https://github.com/willWashington/AbcBankCSharpInterview/commits/development
+
 ## The Stack & Implementation
 I implemented .NET 4.8.1 in the first PR I pushed for the challenge. The implementation itself leverages TDD. I built the foundation of the architecture and then started to build the first test. This test is designed to be fired in CI/CD eventually as a startup test. It should test the foundation of the entire app and be run on startup for validation at runtime. It should create an Establishment, a Customer, two Accounts for the Customer: Checking and Saving, and generate Transactions for those accounts. Once I was able to wire all this up, I engaged strictly in TDD, writing new code from the foundational test. I'll continue to engage in that behavior going forward.
 
