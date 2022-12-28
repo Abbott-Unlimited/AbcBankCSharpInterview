@@ -1,8 +1,41 @@
-Programming Test
-========
+# William Washington - Example Work
+I am a .NET Developer that loves to find ways to inject efficiency.
+If you're interested, you can learn more about me here: https://github.com/willWashington
 
-Instructions
-------------
+## The Code Challenge
+In my recent job search, a company offered this programming test to me. 
+
+Two things stood out to me in their challenge: "treat this code as if you owned this application" and "you're welcome to spend as much time as you like"
+
+I asked myself what would I do if this indeed were my own application. My solution was to make it more extensible and refactor it to be something more. 
+
+I decided to change it from a vague Bank app to an extensible Establishment app. Instead of just Banks, it can now start to think about Establishments in general. That means we have a foundation of preparedness to handle Rental Agencies, Loan Servicers, Loan Originators, Stock firms.. the sky is the limit.
+
+To compound on that, I added an infrastructure based on our classic OOP notion. I've conceptualized Accounts, Customers, Establishments, and Transactions and modeled those objects in code.
+
+I believe that the new configuration allows the application to be much more dynamic and extensible while providing a solid, modern foundation to continue to improve on.
+
+You can find my commits to this repo here: https://github.com/willWashington/AbcBankCSharpInterview/commits/development
+
+## The Stack & Implementation
+I implemented .NET 4.8.1 in the first PR I pushed for the challenge. The implementation itself leverages TDD. I built the foundation of the architecture and then started to build the first test. This test is designed to be fired in CI/CD eventually as a startup test. It should test the foundation of the entire app and be run on startup for validation at runtime. It should create an Establishment, a Customer, two Accounts for the Customer: Checking and Saving, and generate Transactions for those accounts. Once I was able to wire all this up, I engaged strictly in TDD, writing new code from the foundational test. I'll continue to engage in that behavior going forward.
+
+In the future, we can move to different tests based on conditionals considering the various Establishments we can consume.
+
+## Things I'd Like to Improve in this Repo
+
+-This project should probably be updated to at least .NET 5.0 so as to implement the new foundational changes in structure. I say 5 because I've had some issues in 6 and 7 that still need time to work out, but migrating to 5 will build the foundation to move to 6 or 7 eventually without the big leap from 4.8 to those newer versions. The migration to the new technology may contain risks that require time that are beyond the scope of this task for me, so I won't implement that here, but from a business perspective, it should happen almost immediately and prior to a production launch.
+
+-This project did not have a front end, but if I were to implement one, I'd probably build an API infrastructure with Controllers for this app that were accessible from the UI app. I'd build that app today in Razor, more than likely, implementing .NET 5. I choose 5 because I've ran into some issues in 6 and 7 that seem to still need time to work out.
+
+-I personally am a proponent for the idea that OOP has been misunderstood in that we should not be passing objects but rather messages between objects. I like to build my objects in my more personal projects to have methods on them rather than having methods in Controllers or etc that manipulate those objects so as to implement a more message oriented flow. I'd probably begin to implement that here as the application evolved.
+
+##
+Everything beyond this point was as I found it when it was delivered to me.
+
+## Programming Test
+
+## Instructions
 
 There are several deliberate design, code quality and test issues that should be identified and resolved. The section below details what the behavior of the application is supposed to be, which may not match up with how the code is currently functioning.
 
