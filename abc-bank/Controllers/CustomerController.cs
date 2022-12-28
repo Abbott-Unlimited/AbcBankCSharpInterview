@@ -15,14 +15,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
         {
             return Customers.FirstOrDefault(x => x.CustomerID == customerID);
         }
-        /// <summary>
-        /// NOTE: This method is not future proof and needs to be more elegant and safe.
-        /// </summary>
-        /// <param name="customerFullName"></param>
-        /// <returns>
-        /// The first customer that matches the exact 
-        /// name from a list of customers that match the exact name.
-        /// </returns>
+
         public static Customer GetCustomerByExactFullName(string customerFullName)
         {
             return Customers.FirstOrDefault(x => x.FullName == customerFullName);

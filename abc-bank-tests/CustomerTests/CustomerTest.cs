@@ -34,7 +34,7 @@ namespace AbcCompanyEstablishmentAppTests
             var savingAccountTotal = AccountController.GetAccountAmount(henrySavingID).ToString("C");
             var totalInAccounts = AccountController.GetTotalForAllAccounts(henry).ToString("C");
 
-            var expected = $"Statement for {henry.FullName}\n\nChecking Account\n  deposit {transaction1Amount}\nTotal {checkingAccountTotal}\n\nSavings Account\n  deposit {transaction2Amount}\n  withdrawal {transaction3Amount}\nTotal {savingAccountTotal}\n\nTotal In All Accounts {totalInAccounts}";
+            var expected = $"Statement for {henry.FullName}\n\nChecking Account\n  DEPOSIT {transaction1Amount}\nTotal {checkingAccountTotal}\n\nSavings Account\n  DEPOSIT {transaction2Amount}\n  WITHDRAWAL {transaction3Amount}\nTotal {savingAccountTotal}\n\nTotal In All Accounts {totalInAccounts}";
 
             var queryCustomer = CustomerController.GetCustomerByCustomerID(henry.CustomerID);
             var actual = StatementGenerator.GetCustomerStatementByID(queryCustomer);

@@ -23,7 +23,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
             foreach (Customer customer in Customers)
             {
                 var numberOfAccounts = customer.Accounts.Count;
-                summary += "\n - " + customer.FullName + " (" + numberOfAccounts + AbcFunctions.MakeWordPlural(numberOfAccounts, "account") + ")";
+                summary += "\n - " + customer.FullName + " (" + numberOfAccounts + AbcFunctions.CheckPluralization(numberOfAccounts, "account") + ")";
             }
 
             return summary;

@@ -17,7 +17,7 @@ namespace AbcCompanyEstablishmentApp.Controllers
                 statement += "\n" + StatementForAccount(account) + "\n";
                 total += account.AccountAmount;
             }
-            statement += "\nTotal In All Accounts " + AbcFunctions.ToDollars(total);
+            statement += "\nTotal In All Accounts " + total.ToString("C");
             return statement;
         }
 
@@ -30,10 +30,10 @@ namespace AbcCompanyEstablishmentApp.Controllers
             
             foreach (Transaction transaction in account.Transactions)
             {
-                workingString += "  " + transaction.TransactionType + " " + AbcFunctions.ToDollars(transaction.AccountAmount) + "\n";
+                workingString += "  " + transaction.TransactionType + " " + transaction.AccountAmount.ToString("C") + "\n";
             }
 
-            workingString += "Total " + AbcFunctions.ToDollars(total);
+            workingString += "Total " + total.ToString("C");
             return workingString;
         }
 
