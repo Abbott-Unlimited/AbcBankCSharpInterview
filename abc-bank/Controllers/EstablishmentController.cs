@@ -8,22 +8,22 @@ using static AbcCompanyEstablishmentApp.Utilities.AbcCustomValues;
 
 namespace AbcCompanyEstablishmentApp.Controllers
 {
-    internal static class EstablishmentController
+    public static class EstablishmentController
     {
-        public static List<Customer> Customers = new List<Customer>();
+        public static List<Establishment> Establishments = new List<Establishment>();
 
-        public static void AddCustomer(Customer customer)
+        public static void AddEstablishment(Establishment establishment)
         {
-            Customers.Add(customer);
+            Establishments.Add(establishment);
         }
 
-        public static string CustomerSummary()
+        public static string GetEstablishmentSummary()
         {
             string summary = "Customer Summary";
-            foreach (Customer customer in Customers)
+            foreach (Establishment establishment in Establishments)
             {
-                var numberOfAccounts = customer.Accounts.Count;
-                summary += "\n - " + customer.FullName + " (" + numberOfAccounts + AbcFunctions.CheckPluralization(numberOfAccounts, "account") + ")";
+                var numberOfAccounts = establishment.Accounts.Count;
+                summary += $"\n - {establishment.EstablishmentName} ( {establishment.Type} - {establishment.EstablishmentOwnerName} - {establishment.EstablishmentPhysicalAddress} -  {establishment.EstablishmentContactNumber} )";
             }
 
             return summary;

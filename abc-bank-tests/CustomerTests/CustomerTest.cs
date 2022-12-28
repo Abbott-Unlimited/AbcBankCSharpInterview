@@ -10,9 +10,25 @@ namespace AbcCompanyEstablishmentAppTests
     public class CustomerTest
     {
         //we'll run this test on app startup just to confirm everything for the day/restart/crash/whatever
+        //everything we test still needs mocks, etc, but this is POC
         [TestMethod]
         public void AppStartupTest()
         {
+            string expected = string.Empty;
+            string actual = string.Empty;
+
+            Establishment establishment = new Establishment(
+                EstablishmentType.BANK,
+                Random.GetRandomString(30),
+                Random.GetRandomString(20),
+                Random.GetRandomString(35),
+                Random.GetRandomString(10, true)
+                );
+            EstablishmentController.AddEstablishment( establishment );
+
+            expected = $"\n - {establishment.EstablishmentName} ( {establishment.Type} - {establishment.EstablishmentOwnerName} - {establishment.EstablishmentPhysicalAddress} -  {establishment.EstablishmentContactNumber} )";
+            actual = EstablishmentController.GetEstablishmentSummary();
+
             Customer henry = Random.GetRandomCustomer();
             CustomerController.Customers.Add(henry);
 
@@ -34,10 +50,10 @@ namespace AbcCompanyEstablishmentAppTests
             var savingAccountTotal = AccountController.GetAccountAmount(henrySavingID).ToString("C");
             var totalInAccounts = AccountController.GetTotalForAllAccounts(henry).ToString("C");
 
-            var expected = $"Statement for {henry.FullName}\n\nChecking Account\n  DEPOSIT {transaction1Amount}\nTotal {checkingAccountTotal}\n\nSavings Account\n  DEPOSIT {transaction2Amount}\n  WITHDRAWAL {transaction3Amount}\nTotal {savingAccountTotal}\n\nTotal In All Accounts {totalInAccounts}";
+            expected = $"Statement for {henry.FullName}\n\nChecking Account\n  DEPOSIT {transaction1Amount}\nTotal {checkingAccountTotal}\n\nSavings Account\n  DEPOSIT {transaction2Amount}\n  WITHDRAWAL {transaction3Amount}\nTotal {savingAccountTotal}\n\nTotal In All Accounts {totalInAccounts}";
 
             var queryCustomer = CustomerController.GetCustomerByCustomerID(henry.CustomerID);
-            var actual = StatementGenerator.GetCustomerStatementByID(queryCustomer);
+            actual = StatementGenerator.GetCustomerStatementByID(queryCustomer);
 
             Assert.AreEqual(expected, actual);
         }
