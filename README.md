@@ -15,6 +15,8 @@ To compound on that, I added an infrastructure based on our classic OOP notion. 
 
 I believe that the new configuration allows the application to be much more dynamic and extensible while providing a solid, modern foundation to continue to improve on.
 
+As of this writing, I am no longer contributing to this repo. The AppStartupTest in CustomerTest passes and covers all of the code. Cheers!
+
 You can find my commits to this repo here: https://github.com/willWashington/AbcBankCSharpInterview/commits/development
 
 ## The Stack & Implementation
