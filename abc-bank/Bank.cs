@@ -34,11 +34,16 @@ namespace abc_bank
             return number + " " + (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
+        public double TotalInterestPaid() {
             double total = 0;
             foreach(Customer c in customers)
                 total += c.TotalInterestEarned();
             return total;
+        }
+
+        public string TotalInterestPaidReport()
+        {
+            return "Total Interet Paid:\n" + TotalInterestPaid();
         }
 
         public String GetFirstCustomer()
@@ -54,5 +59,7 @@ namespace abc_bank
                 return "Error";
             }
         }
+
+
     }
 }

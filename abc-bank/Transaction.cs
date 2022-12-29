@@ -9,13 +9,14 @@ namespace abc_bank
     public class Transaction
     {
         public readonly double amount;
+        public DateTime transactionDate;
+        public TransactionType TransactionType { get; }
 
-        private DateTime transactionDate;
-
-        public Transaction(double amount) 
+        public Transaction(double amount, TransactionType transactionType)
         {
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
+            TransactionType = transactionType;
         }
     }
 }

@@ -6,79 +6,62 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
-    public class Account
+    public abstract class Account
     {
-
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
         public List<Transaction> transactions;
+        public double Ballance { get; private set; }
 
-        public Account(int accountType) 
+
+        public abstract AccountType AccountType { get; }
+
+        public Account()
         {
-            this.accountType = accountType;
             this.transactions = new List<Transaction>();
+            this.Ballance = 0.0;
         }
-
-        public void Deposit(double amount) 
+        public void Deposit(double amount, bool isTransferDeposit)
         {
-            if (amount <= 0) {
+            if (amount <= 0)
+            {
                 throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(amount));
+            }
+            else
+            {
+                if (isTransferDeposit) transactions.Add(new Transaction(amount, TransactionType.TransferIn));
+                else transactions.Add(new Transaction(amount, TransactionType.Deposit));
+                Ballance += amount;
             }
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(double amount, bool isTransferWithdrawal)
         {
-            if (amount <= 0) {
+            if (amount <= 0)
+            {
                 throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
+            }
+            else
+            {
+                if (isTransferWithdrawal) transactions.Add(new Transaction(-amount, TransactionType.TransferOut));
+                else transactions.Add(new Transaction(-amount, TransactionType.Withdrawal));
+                Ballance -= amount;
             }
         }
 
-        public double InterestEarned() 
+
+        public double sumTransactions()
         {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
-                    else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
-                default:
-                    return amount * 0.001;
-            }
+            return CheckIfTransactionsExist(true);
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
+        private double CheckIfTransactionsExist(bool checkAll)
         {
             double amount = 0.0;
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
-        }
+        } 
 
-        public int GetAccountType() 
-        {
-            return accountType;
-        }
+        public abstract double InterestEarned();
 
     }
 }

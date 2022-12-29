@@ -60,31 +60,61 @@ namespace abc_bank
             String s = "";
 
            //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
+            switch(a.AccountType){
+                case AccountType.CHECKING:
                     s += "Checking Account\n";
                     break;
-                case Account.SAVINGS:
+                case AccountType.SAVINGS:
                     s += "Savings Account\n";
                     break;
-                case Account.MAXI_SAVINGS:
+                case AccountType.MAXI_SAVINGS:
                     s += "Maxi Savings Account\n";
                     break;
             }
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
+            foreach (Transaction t in a.transactions)
+            {
+                s += "  " + t.TransactionType.ToString().ToLower() + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
+
             s += "Total " + ToDollars(total);
             return s;
         }
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return Math.Abs(d).ToString("C");
+        }
+
+        public void Transfer(AccountType accountTypeToTransferFrom, AccountType accountTypeToTransferTo, double tranferAmmout)
+        {
+            if (tranferAmmout <= 0)
+            {
+                throw new ArgumentException("Transfer ammount should be positive number");
+            }
+            Account accountFrom = accounts.Where(a => a.AccountType == accountTypeToTransferFrom).FirstOrDefault();
+            if (accountFrom == null)
+            {
+                throw new ArgumentException("Customer " + name + " doesn't have " + accountTypeToTransferFrom);
+            }
+            Account accountTo = accounts.Where(a => a.AccountType == accountTypeToTransferTo).FirstOrDefault();
+            if (accountTo == null)
+            {
+                throw new ArgumentException("Customer " + name + " doesn't have " + accountTypeToTransferTo + " account");
+            }
+            if (accountFrom.Ballance < tranferAmmout)
+            {
+                throw new ArgumentException("Customer " + name + " doesn't have enough funds on " + accountTypeToTransferFrom);
+            }
+            if (accountTypeToTransferFrom == accountTypeToTransferTo)
+            {
+                throw new ArgumentException("Cannot transfer to same account");
+            }
+            accountFrom.Withdraw(tranferAmmout, true);
+            accountTo.Deposit(tranferAmmout, true);     
         }
     }
 }
