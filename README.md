@@ -36,7 +36,7 @@ In the future, we can move to different tests based on conditionals considering 
 -I personally am a proponent for the idea that OOP has been misunderstood in that we should not be passing objects but rather messages between objects. I like to build my objects in my more personal projects to have methods on them rather than having methods in Controllers or etc that manipulate those objects so as to implement a more message oriented flow. I'd probably begin to implement that here as the application evolved.
 
 ##
-Everything beyond this point was as I found it when it was delivered to me.
+Everything beyond this point is as I found it when it was delivered to me.
 
 ## Programming Test
 
