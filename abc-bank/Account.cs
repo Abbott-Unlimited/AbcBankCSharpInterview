@@ -25,7 +25,7 @@ namespace abc_bank
         public void Deposit(double amount) 
         {
             if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
+                throw new ArgumentException("Amount must be greater than zero.");
             } else {
                 transactions.Add(new Transaction(amount));
             }
@@ -34,7 +34,7 @@ namespace abc_bank
         public void Withdraw(double amount) 
         {
             if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
+                throw new ArgumentException("Amount must be greater than zero.");
             } else {
                 transactions.Add(new Transaction(-amount));
             }

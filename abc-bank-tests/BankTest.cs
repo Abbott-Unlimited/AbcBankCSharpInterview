@@ -9,50 +9,59 @@ namespace abc_bank_tests
     {
 
         private static readonly double DOUBLE_DELTA = 1e-15;
+        private static String BILL = "Bill";
+        private static String JOHN= "John";
+        private static double TOTALINTERESTPAID_01 = 0.1;
+        private static double TOTALINTERESTPAID_2 = 2.0;
+        private static double TOTALINTERESTPAID_170 = 170.0;
+        private static double DEPOSIT_100 = 100.0;
+        private static double DEPOSIT_1500 = 1500.0;
+        private static double DEPOSIT_3000 = 3000.0;
+        private static String CUSTOMER_SUMMARY_JOHN = "Customer Summary\n - John (1 account)";
 
         [TestMethod]
-        public void CustomerSummary() 
+        public void TestCustomerSummary() 
         {
             Bank bank = new Bank();
-            Customer john = new Customer("John");
+            Customer john = new Customer(JOHN);
             john.OpenAccount(new Account(Account.CHECKING));
             bank.AddCustomer(john);
 
-            Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary());
+            Assert.AreEqual(CUSTOMER_SUMMARY_JOHN, bank.CustomerSummary());
         }
 
         [TestMethod]
-        public void CheckingAccount() {
+        public void TestCheckingAccount() {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.CHECKING);
-            Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
+            Customer bill = new Customer(BILL).OpenAccount(checkingAccount);
             bank.AddCustomer(bill);
 
-            checkingAccount.Deposit(100.0);
+            checkingAccount.Deposit(DEPOSIT_100);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(TOTALINTERESTPAID_01, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
-        public void Savings_account() {
+        public void TestSavingsAccount() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Account savingsAccount = new Account(Account.SAVINGS);
+            bank.AddCustomer(new Customer(BILL).OpenAccount(savingsAccount));
 
-            checkingAccount.Deposit(1500.0);
+            savingsAccount.Deposit(DEPOSIT_1500);
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(TOTALINTERESTPAID_2, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
-        public void Maxi_savings_account() {
+        public void TestMaxiSavingsAccount() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer(BILL).OpenAccount(maxiSavingsAccount));
 
-            checkingAccount.Deposit(3000.0);
+            maxiSavingsAccount.Deposit(DEPOSIT_3000);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(TOTALINTERESTPAID_170, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }
