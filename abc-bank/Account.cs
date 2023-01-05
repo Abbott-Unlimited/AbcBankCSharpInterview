@@ -22,7 +22,7 @@ namespace abc_bank
             this.transactions = new List<Transaction>();
         }
 
-        public void Deposit(double amount) 
+        public void Deposit(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
@@ -31,7 +31,7 @@ namespace abc_bank
             }
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(decimal amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
@@ -40,36 +40,44 @@ namespace abc_bank
             }
         }
 
-        public double InterestEarned() 
+        public decimal InterestEarned() 
         {
-            double amount = sumTransactions();
+            decimal amount = sumTransactions();
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return amount * 0.001M;
                     else
-                        return 1 + (amount-1000) * 0.002;
+                        return 1 + (amount-1000) * 0.002M;
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
+    /*                if (amount <= 1000)
+                        return amount * 0.02M;
                     if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                        return 20 + (amount-1000) * 0.05M;
+                    return 70 + (amount-2000) * 0.1M;
+    */              // new rate - 5% if no transactions for 10 days otherwise .1%
+                    if (transactions.Last().transactionDate.AddDays(10) < DateTime.Now)
+                    {
+                        return amount * .05M;
+                    }
+
+                    return amount * .01M;
+
                 default:
-                    return amount * 0.001;
+                    return amount * 0.001M;
             }
         }
 
-        public double sumTransactions() {
+        public decimal sumTransactions() {
            return CheckIfTransactionsExist(true);
         }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        private decimal CheckIfTransactionsExist(bool checkAll) 
         {
-            double amount = 0.0;
+            decimal amount = 0.0M;
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
