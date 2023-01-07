@@ -39,6 +39,24 @@ namespace abc_bank
                 transactions.Add(new Transaction(-amount));
             }
         }
+        
+        public void Transfer(Enums.TransferType transferType, double amount, Account account)
+        {
+            switch (transferType)
+            {
+                case Enums.TransferType.Deposit:
+                    account.Withdraw(amount);
+                    Deposit(amount);
+
+                    break;
+
+                case Enums.TransferType.Withdrawl:
+                    Withdraw(amount);
+                    account.Deposit(amount);
+
+                    break;
+            }
+        }
 
         public double InterestEarned() 
         {
