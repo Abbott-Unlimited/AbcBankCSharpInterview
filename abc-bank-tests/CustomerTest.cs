@@ -55,7 +55,7 @@ namespace abc_bank_tests
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
-            oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }

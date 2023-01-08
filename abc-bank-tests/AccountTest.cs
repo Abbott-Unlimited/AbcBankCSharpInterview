@@ -71,7 +71,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void transfer_deposit_first_account_same_account_are_equal_true()
+        public void Transfer_Deposit_First_Account_Same_Account_Are_Equal_True()
         {
             Account checkingAccount = new Account(Account.CHECKING);
             
