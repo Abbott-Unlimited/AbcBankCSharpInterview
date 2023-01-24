@@ -49,14 +49,14 @@ namespace abc_bank_tests
             Assert.AreEqual(2, oscar.GetNumberOfAccounts());
         }
 
-        [TestMethod]
-        [Ignore]
+        [TestMethod]       
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
-        }
+        }       
     }
 }

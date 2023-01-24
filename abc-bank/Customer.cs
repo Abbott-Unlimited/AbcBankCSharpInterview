@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -84,7 +85,22 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return Math.Abs(d).ToString("c");            
+        }
+
+        public void TransferFunds(Account withdrawlAccount, Account depositAccount, double amount)
+        {
+            try
+            {
+                withdrawlAccount.Withdraw(amount);
+
+                depositAccount.Deposit(amount);
+            }
+            catch(Exception e)
+            {
+
+            }
+            
         }
     }
 }
