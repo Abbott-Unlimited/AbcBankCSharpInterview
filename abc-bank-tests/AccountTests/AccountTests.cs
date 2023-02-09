@@ -23,7 +23,7 @@ namespace abc_bank_tests {
 
     #endregion
 
-    #region Deposit
+    #region Deposits
 
     [TestMethod]
     public void Test_Account_Positive_Amount_Deposit_Works() {
@@ -45,7 +45,7 @@ namespace abc_bank_tests {
 
     #endregion
 
-    #region Withdraw
+    #region Withdraws
 
     [TestMethod]
     // not really liking this test name...

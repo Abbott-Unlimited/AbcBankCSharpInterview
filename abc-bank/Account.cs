@@ -8,6 +8,9 @@ namespace abc_bank {
 
     public List<Transaction> Transactions { get; }
 
+
+    // TODO:  The way interest is handled screams 'abstract to interfaces'
+    //        And if this were being done for production, I would insist on it.
     public double InterestEarned {
       get {
         double amount = CurrentBalance;
@@ -59,6 +62,8 @@ namespace abc_bank {
     public void Withdraw(double amount) {
       if (amount <= 0) {
         throw new InvalidTransactionAmountException();
+      } else if (amount > CurrentBalance) {
+        throw new InsufficientFundsException();
       } else {
         Transactions.Add(new Transaction(-amount));
       }

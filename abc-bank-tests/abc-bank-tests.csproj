@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MSTestExtensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTestExtensions.4.0.0\lib\MSTestExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -52,16 +55,21 @@
   <ItemGroup>
     <Compile Include="BankTest.cs" />
     <Compile Include="CustomerTest.cs" />
-    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AccountTests\MaxiSavingsAccountTests.cs" />
+    <Compile Include="AccountTests\CheckingAccountTests.cs" />
     <Compile Include="TransactionTest.cs" />
-    <Compile Include="AccountTests.cs" />
+    <Compile Include="AccountTests\AccountTests.cs" />
+    <Compile Include="AccountTests\SavingsAccountTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\abc-bank\abc-bank.csproj">
       <Project>{c8a5871b-eefa-49eb-84a0-5b021d13e233}</Project>
       <Name>abc-bank</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
