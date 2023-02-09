@@ -21,7 +21,7 @@ namespace abc_bank {
 
         foreach (Account a in accounts) {
           statement += "\n" + StatementForAccount(a) + "\n";
-          total += a.SumTransactions;
+          total += a.CurrentBalance;
         }
 
         statement += "\nTotal In All Accounts " + ToDollars(total);

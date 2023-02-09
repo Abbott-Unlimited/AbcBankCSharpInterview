@@ -1,41 +1,16 @@
 ﻿using System.Collections.Generic;
 
 namespace abc_bank {
-
   public class Account {
     #region Properties
 
-    public AccountType AccountType {
-      get;
-    }
+    public AccountType AccountType { get; }
 
-    public List<Transaction> Transactions {
-      get;
-    }
-
-    #region These need corrected.
-
-    public double SumTransactions {
-      get {
-        return CheckIfTransactionsExist(true);
-      }
-    }
-
-    private double CheckIfTransactionsExist(bool checkAll) {
-      var amount = 0.0;
-
-      foreach (Transaction t in Transactions) {
-        amount += t.amount;
-      }
-
-      return amount;
-    }
-
-    #endregion
+    public List<Transaction> Transactions { get; }
 
     public double InterestEarned {
       get {
-        double amount = SumTransactions;
+        double amount = CurrentBalance;
 
         switch (AccountType) {
           case AccountType.SAVINGS: {
@@ -90,5 +65,34 @@ namespace abc_bank {
     }
 
     #endregion
+
+
+
+    #region These need corrected.
+
+    public double CurrentBalance {
+      get {
+        return CheckIfTransactionsExist(true);
+      }
+    }
+
+    private double CheckIfTransactionsExist(bool checkAll) {
+      var amount = 0.0;
+
+      foreach (Transaction t in Transactions) {
+        amount += t.amount;
+      }
+
+      return amount;
+    }
+
+    #endregion
+
+    public bool HasTransactions {
+      get {
+        return Transactions.Count > 0 ? true : false;
+      }
+    }
+
   }
 }

@@ -52,8 +52,10 @@
   <ItemGroup>
     <Compile Include="BankTest.cs" />
     <Compile Include="CustomerTest.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionTest.cs" />
+    <Compile Include="AccountTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\abc-bank\abc-bank.csproj">
