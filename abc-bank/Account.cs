@@ -1,84 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace abc_bank
-{
-    public class Account
-    {
+namespace abc_bank {
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
+  public class Account {
+    #region Properties
 
-        private readonly int accountType;
-        public List<Transaction> transactions;
-
-        public Account(int accountType) 
-        {
-            this.accountType = accountType;
-            this.transactions = new List<Transaction>();
-        }
-
-        public void Deposit(double amount) 
-        {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(amount));
-            }
-        }
-
-        public void Withdraw(double amount) 
-        {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
-            }
-        }
-
-        public double InterestEarned() 
-        {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
-                    else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
-                default:
-                    return amount * 0.001;
-            }
-        }
-
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
-        {
-            double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
-            return amount;
-        }
-
-        public int GetAccountType() 
-        {
-            return accountType;
-        }
-
+    public AccountType AccountType {
+      get;
     }
+
+    public List<Transaction> Transactions {
+      get;
+    }
+
+    #region These need corrected.
+
+    public double SumTransactions {
+      get {
+        return CheckIfTransactionsExist(true);
+      }
+    }
+
+    private double CheckIfTransactionsExist(bool checkAll) {
+      var amount = 0.0;
+
+      foreach (Transaction t in Transactions) {
+        amount += t.amount;
+      }
+
+      return amount;
+    }
+
+    #endregion
+
+    public double InterestEarned {
+      get {
+        double amount = SumTransactions;
+
+        switch (AccountType) {
+          case AccountType.SAVINGS: {
+            if (amount <= 1000) {
+              return amount * 0.001;
+            } else {
+              return 1 + (amount - 1000) * 0.002;
+            }
+          }
+          case AccountType.MAXI_SAVINGS: {
+            if (amount <= 1000) {
+              return amount * 0.02;
+            } else if (amount <= 2000) {
+              return 20 + (amount - 1000) * 0.05;
+            } else {
+              return 70 + (amount - 2000) * 0.1;
+            }
+          }
+          default:
+            return amount * 0.001;
+        }
+      }
+    }
+
+    #endregion
+
+    #region CTOR
+
+    public Account(AccountType accountType) {
+      AccountType = accountType;
+      Transactions = new List<Transaction>();
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public void Deposit(double amount) {
+      if (amount <= 0) {
+        throw new InvalidTransactionAmountException();
+      } else {
+        Transactions.Add(new Transaction(amount));
+      }
+    }
+
+    public void Withdraw(double amount) {
+      if (amount <= 0) {
+        throw new InvalidTransactionAmountException();
+      } else {
+        Transactions.Add(new Transaction(-amount));
+      }
+    }
+
+    #endregion
+  }
 }

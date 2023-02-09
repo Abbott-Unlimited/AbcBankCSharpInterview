@@ -1,90 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace abc_bank
-{
-    public class Customer
-    {
-        private String name;
-        private List<Account> accounts;
+namespace abc_bank {
+  public class Customer {
+    #region Properties
 
-        public Customer(String name)
-        {
-            this.name = name;
-            this.accounts = new List<Account>();
-        }
+    public string Name { get; }
 
-        public String GetName()
-        {
-            return name;
-        }
-
-        public Customer OpenAccount(Account account)
-        {
-            accounts.Add(account);
-            return this;
-        }
-
-        public int GetNumberOfAccounts()
-        {
-            return accounts.Count;
-        }
-
-        public double TotalInterestEarned() 
-        {
-            double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
-            return total;
-        }
-
-        public String GetStatement() 
-        {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
-            double total = 0.0;
-            foreach (Account a in accounts) 
-            {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
-            }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
-            return statement;
-        }
-
-        private String statementForAccount(Account a) 
-        {
-            String s = "";
-
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
-
-            //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
-            }
-            s += "Total " + ToDollars(total);
-            return s;
-        }
-
-        private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
-        }
+    private List<Account> accounts;
+    public int NumberOfAccounts {
+      get {
+        return accounts.Count;
+      }
     }
+
+    public string Statement {
+      get {
+        var statement = "Statement for " + Name + "\n";
+        var total = 0.0;
+
+        foreach (Account a in accounts) {
+          statement += "\n" + StatementForAccount(a) + "\n";
+          total += a.SumTransactions;
+        }
+
+        statement += "\nTotal In All Accounts " + ToDollars(total);
+
+        return statement;
+      }
+    }
+
+    public double TotalInterestEarned {
+      get {
+        var total = 0.0;
+
+        foreach (Account a in accounts) {
+          total += a.InterestEarned;
+        }
+
+        return total;
+      }
+    }
+
+    #endregion
+
+    #region CTOR
+
+    public Customer(string name) {
+      Name = name;
+      accounts = new List<Account>();
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    // TODO:  Examine the following much closer...
+    public Customer OpenAccount(Account account) {
+      accounts.Add(account);
+      return this;
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private string StatementForAccount(Account account) {
+      string s = "";
+
+      //Translate to pretty account type
+      switch (account.AccountType) {
+        case AccountType.CHECKING:
+          s += "Checking Account\n";
+          break;
+        case AccountType.SAVINGS:
+          s += "Savings Account\n";
+          break;
+        case AccountType.MAXI_SAVINGS:
+          s += "Maxi Savings Account\n";
+          break;
+      }
+
+      //Now total up all the transactions
+      var total = 0.0;
+
+      foreach (Transaction t in account.Transactions) {
+        s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
+        total += t.amount;
+      }
+
+      s += "Total " + ToDollars(total);
+
+      return s;
+    }
+
+    private string ToDollars(double d) => string.Format("{0:C2}", Math.Abs(d));
+
+    #endregion
+  }
 }
