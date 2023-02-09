@@ -7,9 +7,9 @@ namespace abc_bank_tests
     public class BankTest
     {
 
-        private static readonly double DOUBLE_DELTA = 1e-15;
+        private static readonly double DOUBLE_DELTA = 1e-15; // 1e-15 = 0.000000000000001
 
-        [TestMethod]
+    [TestMethod]
         public void CustomerSummary() 
         {
             Bank bank = new Bank();

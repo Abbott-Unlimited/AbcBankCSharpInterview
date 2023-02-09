@@ -40,6 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
+    <Compile Include="Accounts\AccountType.cs" />
+    <Compile Include="Accounts\MaxiSavingsAccount.cs" />
+    <Compile Include="Accounts\CheckingAccount.cs" />
+    <Compile Include="Accounts\IAccount.cs" />
+    <Compile Include="Accounts\SavingsAccount.cs" />
     <Compile Include="AccountType.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Bank.cs" />

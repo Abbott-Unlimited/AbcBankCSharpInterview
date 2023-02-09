@@ -110,7 +110,5 @@ namespace abc_bank_tests {
     }
 
     #endregion
-
-
   }
 }
