@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using abc_bank.Accounts;
+
 namespace abc_bank {
   public class Customer {
     #region Properties
 
     public string Name { get; }
 
-    private List<Account> accounts;
+    private List<IAccount> accounts;
     public int NumberOfAccounts {
       get {
         return accounts.Count;
@@ -19,7 +21,7 @@ namespace abc_bank {
         var statement = "Statement for " + Name + "\n";
         var total = 0.0;
 
-        foreach (Account a in accounts) {
+        foreach (var a in accounts) {
           statement += "\n" + StatementForAccount(a) + "\n";
           total += a.CurrentBalance;
         }
@@ -34,7 +36,7 @@ namespace abc_bank {
       get {
         var total = 0.0;
 
-        foreach (Account a in accounts) {
+        foreach (IAccount a in accounts) {
           total += a.InterestEarned;
         }
 
@@ -48,7 +50,7 @@ namespace abc_bank {
 
     public Customer(string name) {
       Name = name;
-      accounts = new List<Account>();
+      accounts = new List<IAccount>();
     }
 
     #endregion
@@ -56,16 +58,22 @@ namespace abc_bank {
     #region Public Methods
 
     // TODO:  Examine the following much closer...
-    public Customer OpenAccount(Account account) {
+    public Customer OpenAccount(IAccount account) {
       accounts.Add(account);
       return this;
+    }
+
+    public Customer OpenAccount(AccountType accountType) {
+      var acct = AccountFactory.GetAccount(accountType);
+
+      return OpenAccount(acct);
     }
 
     #endregion
 
     #region Private Methods
 
-    private string StatementForAccount(Account account) {
+    private string StatementForAccount(IAccount account) {
       string s = "";
 
       //Translate to pretty account type

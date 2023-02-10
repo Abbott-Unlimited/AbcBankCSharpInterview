@@ -1,16 +1,20 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using abc_bank;
+using abc_bank.Accounts;
 
 namespace abc_bank_tests {
   [TestClass]
   public class CustomerTest {
     [TestMethod]
     public void TestApp() {
-      Account checkingAccount = new Account(AccountType.CHECKING);
-      Account savingsAccount = new Account(AccountType.SAVINGS);
+      var checkingAccount = new CheckingAccount();
+      var savingsAccount = new SavingsAccount();
 
-      Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+      var henry = new Customer("Henry");
+
+      henry.OpenAccount(checkingAccount);
+      henry.OpenAccount(savingsAccount);
 
       checkingAccount.Deposit(100.0);
       savingsAccount.Deposit(4000.0);
@@ -32,24 +36,28 @@ namespace abc_bank_tests {
 
     [TestMethod]
     public void TestOneAccount() {
-      Customer oscar = new Customer("Oscar").OpenAccount(new Account(AccountType.SAVINGS));
+      var oscar = new Customer("Oscar");
+      oscar.OpenAccount(new SavingsAccount());
+
       Assert.AreEqual(1, oscar.NumberOfAccounts);
     }
 
     [TestMethod]
     public void TestTwoAccount() {
-      Customer oscar = new Customer("Oscar")
-           .OpenAccount(new Account(AccountType.SAVINGS));
-      oscar.OpenAccount(new Account(AccountType.CHECKING));
+      var oscar = new Customer("Oscar");
+      oscar.OpenAccount(new CheckingAccount());
+      oscar.OpenAccount(new SavingsAccount());
+
       Assert.AreEqual(2, oscar.NumberOfAccounts);
     }
 
     [TestMethod]
-    [Ignore]
     public void TestThreeAccounts() {
-      Customer oscar = new Customer("Oscar")
-              .OpenAccount(new Account(AccountType.SAVINGS));
-      oscar.OpenAccount(new Account(AccountType.CHECKING));
+      var oscar = new Customer("Oscar");
+      oscar.OpenAccount(new CheckingAccount());
+      oscar.OpenAccount(new SavingsAccount());
+      oscar.OpenAccount(new MaxiSavingsAccount());
+
       Assert.AreEqual(3, oscar.NumberOfAccounts);
     }
   }
