@@ -4,9 +4,56 @@ using abc_bank;
 using abc_bank.Accounts;
 
 namespace abc_bank_tests.Customers {
-  
+
+  #region Fakes, Mocks and Stubs
+
+  public class CustomerTestFake : Customer {
+    public CustomerTestFake(string name) : base(name) { }
+  }
+
+  #endregion
+
   [TestClass]
   public class CustomerTest {
+
+    #region Properties 
+
+    #region Name
+
+    [Ignore]
+    [TestMethod]
+    public void Name_Stub() { }
+
+    #endregion     
+
+    #region Accounts
+
+    [Ignore]
+    [TestMethod]
+    public void Accounts_Stub() { }
+
+    #endregion
+
+    #region NumberOfAccounts
+
+    [TestMethod]
+    public void Customer_NumberOfAccounts_result_with_1_account() {
+      var oscar = new Customer("Oscar").OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING));
+
+      Assert.AreEqual(1, oscar.NumberOfAccounts);
+    }
+
+    [TestMethod]
+    public void Customer_NumberOfAccounts_result_with_3_accounts() {
+      var oscar = new Customer("Oscar")
+        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING))
+        .OpenAccount(AccountCreator.GetAccount(AccountType.SAVINGS))
+        .OpenAccount(AccountCreator.GetAccount(AccountType.MAXI_SAVINGS));
+
+      Assert.AreEqual(3, oscar.NumberOfAccounts);
+    }
+
+    #endregion
 
     #region Statement
 
@@ -40,26 +87,59 @@ namespace abc_bank_tests.Customers {
               "Total In All Accounts $3,900.00", henry.Statement);
     }
 
+    #endregion 
+
+    #region Total Interest Earned
+
+    [Ignore]
+    [TestMethod]
+    public void TotalInterestEarned_Stub() { }
+
     #endregion
 
-    #region NumberOfAccounts
+    #endregion
 
+    #region Public Methods
+
+    #region OpenAccount
+
+    [Ignore]
     [TestMethod]
-    public void Customer_NumberOfAccounts_result_with_1_account() {
-      var oscar = new Customer("Oscar").OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING));
+    public void OpenAccount_IAccount_Instance() { }
 
-      Assert.AreEqual(1, oscar.NumberOfAccounts);
-    }
-
+    [Ignore]
     [TestMethod]
-    public void Customer_NumberOfAccounts_result_with_3_accounts() {
-      var oscar = new Customer("Oscar")
-        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING))
-        .OpenAccount(AccountCreator.GetAccount(AccountType.SAVINGS))
-        .OpenAccount(AccountCreator.GetAccount(AccountType.MAXI_SAVINGS));
+    public void OpenAccount_IAccount_AccountType_and_initialDeposit() { }
 
-      Assert.AreEqual(3, oscar.NumberOfAccounts);
-    }
+    #endregion
+
+    #region TransferFunds
+
+    [Ignore]
+    [TestMethod]
+    public void TransferFunds_Stub() { }
+
+    #endregion
+
+    #endregion
+
+    #region Protected Methods (Stubs)
+
+    #region StatementForAccount
+
+    [Ignore]
+    [TestMethod]
+    public void StatementForAccount_Stub() { }
+
+    #endregion
+
+    #region ToDollars
+
+    [Ignore]
+    [TestMethod]
+    public void ToDollars_Stub() { }
+
+    #endregion
 
     #endregion
 

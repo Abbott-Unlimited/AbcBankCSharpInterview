@@ -2,23 +2,23 @@
 ## Requirements
 
 #### <u>Unit Tests</u>
-* [ ] Fix Tests
-  * [x] Broken Tests
-  * [ ] Incorrect Tests 
-    * [x] Bank
-      * [x] FirstCustomer
-        * [x] Bank has no current customers added, return message (simply throwing an error is not ideal)
-        * [x] Bank has customers, return name of first customer (currently, index based - shoddy...)
-      * [x] CustomerSummary
-        * [x] Bank has no current customers added, return message (simply throwing an error is not ideal)
-        * [x] Bank has customers, return stringified customer summary
-  * [ ] Incomplete Tests
-  * [ ] Review for Missing/wrong/incomplete Tests
-    * [x] Account(s)
-    * [x] Bank
-    * [ ] Customer
-    * [ ] Transaction
-    * [ ] DateProvider (? doesn't appear to be in use - yet...) 
+  * [ ] Fix Tests
+    * [x] Broken Tests
+    * [ ] Incorrect Tests 
+      * [x] Bank
+        * [x] FirstCustomer
+          * [x] Bank has no current customers added, return message (simply throwing an error is not ideal)
+          * [x] Bank has customers, return name of first customer (currently, index based - shoddy...)
+        * [x] CustomerSummary
+          * [x] Bank has no current customers added, return message (simply throwing an error is not ideal)
+          * [x] Bank has customers, return stringified customer summary
+    * [ ] Incomplete Tests
+    * [ ] Review for Missing/wrong/incomplete Tests
+      * [x] Account(s)
+      * [x] Bank
+      * [ ] Customer
+      * [ ] Transaction
+      * [ ] DateProvider
 
 #### <u>Existing Features</u>
   * [x] All existing features working
@@ -41,12 +41,11 @@
 
 #### <u>New Features</u>
   * [ ] Customer can transfer funds between accounts
-
   * [ ] Update Maxi-Savings interest rate when
     * [ ] 5% rate when no withdrawls in past 10 days
     * [ ] 0.1% when a withdrawl occurs within past 10 days
-
   * [ ] Interest accrues daily per-annum (for each year)
+  - [per-annum](https://www.accountingcoach.com/blog/what-does-per-annum-mean#:~:text=Per%20annum%20means%20yearly%20or,pays%20interest%20of%206%25.%22)
 
 ## Refactoring Tasks
 

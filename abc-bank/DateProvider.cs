@@ -1,25 +1,22 @@
-﻿//using System;
-
-//
-//  This appears to do absolutely nothing useful nor does it appear to be referenced.
-//  Dead/Zombie code is bad.  Removing.
-//
+﻿using System;
 
 namespace abc_bank {
 
-  //public class DateProvider {
-  //  private static DateProvider instance = null;
+// todo:  Ask about what the purpose of this class is.
+//        eg:   Why a singleton to wrap DateTime.Now - I am not aware
+//              of anything that would prompt creation of this - nor any need...
+//        May learn something :)
+  public class DateProvider {
+    private static DateProvider instance = null;
 
-  //  public static DateProvider getInstance() {
-  //    if (instance == null) {
-  //      instance = new DateProvider();
-  //    }
+    public static DateProvider getInstance() {
+      return instance == null
+        ? new DateProvider()
+        : instance;
+    }
 
-  //    return instance;
-  //  }
-
-  //  public DateTime Now() {
-  //    return DateTime.Now;
-  //  }
-  //}
+    public DateTime Now() {
+      return DateTime.Now;
+    }
+  }
 }

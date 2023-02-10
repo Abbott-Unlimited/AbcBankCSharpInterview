@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using abc_bank.Exceptions;
+using abc_bank.Transactions;
 
 namespace abc_bank.Accounts {
   public abstract class AccountBase : IAccount {
@@ -14,7 +15,7 @@ namespace abc_bank.Accounts {
         var amount = 0.0;
 
         foreach (Transaction t in Transactions) {
-          amount += t.amount;
+          amount += t.Amount;
         }
 
         return amount;
@@ -56,7 +57,7 @@ namespace abc_bank.Accounts {
       if (amount <= 0) {
         throw new InvalidTransactionAmountException();
       } else {
-        Transactions.Add(new Transaction(amount));
+        Transactions.Add(new Transaction(amount, TransactionType.Deposit));
       }
     }
 
@@ -66,7 +67,7 @@ namespace abc_bank.Accounts {
       } else if (amount > CurrentBalance) {
         throw new InsufficientFundsException();
       } else {
-        Transactions.Add(new Transaction(-amount));
+        Transactions.Add(new Transaction(-amount, TransactionType.Withdraw));
       }
     }
 

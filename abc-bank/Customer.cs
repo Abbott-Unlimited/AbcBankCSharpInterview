@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 using abc_bank.Accounts;
+using abc_bank.Transactions;
 
 namespace abc_bank {
   public class Customer {
@@ -11,10 +11,11 @@ namespace abc_bank {
 
     public string Name { get; }
 
-    private List<IAccount> accounts;
+    public List<IAccount> Accounts { get; protected set; }
+
     public int NumberOfAccounts {
       get {
-        return accounts.Count;
+        return Accounts.Count;
       }
     }
 
@@ -23,13 +24,13 @@ namespace abc_bank {
         var statement = "Statement for " + Name + "\n";
         var total = 0.0;
 
-        foreach (var a in accounts) {
-          statement += "\n" + StatementForAccount(a) + "\n";
-          total += a.CurrentBalance;
+        foreach (var account in Accounts) {
+          statement += "\n" + StatementForAccount(account) + "\n";
+          total += account.CurrentBalance;
         }
 
         statement += "\nTotal In All Accounts " + ToDollars(total);
-        
+
         return statement;
       }
     }
@@ -38,8 +39,8 @@ namespace abc_bank {
       get {
         var total = 0.0;
 
-        foreach (IAccount a in accounts) {
-          total += a.InterestEarned;
+        foreach (IAccount account in Accounts) {
+          total += account.InterestEarned;
         }
 
         return total;
@@ -52,7 +53,7 @@ namespace abc_bank {
 
     public Customer(string name) {
       Name = name;
-      accounts = new List<IAccount>();
+      Accounts = new List<IAccount>();
     }
 
     #endregion
@@ -60,23 +61,21 @@ namespace abc_bank {
     #region Public Methods
 
     public Customer OpenAccount(IAccount account) {
-      accounts.Add(account);
+      Accounts.Add(account);
       return this;
     }
 
-    public Customer OpenAccount(AccountType accountType) {
-      return OpenAccount(AccountCreator.GetAccount(accountType));
-    }
-
-    public Customer OpenAccount(AccountType accountType, double initialDeposit) {
+    public Customer OpenAccount(AccountType accountType, double initialDeposit = 0.00) {
       return OpenAccount(AccountCreator.GetAccount(accountType, initialDeposit));
     }
 
+    public void TransferFunds() => throw new NotImplementedException;
+
     #endregion
 
-    #region Private Methods
+    #region Protected Methods
 
-    private string StatementForAccount(IAccount account) {
+    protected string StatementForAccount(IAccount account) {
       string s = "";
 
       //Translate to pretty account type
@@ -96,8 +95,8 @@ namespace abc_bank {
       var total = 0.0;
 
       foreach (Transaction t in account.Transactions) {
-        s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-        total += t.amount;
+        s += "  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.Amount) + "\n";
+        total += t.Amount;
       }
 
       s += "Total " + ToDollars(total);
@@ -105,7 +104,7 @@ namespace abc_bank {
       return s;
     }
 
-    private string ToDollars(double d) => string.Format("{0:C2}", Math.Abs(d));
+    protected string ToDollars(double d) => string.Format("{0:C2}", Math.Abs(d));
 
     #endregion
 
