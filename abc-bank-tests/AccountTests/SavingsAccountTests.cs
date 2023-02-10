@@ -5,22 +5,16 @@ using abc_bank.Accounts;
 namespace abc_bank_tests.Accounts {
 
   [TestClass]
-  public class SavingsAccountTests {
+  public class Savings_Account_Tests {
 
     [TestMethod]
-    public void Accrued_Interest_With_Balance_1000_Or_Less() {
-      IAccount acct = new SavingsAccount();
-      acct.Deposit(1000);
-
-      Assert.AreEqual(1, acct.InterestEarned);
+    public void Interest_Earned_With_Balance_1000_Or_Less() {
+      Assert.AreEqual(1, new SavingsAccount(1000.00).InterestEarned, Constants.DOUBLE_DELTA);
     }
 
     [TestMethod]
-    public void Accrued_Interest_With_Balance_Greater_Than_1000() {
-      IAccount acct = new SavingsAccount();
-      acct.Deposit(2000);
-
-      Assert.AreEqual(4, acct.InterestEarned);
+    public void Interest_Earned_With_Balance_Greater_Than_1000() {
+      Assert.AreEqual(4, new SavingsAccount(2000).InterestEarned, Constants.DOUBLE_DELTA);
     }
   }
 }

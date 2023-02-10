@@ -16,7 +16,11 @@ namespace abc_bank {
       }
     }
 
-    public bool HasCustomers => Customers.Count > 0;
+    public bool HasCustomers {
+      get {
+        return Customers.Count > 0;
+      }
+    }
 
     // todo:  Shouldn't this be based on sign-up date or something?  
     //        C# handles ordering in Lists/Arrays better than Javascript - but still poor practice
@@ -49,7 +53,7 @@ namespace abc_bank {
       get {
         var total = 0.0;
 
-        foreach (var c in Customers) { // should probably be a LINQ query...
+        foreach (var c in Customers) {
           total += c.TotalInterestEarned;
         }
 
@@ -65,7 +69,6 @@ namespace abc_bank {
       Customers.Add(customer);
     }
 
-    // TODO: in a perfect world, more than just a name should be necessary...
     public Customer AddCustomer(string customerName) {
       var customer = new Customer(customerName);
       AddCustomer(customer);
@@ -77,12 +80,7 @@ namespace abc_bank {
 
     #region Private Methods
 
-    // Make sure correct plural of word is created based on the number passed in:
-    // If number passed in is 1 just return the word otherwise add an 's' at the end
-    //
-    // protected, not private so it can be tested.
-    // also, I abhor the name Format here - names should be descriptive and when possible, explicit
-    protected string Format(int number, string word) {
+    private string Format(int number, string word) {
       return number + " " + (number == 1 ? word : word + "s");
     }
 

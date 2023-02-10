@@ -3,11 +3,17 @@
 using abc_bank;
 using abc_bank.Accounts;
 
-namespace abc_bank_tests {
+namespace abc_bank_tests.Customers {
+  
   [TestClass]
   public class CustomerTest {
+
+    #region Statement
+
     [TestMethod]
-    public void TestApp() {
+    public void Customer_Statement_Report_Test() {
+      // observation:   It's kinda weird we can open an account for a customer
+      //                without having the customer belong to a bank...
       var checkingAccount = new CheckingAccount();
       var savingsAccount = new SavingsAccount();
 
@@ -34,31 +40,28 @@ namespace abc_bank_tests {
               "Total In All Accounts $3,900.00", henry.Statement);
     }
 
+    #endregion
+
+    #region NumberOfAccounts
+
     [TestMethod]
-    public void TestOneAccount() {
-      var oscar = new Customer("Oscar");
-      oscar.OpenAccount(new SavingsAccount());
+    public void Customer_NumberOfAccounts_result_with_1_account() {
+      var oscar = new Customer("Oscar").OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING));
 
       Assert.AreEqual(1, oscar.NumberOfAccounts);
     }
 
     [TestMethod]
-    public void TestTwoAccount() {
-      var oscar = new Customer("Oscar");
-      oscar.OpenAccount(new CheckingAccount());
-      oscar.OpenAccount(new SavingsAccount());
-
-      Assert.AreEqual(2, oscar.NumberOfAccounts);
-    }
-
-    [TestMethod]
-    public void TestThreeAccounts() {
-      var oscar = new Customer("Oscar");
-      oscar.OpenAccount(new CheckingAccount());
-      oscar.OpenAccount(new SavingsAccount());
-      oscar.OpenAccount(new MaxiSavingsAccount());
+    public void Customer_NumberOfAccounts_result_with_3_accounts() {
+      var oscar = new Customer("Oscar")
+        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING))
+        .OpenAccount(AccountCreator.GetAccount(AccountType.SAVINGS))
+        .OpenAccount(AccountCreator.GetAccount(AccountType.MAXI_SAVINGS));
 
       Assert.AreEqual(3, oscar.NumberOfAccounts);
     }
+
+    #endregion
+
   }
 }

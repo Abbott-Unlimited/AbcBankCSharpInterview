@@ -7,29 +7,14 @@ namespace abc_bank_tests.Accounts {
   [TestClass]
   public class MaxiSavingsAccountTests {
 
-    [Ignore]
     [TestMethod]
     public void Account_1000_Or_Less_Interest() {
-      Assert.Fail("This is the savings calculation, not maxi-savings");
-
-      IAccount acct = new MaxiSavingsAccount();
-      //acct.Deposit(1000);
-
-      //Assert.AreEqual(1, acct.InterestEarned);
+      Assert.AreEqual(20, new MaxiSavingsAccount(1000.00).InterestEarned, Constants.DOUBLE_DELTA);
     }
 
-    [Ignore]
     [TestMethod]
     public void Account_Over_1000_Interest() {
-      Assert.Fail("This is the savings calculation, not maxi-savings");
-
-      IAccount acct = new MaxiSavingsAccount();
-      //acct.Deposit(2000);
-
-      //Assert.AreEqual(4, acct.InterestEarned);
+      Assert.AreEqual(100, new MaxiSavingsAccount(2000.00).InterestEarned, Constants.DOUBLE_DELTA);
     }
-
-    // todo:  Could probably use a few more tests here to cover
-    //        No balance, negative balance, etc.  Can wait however.
   }
 }

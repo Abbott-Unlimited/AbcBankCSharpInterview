@@ -5,6 +5,8 @@ using abc_bank.Exceptions;
 namespace abc_bank.Accounts {
   public abstract class AccountBase : IAccount {
 
+    #region Properties
+
     public virtual AccountType AccountType { get; }
 
     public virtual double CurrentBalance {
@@ -23,16 +25,28 @@ namespace abc_bank.Accounts {
 
     public virtual bool HasTransactions {
       get {
-        return Transactions.Count > 0 ? true : false;
+        return Transactions.Count > 0;
       }
     }
 
     public abstract double InterestEarned { get; }
 
-    protected AccountBase(AccountType accountType) {
+    #endregion
+
+    #region CTOR
+
+    public AccountBase(AccountType accountType, double initialDeposit = 0.00) {
       AccountType = accountType;
       Transactions = new List<Transaction>();
+
+      if (initialDeposit > 0.00) {
+        Deposit(initialDeposit);
+      }
     }
+
+    #endregion
+
+    #region Methods
 
     protected double CalculateInterest(double interestRate) {
       return CurrentBalance * interestRate;
@@ -55,5 +69,8 @@ namespace abc_bank.Accounts {
         Transactions.Add(new Transaction(-amount));
       }
     }
+
+    #endregion
+
   }
 }

@@ -12,12 +12,12 @@ using abc_bank.Accounts;
  */
 namespace abc_bank_tests.Accounts {
 
-  #region AccountBase Implementation Structure
+  #region AccountBase Implementation Fixture
 
   public class AccountBaseMock : AccountBase {
     public override double InterestEarned => throw new System.NotImplementedException();
 
-    public AccountBaseMock(AccountType accountType) : base(accountType) { }
+    public AccountBaseMock(AccountType accountType, double initialDeposit = 0.00) : base(accountType, initialDeposit) { }
   }
 
   #endregion
@@ -40,10 +40,24 @@ namespace abc_bank_tests.Accounts {
 
     #endregion
 
+    #region Constructor
+
+    [TestMethod]
+    public void CTOR_No_deposit_attempt_if_initialDeposit_amount_is_0_or_less() {
+      Assert.IsFalse(new AccountBaseMock(AccountType.CHECKING).HasTransactions);
+    }
+
+    [TestMethod]
+    public void CTOR_Deposit_made_if_initialDeposit_amount_greater_than_0() {
+      Assert.IsTrue(new AccountBaseMock(AccountType.CHECKING, 0.01).HasTransactions);
+    }
+
+    #endregion
+
     #region CurrentBalance & AccountType Properties
 
     [TestMethod]
-    public void Test_Current_Balance_Property_Returns_Accurate_Current_Balance() {
+    public void Current_Balance_Property_Returns_Accurate_Current_Balance() {
       acct.Deposit(100);
       acct.Deposit(200.75);
       acct.Withdraw(52.75);
@@ -52,9 +66,7 @@ namespace abc_bank_tests.Accounts {
     }
 
     [TestMethod]
-    // TODO:  Bonus points for eventually moving to a generic test for 'all' account types
-    // using reflection to find and consume all AccountTypes (Pretty simple at the moment, using the enum)
-    public void Test_Account_Type_Property_Returns_Correct_Type() {
+    public void Account_Type_Property_Returns_Correct_Type() {
       acct = new AccountBaseMock(AccountType.CHECKING);
       Assert.AreEqual(AccountType.CHECKING, acct.AccountType);
 
@@ -70,7 +82,7 @@ namespace abc_bank_tests.Accounts {
     #region Deposit
 
     [TestMethod]
-    public void Test_Account_Positive_Amount_Deposit_Works() {
+    public void Account_Positive_Amount_Deposit_Works() {
       acct.Deposit(100);
       Assert.IsTrue(acct.CurrentBalance == 100);
 
@@ -79,12 +91,12 @@ namespace abc_bank_tests.Accounts {
     }
 
     [TestMethod]
-    public void Test_Account_Zero_Dollar_Deposit_Does_Not_Work() {
+    public void Account_Zero_Dollar_Deposit_Does_Not_Work() {
       Assert.Throws<InvalidTransactionAmountException>(() => acct.Deposit(0.0));
     }
 
     [TestMethod]
-    public void Test_Account_Negative_Amount_Deposit_Does_Not_Work() {
+    public void Account_Negative_Amount_Deposit_Does_Not_Work() {
       Assert.Throws<InvalidTransactionAmountException>(() => acct.Deposit(-1));
     }
 
@@ -93,12 +105,12 @@ namespace abc_bank_tests.Accounts {
     #region Withdraw
 
     [TestMethod]
-    public void Test_Account_Withdraw_Amount_Cannot_Exceed_Current_Balance() {
+    public void Account_Withdraw_Amount_Cannot_Exceed_Current_Balance() {
       Assert.Throws<InsufficientFundsException>(() => acct.Withdraw(100));
     }
 
     [TestMethod]
-    public void Test_Account_Positive_Amount_Withdraw_Works() {
+    public void Account_Positive_Amount_Withdraw_Works() {
       acct.Deposit(100);
       acct.Withdraw(50);
 
@@ -106,12 +118,12 @@ namespace abc_bank_tests.Accounts {
     }
 
     [TestMethod]
-    public void Test_Account_Zero_Dollar_Withdraw_Does_Not_Work() {
+    public void Account_Zero_Dollar_Withdraw_Does_Not_Work() {
       Assert.Throws<InvalidTransactionAmountException>(() => acct.Withdraw(0.0));
     }
 
     [TestMethod]
-    public void Test_Account_Negative_Amount_Withdraw_Does_Not_Work() {
+    public void Account_Negative_Amount_Withdraw_Does_Not_Work() {
       Assert.Throws<InvalidTransactionAmountException>(() => acct.Withdraw(-1.0));
     }
 
@@ -120,12 +132,12 @@ namespace abc_bank_tests.Accounts {
     #region Transactions
 
     [TestMethod]
-    public void Test_Account_Has_No_Transactions() {
+    public void Account_Has_No_Transactions() {
       Assert.IsFalse(acct.HasTransactions);
     }
 
     [TestMethod]
-    public void Test_Account_Has_Transactions() {
+    public void Account_Has_Transactions() {
       acct.Deposit(100);
 
       Assert.IsTrue(acct.HasTransactions);

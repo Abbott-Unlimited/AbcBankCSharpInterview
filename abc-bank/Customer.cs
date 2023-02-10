@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using abc_bank.Accounts;
 
 namespace abc_bank {
   public class Customer {
+
     #region Properties
 
     public string Name { get; }
@@ -27,7 +29,7 @@ namespace abc_bank {
         }
 
         statement += "\nTotal In All Accounts " + ToDollars(total);
-
+        
         return statement;
       }
     }
@@ -57,16 +59,17 @@ namespace abc_bank {
 
     #region Public Methods
 
-    // TODO:  Examine the following much closer...
     public Customer OpenAccount(IAccount account) {
       accounts.Add(account);
       return this;
     }
 
     public Customer OpenAccount(AccountType accountType) {
-      var acct = AccountFactory.GetAccount(accountType);
+      return OpenAccount(AccountCreator.GetAccount(accountType));
+    }
 
-      return OpenAccount(acct);
+    public Customer OpenAccount(AccountType accountType, double initialDeposit) {
+      return OpenAccount(AccountCreator.GetAccount(accountType, initialDeposit));
     }
 
     #endregion
@@ -105,5 +108,6 @@ namespace abc_bank {
     private string ToDollars(double d) => string.Format("{0:C2}", Math.Abs(d));
 
     #endregion
+
   }
 }

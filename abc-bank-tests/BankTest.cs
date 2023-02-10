@@ -2,77 +2,87 @@
 
 using abc_bank;
 using abc_bank.Accounts;
-using System.Security.Principal;
 
 namespace abc_bank_tests.BankTests {
+
   [TestClass]
   public class BankTest {
 
-    //  used for ensuring truncation does not cause rounding issues, etc - I assume?
-    private static readonly double DOUBLE_DELTA = 1e-15; // 1e-15 = 0.000000000000001
+    #region Setup and Teardown
+
+    Bank bank;
+
+    [TestInitialize]
+    public void Init() {
+      bank = new Bank();
+    }
+
+    [TestCleanup]
+    public void Cleanup() {
+      bank = null;
+    }
+
+    #endregion
+
+    #region HasCustomers
 
     [TestMethod]
-    public void HasCustomers_Test() {
-      var bank = new Bank();
-
-      Assert.AreEqual(false, bank.HasCustomers);
-
+    public void HasCustomers_is_true_Test() {
       bank.AddCustomer("Jack");
 
-      Assert.AreEqual(true, bank.HasCustomers);
+      Assert.IsTrue(bank.HasCustomers);
     }
 
     [TestMethod]
-    public void First_Bank_Customer_Does_Not_Error_When_No_Customers() {
-      var bank = new Bank();
+    public void HasCustomers_is_false_Test() {
+      Assert.IsFalse(bank.HasCustomers);
+    }
 
+    #endregion
+
+    #region First Bank Customer
+
+    [TestMethod]
+    public void First_Bank_Customer_Returns_No_Customers_Message_When_No_Customers() {
       Assert.AreEqual(Messages.NO_CUSTOMERS_MSG, bank.FirstCustomer);
     }
 
     [TestMethod]
     public void First_Bank_Customer_Returns_First_Customer_Name() {
-      var bank = new Bank();
       bank.AddCustomer("Jenny");
       bank.AddCustomer("Bob");
       bank.AddCustomer("Jack");
 
       Assert.AreEqual("Jenny", bank.FirstCustomer);
-
     }
+
+    #endregion
+
+    #region Customer Summary
 
     [TestMethod]
     public void Customer_Summary_With_No_Customers() {
-      var bank = new Bank();
-
       Assert.AreEqual(Messages.NO_CUSTOMERS_MSG, bank.CustomerSummary);
     }
 
     [TestMethod]
     public void Customer_Summary_With_1_Customer_1_account() {
-      var bank = new Bank();
-      var john = new Customer("John");
-      var acct = new CheckingAccount();
-
-      bank.AddCustomer(john);
-      john.OpenAccount(acct);
+      bank.AddCustomer("John").OpenAccount(AccountType.CHECKING);
 
       Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary);
     }
 
     [TestMethod]
     public void Customer_Summary_With_1_Customer_2_accounts() {
-      var bank = new Bank();
-      var john = bank.AddCustomer("John");
-
-      john.OpenAccount(AccountType.CHECKING);
-      john.OpenAccount(AccountType.SAVINGS);
+      bank.AddCustomer("John")
+        .OpenAccount(AccountType.CHECKING)
+        .OpenAccount(AccountType.SAVINGS);
 
       Assert.AreEqual("Customer Summary\n - John (2 accounts)", bank.CustomerSummary);
     }
 
     [TestMethod]
     public void Customer_Summary_With_3_Customers_1_account_each() {
-      var bank = new Bank();
       bank.AddCustomer("John").OpenAccount(AccountType.CHECKING);
       bank.AddCustomer("Jimmy").OpenAccount(AccountType.SAVINGS);
       bank.AddCustomer("Jack").OpenAccount(AccountType.CHECKING);
@@ -85,56 +95,50 @@ namespace abc_bank_tests.BankTests {
       Assert.AreEqual(expected, bank.CustomerSummary);
     }
 
+    #endregion
+
+    #region Add Customer
+
     [TestMethod]
-    public void CheckingAccount() {
-      var bank = new Bank();
-      var bill = new Customer("Bill");
-      var account = new CheckingAccount();
+    public void AddCustomer_By_New_Customer_Instance() {
+      bank.AddCustomer(new Customer("Bob"));
 
-      bill.OpenAccount(account);
-      bank.AddCustomer(bill);
-      account.Deposit(100.0);
-
-      Assert.AreEqual(0.1, bank.TotalInterestPaid, DOUBLE_DELTA);
+      Assert.IsTrue(bank.HasCustomers);
     }
 
     [TestMethod]
-    public void AddCustomer_By_Customer_Name() { 
-      
-    }
+    public void AddCustomer_By_Customer_Name() {
+      bank.AddCustomer("Bob");
 
-    #region Broken Tests
-
-    [Ignore]
-    [TestMethod]
-    public void Savings_account() {
-      var bank = new Bank();
-      var account = new SavingsAccount();
-      var bill = new Customer("Bill");
-
-      bank.AddCustomer(bill);
-      bill.OpenAccount(account);
-      account.Deposit(1500.0);
-
-      Assert.AreEqual(2.0, bank.TotalInterestPaid, DOUBLE_DELTA);
-    }
-
-    [Ignore]
-    [TestMethod]
-    public void Maxi_savings_account() {
-      Assert.Fail("MaxiSavingsAccount accrued interest is not yet implemented properly");
-
-      var bank = new Bank();
-      var account = new MaxiSavingsAccount();
-      var bill = new Customer("Bill");
-
-      bank.AddCustomer(bill);
-      bill.OpenAccount(account);
-      account.Deposit(3000.0);
-
-      Assert.AreEqual(170.0, bank.TotalInterestPaid, DOUBLE_DELTA);
+      Assert.IsTrue(bank.HasCustomers);
     }
 
     #endregion
+
+    #region Total Interest Paid
+
+    [TestMethod]
+    public void Total_interest_paid_single_checking_account() {
+      bank.AddCustomer("Bill").OpenAccount(new CheckingAccount(100.00));
+
+      Assert.AreEqual(0.10, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
+    }
+
+    [TestMethod]
+    public void Total_interest_paid_single_savings_account() {
+      bank.AddCustomer("Bill").OpenAccount(new SavingsAccount(1000.00));
+
+      Assert.AreEqual(1.00, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
+    }
+
+    [TestMethod]
+    public void Total_interest_paid_single_maxi_savings_account() {
+      bank.AddCustomer("Bill").OpenAccount(new MaxiSavingsAccount(2000.00));
+
+      Assert.AreEqual(100.00, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
+    }
+
+    #endregion
+  
   }
 }

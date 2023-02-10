@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountBase.cs" />
-    <Compile Include="Accounts\AccountFactory.cs" />
+    <Compile Include="Accounts\AccountCreator.cs" />
     <Compile Include="Accounts\AccountType.cs" />
     <Compile Include="Accounts\MaxiSavingsAccount.cs" />
     <Compile Include="Accounts\CheckingAccount.cs" />
