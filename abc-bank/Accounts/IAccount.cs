@@ -7,9 +7,13 @@ namespace abc_bank.Accounts {
 
     #region Properties
 
+    int Id { get; }
+
+    int CustomerId { get; }
+
     AccountType AccountType { get; }
 
-    List<Transaction> Transactions { get; }
+    List<ITransaction> Transactions { get; }
 
     bool HasTransactions { get; }
 

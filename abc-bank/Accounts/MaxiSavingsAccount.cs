@@ -8,7 +8,8 @@
           : CalculateInterest(0.05);
       }
     }
-    public MaxiSavingsAccount(double initialDeposit = 0.00) : base(AccountType.MAXI_SAVINGS, initialDeposit) { }
+    public MaxiSavingsAccount(int lastAccountId, double initialDeposit = 0.00) 
+      : base(AccountType.MAXI_SAVINGS, lastAccountId, initialDeposit) { }
 
   }
 }

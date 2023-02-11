@@ -2,53 +2,79 @@
 
 using abc_bank;
 using abc_bank.Accounts;
+using System.Collections.Generic;
 
 namespace abc_bank_tests.Customers {
-
-  #region Fakes, Mocks and Stubs
-
-  public class CustomerTestFake : Customer {
-    public CustomerTestFake(string name) : base(name) { }
-  }
-
-  #endregion
 
   [TestClass]
   public class CustomerTest {
 
+    #region Setup and Teardown
+
+    Customer cust;
+
+    [TestInitialize]
+    public void Init() {
+      cust = new Customer("Alvin", 0);
+    }
+
+    [TestCleanup]
+    public void Cleanup() {
+      cust = null;
+    }
+
+    #endregion
+
     #region Properties 
+
+    #region Id
+
+    [TestMethod]
+    public void Id_is_initialized_to_value_of_customerId_plus_one_arg_in_constructor() {
+      Assert.AreEqual(1, new Customer("Flipper", 0).Id);
+    }
+
+    #endregion
 
     #region Name
 
-    [Ignore]
     [TestMethod]
-    public void Name_Stub() { }
+    public void Name_is_initialized_to_name_argument_value_in_constructor() {
+      Assert.AreEqual("Jeff", new Customer("Jeff", 0).Name);
+    }
 
     #endregion     
 
     #region Accounts
 
-    [Ignore]
     [TestMethod]
-    public void Accounts_Stub() { }
+    public void Accounts_is_initialized_when_Customer_is_instantiated() {
+      Assert.IsInstanceOfType(new Customer("Jimmy", 0).Accounts, typeof(List<IAccount>));
+    }
 
     #endregion
 
     #region NumberOfAccounts
 
     [TestMethod]
+    public void Customer_NumberOfAccounts_result_with_0_account() {
+      Assert.AreEqual(0, new Customer("Oscar", 0).NumberOfAccounts);
+    }
+
+    [TestMethod]
     public void Customer_NumberOfAccounts_result_with_1_account() {
-      var oscar = new Customer("Oscar").OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING));
+      var oscar = new Customer("Oscar", 0)
+        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING, 0));
 
       Assert.AreEqual(1, oscar.NumberOfAccounts);
     }
 
     [TestMethod]
     public void Customer_NumberOfAccounts_result_with_3_accounts() {
-      var oscar = new Customer("Oscar")
-        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING))
-        .OpenAccount(AccountCreator.GetAccount(AccountType.SAVINGS))
-        .OpenAccount(AccountCreator.GetAccount(AccountType.MAXI_SAVINGS));
+      var oscar = new Customer("Oscar", 0)
+        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING, 0))
+        .OpenAccount(AccountCreator.GetAccount(AccountType.SAVINGS, 0))
+        .OpenAccount(AccountCreator.GetAccount(AccountType.MAXI_SAVINGS, 0));
 
       Assert.AreEqual(3, oscar.NumberOfAccounts);
     }
@@ -61,10 +87,10 @@ namespace abc_bank_tests.Customers {
     public void Customer_Statement_Report_Test() {
       // observation:   It's kinda weird we can open an account for a customer
       //                without having the customer belong to a bank...
-      var checkingAccount = new CheckingAccount();
-      var savingsAccount = new SavingsAccount();
+      var checkingAccount = new CheckingAccount(0);
+      var savingsAccount = new SavingsAccount(0);
 
-      var henry = new Customer("Henry");
+      var henry = new Customer("Henry", 0);
 
       henry.OpenAccount(checkingAccount);
       henry.OpenAccount(savingsAccount);
@@ -103,13 +129,20 @@ namespace abc_bank_tests.Customers {
 
     #region OpenAccount
 
-    [Ignore]
     [TestMethod]
-    public void OpenAccount_IAccount_Instance() { }
+    public void OpenAccount_by_IAccount_Instance() {
+      var acct = AccountCreator.GetAccount(AccountType.CHECKING, cust.NumberOfAccounts);
+      Assert.AreEqual(1, cust.OpenAccount(acct).NumberOfAccounts);
+    }
 
-    [Ignore]
     [TestMethod]
-    public void OpenAccount_IAccount_AccountType_and_initialDeposit() { }
+    public void OpenAccount_by_AccountType_lastAccountId_and_maybe_initialDeposit() {
+      cust.OpenAccount(AccountType.CHECKING, cust.NumberOfAccounts);
+      Assert.AreEqual(1, cust.NumberOfAccounts);
+
+      //cust.OpenAccount(AccountType.CHECKING, cust.NumberOfAccounts);
+      //Assert.AreEqual(1, cust.NumberOfAccounts);
+    }
 
     #endregion
 
@@ -117,7 +150,7 @@ namespace abc_bank_tests.Customers {
 
     [Ignore]
     [TestMethod]
-    public void TransferFunds_Stub() { }
+    public void TransferFunds_fromAccountId_arg_value_must___Aaaand___I_FORGET_WHAT_IT_MUST_getting_too_dang_late___() { }
 
     #endregion
 

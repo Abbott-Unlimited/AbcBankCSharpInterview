@@ -8,7 +8,8 @@
       }
     }
 
-    public SavingsAccount(double initialDeposit = 0.00) : base(AccountType.SAVINGS, initialDeposit) { }
+    public SavingsAccount(int lastAccountId, double initialDeposit = 0.00) 
+      : base(AccountType.SAVINGS, lastAccountId, initialDeposit) { }
 
   }
 }

@@ -2,7 +2,7 @@
 
 namespace abc_bank.Transactions {
 
-  public class Transaction {
+  public class Transaction : ITransaction {
 
     #region Properties
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using abc_bank.Exceptions;
 using abc_bank.Transactions;
@@ -6,7 +7,10 @@ using abc_bank.Transactions;
 namespace abc_bank.Accounts {
   public abstract class AccountBase : IAccount {
 
-    #region Properties
+    #region Properties  
+    public virtual int Id { get; }
+
+    public virtual int CustomerId { get; }
 
     public virtual AccountType AccountType { get; }
 
@@ -22,11 +26,11 @@ namespace abc_bank.Accounts {
       }
     }
 
-    public virtual List<Transaction> Transactions { get; protected set; }
+    public virtual List<ITransaction> Transactions { get; protected set; } = new List<ITransaction>();
 
     public virtual bool HasTransactions {
       get {
-        return Transactions.Count > 0;
+        return Transactions.Count() > 0;
       }
     }
 
@@ -36,9 +40,13 @@ namespace abc_bank.Accounts {
 
     #region CTOR
 
-    public AccountBase(AccountType accountType, double initialDeposit = 0.00) {
+    public AccountBase(
+      AccountType accountType,
+      int lastAccountId,
+      double initialDeposit = 0.00
+    ) {
+      Id = lastAccountId + 1;
       AccountType = accountType;
-      Transactions = new List<Transaction>();
 
       if (initialDeposit > 0.00) {
         Deposit(initialDeposit);

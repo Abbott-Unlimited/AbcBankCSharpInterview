@@ -6,7 +6,8 @@
       }
     }
 
-    public CheckingAccount(double initialDeposit = 0.00) : base(AccountType.CHECKING, initialDeposit) { }
+    public CheckingAccount(int lastAccountId, double initialDeposit = 0.00) 
+      : base(AccountType.CHECKING, lastAccountId, initialDeposit) { }
 
   }
 }

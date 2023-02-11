@@ -8,7 +8,7 @@ namespace abc_bank_tests.Accounts {
 
     [TestMethod]
     public void Interest_Accrued() {
-      IAccount acct = new CheckingAccount();
+      IAccount acct = new CheckingAccount(0);
       acct.Deposit(1000);
 
       Assert.AreEqual(1, acct.InterestEarned);

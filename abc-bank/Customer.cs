@@ -9,14 +9,14 @@ namespace abc_bank {
 
     #region Properties
 
+    public int Id { get; }
+
     public string Name { get; }
 
-    public List<IAccount> Accounts { get; protected set; }
+    public List<IAccount> Accounts { get; protected set; } = new List<IAccount>();
 
     public int NumberOfAccounts {
-      get {
-        return Accounts.Count;
-      }
+      get => Accounts.Count;
     }
 
     public string Statement {
@@ -51,9 +51,9 @@ namespace abc_bank {
 
     #region CTOR
 
-    public Customer(string name) {
+    public Customer(string name, int lastCustomerId) {
+      Id = lastCustomerId + 1;
       Name = name;
-      Accounts = new List<IAccount>();
     }
 
     #endregion
@@ -62,14 +62,17 @@ namespace abc_bank {
 
     public Customer OpenAccount(IAccount account) {
       Accounts.Add(account);
+
       return this;
     }
 
-    public Customer OpenAccount(AccountType accountType, double initialDeposit = 0.00) {
-      return OpenAccount(AccountCreator.GetAccount(accountType, initialDeposit));
+    public Customer OpenAccount(AccountType accountType, int lastAccountId, double initialDeposit = 0.00) {
+      var acct = AccountCreator.GetAccount(accountType, lastAccountId, initialDeposit);
+
+      return OpenAccount(acct);
     }
 
-    public void TransferFunds() => throw new NotImplementedException;
+    public uint TransferFunds(uint fromAccountId, uint toAccountId, double amount) => throw new NotImplementedException();
 
     #endregion
 

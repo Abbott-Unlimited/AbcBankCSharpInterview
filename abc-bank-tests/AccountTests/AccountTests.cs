@@ -17,7 +17,8 @@ namespace abc_bank_tests.Accounts {
   public class AccountBaseMock : AccountBase {
     public override double InterestEarned => throw new System.NotImplementedException();
 
-    public AccountBaseMock(AccountType accountType, double initialDeposit = 0.00) : base(accountType, initialDeposit) { }
+    public AccountBaseMock(AccountType accountType, int lastAccountId, double initialDeposit = 0.00)
+      : base(accountType, lastAccountId, initialDeposit) { }
   }
 
   #endregion
@@ -30,7 +31,7 @@ namespace abc_bank_tests.Accounts {
 
     [TestInitialize]
     public void Init() {
-      acct = new AccountBaseMock(AccountType.CHECKING);
+      acct = new AccountBaseMock(AccountType.CHECKING, 0);
     }
 
     [TestCleanup]
@@ -44,12 +45,12 @@ namespace abc_bank_tests.Accounts {
 
     [TestMethod]
     public void CTOR_No_deposit_attempt_if_initialDeposit_amount_is_0_or_less() {
-      Assert.IsFalse(new AccountBaseMock(AccountType.CHECKING).HasTransactions);
+      Assert.IsFalse(new AccountBaseMock(AccountType.CHECKING, 0).HasTransactions);
     }
 
     [TestMethod]
     public void CTOR_Deposit_made_if_initialDeposit_amount_greater_than_0() {
-      Assert.IsTrue(new AccountBaseMock(AccountType.CHECKING, 0.01).HasTransactions);
+      Assert.IsTrue(new AccountBaseMock(AccountType.CHECKING, 0, 0.01).HasTransactions);
     }
 
     #endregion
@@ -67,13 +68,13 @@ namespace abc_bank_tests.Accounts {
 
     [TestMethod]
     public void Account_Type_Property_Returns_Correct_Type() {
-      acct = new AccountBaseMock(AccountType.CHECKING);
+      acct = new AccountBaseMock(AccountType.CHECKING, 0);
       Assert.AreEqual(AccountType.CHECKING, acct.AccountType);
 
-      acct = new AccountBaseMock(AccountType.SAVINGS);
+      acct = new AccountBaseMock(AccountType.SAVINGS, 0);
       Assert.AreEqual(AccountType.SAVINGS, acct.AccountType);
 
-      acct = new AccountBaseMock(AccountType.MAXI_SAVINGS);
+      acct = new AccountBaseMock(AccountType.MAXI_SAVINGS, 0);
       Assert.AreEqual(AccountType.MAXI_SAVINGS, acct.AccountType);
     }
 

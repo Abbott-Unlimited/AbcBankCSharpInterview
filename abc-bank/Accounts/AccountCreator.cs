@@ -2,11 +2,11 @@
 
 namespace abc_bank.Accounts {
   public static class AccountCreator {
-    public static IAccount GetAccount(AccountType accountType, double initialDeposit = 0.0) {
+    public static IAccount GetAccount(AccountType accountType, int lastAccountId, double initialDeposit = 0.0) {
       var creator = new Dictionary<AccountType, IAccount>(){
-        { AccountType.CHECKING, new CheckingAccount(initialDeposit) },
-        { AccountType.SAVINGS, new SavingsAccount(initialDeposit) },
-        { AccountType.MAXI_SAVINGS, new MaxiSavingsAccount(initialDeposit) }
+        { AccountType.CHECKING, new CheckingAccount(lastAccountId, initialDeposit) },
+        { AccountType.SAVINGS, new SavingsAccount(lastAccountId, initialDeposit) },
+        { AccountType.MAXI_SAVINGS, new MaxiSavingsAccount(lastAccountId, initialDeposit) }
       };
 
       return creator[accountType];

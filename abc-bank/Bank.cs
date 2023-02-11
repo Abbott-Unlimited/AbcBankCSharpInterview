@@ -16,6 +16,12 @@ namespace abc_bank {
       }
     }
 
+    public int NumberOfCustomers {
+      get {
+        return Customers.Count;
+      }
+    }
+
     public bool HasCustomers {
       get {
         return Customers.Count > 0;
@@ -67,13 +73,6 @@ namespace abc_bank {
 
     public void AddCustomer(Customer customer) {
       Customers.Add(customer);
-    }
-
-    public Customer AddCustomer(string customerName) {
-      var customer = new Customer(customerName);
-      AddCustomer(customer);
-
-      return customer;
     }
 
     #endregion
