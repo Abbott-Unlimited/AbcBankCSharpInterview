@@ -1,4 +1,5 @@
-﻿using System;
+﻿using abc_bank.Services.DateServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +9,19 @@ namespace abc_bank
 {
     public class Transaction
     {
-        public readonly double amount;
+        public readonly decimal amount;
 
         private DateTime transactionDate;
 
-        public Transaction(double amount) 
+        public Transaction(decimal amount, DateTime? transactionDate = null) 
         {
             this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            this.transactionDate = transactionDate == null ? DateProvider.getInstance().Now() : transactionDate.Value;
+        }
+
+        public DateTime GetTransactionDate()
+        {
+            return this.transactionDate;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using abc_bank.Services.DateServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,82 +10,39 @@ namespace abc_bank
     public class Customer
     {
         private String name;
-        private List<Account> accounts;
+        private DateTime dateCreated;
+        private List<Account> accounts = new List<Account>();
 
-        public Customer(String name)
+        public Customer(String name, DateTime? dateCreated = null)
         {
             this.name = name;
-            this.accounts = new List<Account>();
+            this.dateCreated = dateCreated == null ? DateProvider.getInstance().Now() : dateCreated.Value;
         }
 
         public String GetName()
         {
-            return name;
+            return this.name;
+        }
+
+        public DateTime GetDateCreated()
+        {
+            return this.dateCreated;
         }
 
         public Customer OpenAccount(Account account)
         {
-            accounts.Add(account);
+            this.accounts.Add(account);
             return this;
         }
 
         public int GetNumberOfAccounts()
         {
-            return accounts.Count;
+            return this.accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public List<Account> GetAccounts()
         {
-            double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
-            return total;
-        }
-
-        public String GetStatement() 
-        {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
-            double total = 0.0;
-            foreach (Account a in accounts) 
-            {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
-            }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
-            return statement;
-        }
-
-        private String statementForAccount(Account a) 
-        {
-            String s = "";
-
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
-
-            //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
-            }
-            s += "Total " + ToDollars(total);
-            return s;
-        }
-
-        private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return this.accounts;
         }
     }
 }

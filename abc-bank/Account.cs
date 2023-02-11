@@ -8,77 +8,29 @@ namespace abc_bank
 {
     public class Account
     {
+        private readonly AccountType accountType;
+        private readonly string accountName;
+        public List<Transaction> transactions = new List<Transaction>();
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
-        public List<Transaction> transactions;
-
-        public Account(int accountType) 
+        public Account(AccountType accountType, string accountName) 
         {
             this.accountType = accountType;
-            this.transactions = new List<Transaction>();
+            this.accountName = accountName;
         }
 
-        public void Deposit(double amount) 
+        public void AddTransaction(Transaction transaction)
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(amount));
-            }
+            this.transactions.Add(transaction);
         }
 
-        public void Withdraw(double amount) 
+        public AccountType GetAccountType() 
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
-            }
+            return this.accountType;
         }
 
-        public double InterestEarned() 
+        public string GetAccountName()
         {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
-                    else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
-                default:
-                    return amount * 0.001;
-            }
+            return this.accountName;
         }
-
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
-        {
-            double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
-            return amount;
-        }
-
-        public int GetAccountType() 
-        {
-            return accountType;
-        }
-
     }
 }
