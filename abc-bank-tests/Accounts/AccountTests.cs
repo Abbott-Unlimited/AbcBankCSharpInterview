@@ -23,6 +23,7 @@ namespace abc_bank_tests.Accounts {
 
   [TestClass]
   public class Account_Common_Behaviors_Tests {
+
     #region Setup and Teardown
 
     IAccount acct;

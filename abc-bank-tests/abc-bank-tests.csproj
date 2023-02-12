@@ -58,6 +58,7 @@
     <Compile Include="Accounts\CheckingAccountTests.cs" />
     <Compile Include="Accounts\AccountTests.cs" />
     <Compile Include="Accounts\SavingsAccountTests.cs" />
+    <Compile Include="UtilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\abc-bank\abc-bank.csproj">
