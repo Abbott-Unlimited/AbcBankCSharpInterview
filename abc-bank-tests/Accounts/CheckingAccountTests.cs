@@ -13,8 +13,6 @@ namespace abc_bank_tests.Accounts {
 
       Assert.AreEqual(1, acct.InterestEarned);
     }
-
-    // todo:  Could probably use a few more tests here to cover
-    //        No balance, negative balance, etc.  Can wait however.
+    
   }
 }

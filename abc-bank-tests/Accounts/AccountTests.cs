@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MSTestExtensions;
-
-using abc_bank.Exceptions;
 using abc_bank.Accounts;
+using abc_bank.Exceptions;
 
 /*
  *  We are only testing the AccountBase methods and properties that have actually been
@@ -24,7 +22,7 @@ namespace abc_bank_tests.Accounts {
   #endregion
 
   [TestClass]
-  public class Account_Common_Behaviors_Tests : BaseTest {
+  public class Account_Common_Behaviors_Tests {
     #region Setup and Teardown
 
     IAccount acct;
@@ -92,13 +90,17 @@ namespace abc_bank_tests.Accounts {
     }
 
     [TestMethod]
+    [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Account_Zero_Dollar_Deposit_Does_Not_Work() {
-      Assert.Throws<InvalidTransactionAmountException>(() => acct.Deposit(0.0));
+      acct.Deposit(0.0);
+      Assert.Fail();
     }
 
     [TestMethod]
+    [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Account_Negative_Amount_Deposit_Does_Not_Work() {
-      Assert.Throws<InvalidTransactionAmountException>(() => acct.Deposit(-1));
+      acct.Deposit(-1);
+      Assert.Fail();
     }
 
     #endregion
@@ -106,8 +108,10 @@ namespace abc_bank_tests.Accounts {
     #region Withdraw
 
     [TestMethod]
+    [ExpectedException(typeof(InsufficientFundsException))]
     public void Account_Withdraw_Amount_Cannot_Exceed_Current_Balance() {
-      Assert.Throws<InsufficientFundsException>(() => acct.Withdraw(100));
+      acct.Withdraw(100);
+      Assert.Fail();
     }
 
     [TestMethod]
@@ -119,13 +123,17 @@ namespace abc_bank_tests.Accounts {
     }
 
     [TestMethod]
+    [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Account_Zero_Dollar_Withdraw_Does_Not_Work() {
-      Assert.Throws<InvalidTransactionAmountException>(() => acct.Withdraw(0.0));
+      acct.Withdraw(0.0);
+      Assert.Fail();
     }
 
     [TestMethod]
+    [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Account_Negative_Amount_Withdraw_Does_Not_Work() {
-      Assert.Throws<InvalidTransactionAmountException>(() => acct.Withdraw(-1.0));
+      acct.Withdraw(-1.0);
+      Assert.Fail();
     }
 
     #endregion   
