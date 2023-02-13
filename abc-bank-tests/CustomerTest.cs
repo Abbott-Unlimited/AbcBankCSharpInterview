@@ -151,19 +151,7 @@ namespace abc_bank_tests.Customers {
 
     [Ignore]
     [TestMethod]
-    public void TransferFunds_fromAccountId_NOT_IMPLEMENTED() => throw new NotImplementedException();
-
-    #endregion
-
-    #endregion
-
-    #region Protected Methods (Stubs)
-
-    #region StatementForAccount
-
-    [Ignore]
-    [TestMethod]
-    public void StatementForAccount_Stub() { }
+    public void TransferFunds_from_AccountId_NOT_IMPLEMENTED() => throw new NotImplementedException();
 
     #endregion
 

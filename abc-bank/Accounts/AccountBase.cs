@@ -10,19 +10,19 @@ namespace abc_bank.Accounts {
     #region Properties  
 
     public virtual int Id { get; }
-
+    
     public virtual int CustomerId { get; }
 
     public abstract string ReportLabel { get; }
 
     public virtual AccountType AccountType { get; }
-
+    
     public abstract double InterestEarned { get; }
-
+    
     public virtual List<ITransaction> Transactions { get; protected set; } = new List<ITransaction>();
-
+    
     public virtual bool HasTransactions { get => Transactions.Count() > 0; }
-
+    
     public virtual double CurrentBalance {
       get {
         var amount = 0.0;
@@ -63,15 +63,12 @@ namespace abc_bank.Accounts {
       return depositTransaction;
     }
 
-
     public IWithdraw Withdraw(double amount) {
       var withdrawTransaction = new Withdraw(amount, DateTime.Now, this);
 
       Transactions.Add(withdrawTransaction);
       return withdrawTransaction;
     }
-
-
     #endregion
 
   }

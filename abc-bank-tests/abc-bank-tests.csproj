@@ -60,6 +60,7 @@
     <Compile Include="Accounts\AccountTests.cs" />
     <Compile Include="Accounts\SavingsAccountTests.cs" />
     <Compile Include="Transactions\Deposit_Tests.cs" />
+    <Compile Include="Transactions\Transfer_Tests.cs" />
     <Compile Include="Transactions\Withdraw_Tests.cs" />
     <Compile Include="Extensions\Formatting.cs" />
     <Compile Include="UtilityTests.cs" />

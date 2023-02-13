@@ -60,6 +60,8 @@
     <Compile Include="Transactions\IWithdraw.cs" />
     <Compile Include="Transactions\Withdraw.cs" />
     <Compile Include="Transactions\ITransaction.cs" />
+    <Compile Include="Transactions\ITransfer.cs" />
+    <Compile Include="Transactions\Transfer.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup />
