@@ -29,7 +29,11 @@ namespace abc_bank.Accounts {
 
     IDeposit Deposit(double amount);
 
+    bool Deposit(ITransfer fromTransfer);
+
     IWithdraw Withdraw(double amount);
+
+    bool Withdraw(ITransfer fromTransfer);
 
     #endregion
 

@@ -52,18 +52,18 @@
   <ItemGroup>
     <Compile Include="BankTest.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="CustomerTest.cs" />
+    <Compile Include="Customer_Test.cs" />
     <Compile Include="Extensions\Statement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Accounts\MaxiSavingsAccountTests.cs" />
-    <Compile Include="Accounts\CheckingAccountTests.cs" />
+    <Compile Include="Accounts\CheckingAccount_Tests.cs" />
     <Compile Include="Accounts\AccountTests.cs" />
     <Compile Include="Accounts\SavingsAccountTests.cs" />
     <Compile Include="Transactions\Deposit_Tests.cs" />
     <Compile Include="Transactions\Transfer_Tests.cs" />
     <Compile Include="Transactions\Withdraw_Tests.cs" />
     <Compile Include="Extensions\Formatting.cs" />
-    <Compile Include="UtilityTests.cs" />
+    <Compile Include="Utilities_Tests\UtilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\abc-bank\abc-bank.csproj">

@@ -45,6 +45,8 @@
     <Compile Include="Accounts\CheckingAccount.cs" />
     <Compile Include="Accounts\IAccount.cs" />
     <Compile Include="Accounts\SavingsAccount.cs" />
+    <Compile Include="Exceptions\InvalidAccountException.cs" />
+    <Compile Include="Exceptions\InvalidTransactionRequestException.cs" />
     <Compile Include="Extensions\TransactionExtensions.cs" />
     <Compile Include="Extensions\FormattingExtensions.cs" />
     <Compile Include="Messages.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="Customer.cs" />
     <Compile Include="DateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\CustomerSummary.cs" />
     <Compile Include="Reports\Statements.cs" />
     <Compile Include="Transactions\Deposit.cs" />
     <Compile Include="Transactions\IDeposit.cs" />

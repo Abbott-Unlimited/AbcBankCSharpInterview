@@ -15,7 +15,7 @@ namespace abc_bank_tests.Transactions {
 
     [Ignore]
     [TestMethod]
-    public void Id_Property__NOT_IMPLEMENTED() => throw new NotImplementedException();
+    public void Id_Property__TEST_NOT_IMPLEMENTED() => throw new NotImplementedException();
 
     #endregion
 
@@ -23,7 +23,7 @@ namespace abc_bank_tests.Transactions {
 
     [TestMethod]
     public void AccountId_Property_is_set_to_depositAccount_Id_in_constructor() {
-      var acct = new SavingsAccount(0, 1000.00);
+      var acct = new SavingsAccount(0, 1, 1000.00);
       var transaction = acct.Deposit(1000);
 
       Assert.AreEqual(acct.Id, transaction.AccountId);
@@ -49,7 +49,7 @@ namespace abc_bank_tests.Transactions {
 
     [TestMethod]
     public void Amount_Property_is_set_to_transactionDate_constructor_arg() {
-      var acct = new SavingsAccount(0);
+      var acct = new SavingsAccount(0, 1);
       acct.Deposit(1000);
 
       Assert.AreEqual(1000, acct.CurrentBalance);
@@ -64,14 +64,14 @@ namespace abc_bank_tests.Transactions {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Deposit_constructor_throws_error_if_amount_arg_is_negative() {
-      new Deposit(-0.01, DateTime.Now, new SavingsAccount(0));
+      new Deposit(-0.01, DateTime.Now, new SavingsAccount(0, 1));
       Assert.Fail();
     }
 
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Deposit_constructor_throws_error_if_amount_arg_is_0() {
-      new Deposit(0, DateTime.Now, new SavingsAccount(0));
+      new Deposit(0, DateTime.Now, new SavingsAccount(0, 1));
       Assert.Fail();
     }
 

@@ -15,6 +15,10 @@ namespace abc_bank.Transactions {
 
     public double Amount { get; }
 
+    public bool IsFromTransfer { get; }
+
+    public ITransfer TransferDetails { get; }
+
     #endregion
 
     #region CTOR

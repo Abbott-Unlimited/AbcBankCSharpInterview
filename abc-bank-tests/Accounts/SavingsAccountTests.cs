@@ -9,12 +9,12 @@ namespace abc_bank_tests.Accounts {
 
     [TestMethod]
     public void Interest_Earned_With_Balance_1000_Or_Less() {
-      Assert.AreEqual(1, new SavingsAccount(0, 1000.00).InterestEarned, Constants.DOUBLE_DELTA);
+      Assert.AreEqual(1, new SavingsAccount(0, 1, 1000.00).InterestEarned, Constants.DOUBLE_DELTA);
     }
 
     [TestMethod]
     public void Interest_Earned_With_Balance_Greater_Than_1000() {
-      Assert.AreEqual(4, new SavingsAccount(0, 2000).InterestEarned, Constants.DOUBLE_DELTA);
+      Assert.AreEqual(4, new SavingsAccount(0, 1, 2000).InterestEarned, Constants.DOUBLE_DELTA);
     }
   }
 }

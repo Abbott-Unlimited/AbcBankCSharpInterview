@@ -10,19 +10,19 @@ namespace abc_bank.Accounts {
     #region Properties  
 
     public virtual int Id { get; }
-    
+
     public virtual int CustomerId { get; }
 
     public abstract string ReportLabel { get; }
 
     public virtual AccountType AccountType { get; }
-    
+
     public abstract double InterestEarned { get; }
-    
+
     public virtual List<ITransaction> Transactions { get; protected set; } = new List<ITransaction>();
-    
+
     public virtual bool HasTransactions { get => Transactions.Count() > 0; }
-    
+
     public virtual double CurrentBalance {
       get {
         var amount = 0.0;
@@ -39,13 +39,14 @@ namespace abc_bank.Accounts {
 
     #region CTOR
 
-    public AccountBase(AccountType accountType, int accountId, double initialDeposit = 0.00) {
+    public AccountBase(AccountType accountType, int accountId, int customerId, double initialDeposit = 0.00) {
       if (initialDeposit > 0.00) {
         Deposit(initialDeposit);
       }
 
-      Id = accountId + 1;
       AccountType = accountType;
+      Id = accountId + 1;
+      CustomerId = customerId;
     }
 
     #endregion
@@ -69,6 +70,31 @@ namespace abc_bank.Accounts {
       Transactions.Add(withdrawTransaction);
       return withdrawTransaction;
     }
+
+    public bool Deposit(ITransfer fromTransfer) {
+      try {
+        var deposit = new Withdraw(fromTransfer.Amount, DateTime.Now, this);
+        Transactions.Add(deposit);
+      } catch {
+        // real-world implementation, there would be something logging the caught error here.
+        return false;
+      }
+
+      return true;
+    }
+
+    public bool Withdraw(ITransfer fromTransfer) {
+      try {
+        var withdrawTransaction = new Withdraw(fromTransfer.Amount, DateTime.Now, this);
+        Transactions.Add(withdrawTransaction);
+      } catch {
+        // real-world implementation, there would be something logging the caught error here.
+        return false;
+      }
+
+      return true;
+    }
+
     #endregion
 
   }

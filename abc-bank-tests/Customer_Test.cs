@@ -5,11 +5,12 @@ using abc_bank.Accounts;
 using System.Collections.Generic;
 using System.Text;
 using System;
+using abc_bank.Exceptions;
 
 namespace abc_bank_tests.Customers {
 
   [TestClass]
-  public class CustomerTest {
+  public class Customer_Test {
 
     #region Setup and Teardown
 
@@ -32,8 +33,8 @@ namespace abc_bank_tests.Customers {
     #region Id
 
     [TestMethod]
-    public void Id_is_initialized_to_value_of_customerId_plus_one_arg_in_constructor() {
-      Assert.AreEqual(1, new Customer("Flipper", 0).Id);
+    public void Id_is_initialized_to_value_of_customerId_arg_in_constructor() {
+      Assert.AreEqual(1, new Customer("Flipper", 1).Id);
     }
 
     #endregion
@@ -66,17 +67,17 @@ namespace abc_bank_tests.Customers {
     [TestMethod]
     public void Customer_NumberOfAccounts_result_with_1_account() {
       var oscar = new Customer("Oscar", 0)
-        .OpenAccount(new CheckingAccount(0));
+        .OpenAccount(new CheckingAccount(0, 1));
 
       Assert.AreEqual(1, oscar.NumberOfAccounts);
     }
 
     [TestMethod]
     public void Customer_NumberOfAccounts_result_with_3_accounts() {
-      var oscar = new Customer("Oscar", 0)
-        .OpenAccount(new CheckingAccount(0))
-        .OpenAccount(new SavingsAccount(0))
-        .OpenAccount(new MaxiSavingsAccount(0));
+      var oscar = new Customer("Oscar", 1)
+        .OpenAccount(new CheckingAccount(0, 1))
+        .OpenAccount(new SavingsAccount(0, 1))
+        .OpenAccount(new MaxiSavingsAccount(0, 1));
 
       Assert.AreEqual(3, oscar.NumberOfAccounts);
     }
@@ -87,8 +88,8 @@ namespace abc_bank_tests.Customers {
 
     [TestMethod]
     public void Customer_Statement_Report_Test() {
-      var checkingAccount = new CheckingAccount(0);
-      var savingsAccount = new SavingsAccount(0);
+      var checkingAccount = new CheckingAccount(0, 1);
+      var savingsAccount = new SavingsAccount(0, 1);
 
       var henry = new Customer("Henry", 0);
 
@@ -123,7 +124,7 @@ namespace abc_bank_tests.Customers {
 
     [Ignore]
     [TestMethod]
-    public void TotalInterestEarned_Stub() { }
+    public void TotalInterestEarned_TEST_NOT_IMPLEMENTED() => throw new NotImplementedException();
 
     #endregion
 
@@ -134,24 +135,44 @@ namespace abc_bank_tests.Customers {
     #region OpenAccount
 
     [TestMethod]
-    public void OpenAccount_by_IAccount_Instance() {
-      var acct = new CheckingAccount(cust.NumberOfAccounts);
+    public void OpenAccount() {
+      var acct = new CheckingAccount(cust.NumberOfAccounts + 1, 1);
       Assert.AreEqual(1, cust.OpenAccount(acct).NumberOfAccounts);
     }
 
     [TestMethod]
     public void OpenAccount_by_AccountType_lastAccountId_and_maybe_initialDeposit() {
-      cust.OpenAccount(new CheckingAccount(cust.NumberOfAccounts));
+      cust.OpenAccount(new CheckingAccount(cust.NumberOfAccounts + 1, 1));
       Assert.AreEqual(1, cust.NumberOfAccounts);
     }
 
     #endregion
 
-    #region TransferFunds
+    #region TransferFunds 
 
-    [Ignore]
     [TestMethod]
-    public void TransferFunds_from_AccountId_NOT_IMPLEMENTED() => throw new NotImplementedException();
+    [ExpectedException(typeof(InvalidAccountException))]
+    public void TransferFunds_throws_error_if_origin_account_does_not_exist() {
+      var cust = new Customer("Patrick", 1);
+      var acct = new CheckingAccount(1, cust.Id);
+      cust.OpenAccount(acct);
+      var acct2 = new CheckingAccount(0, cust.Id, 10000);
+
+      cust.TransferFunds(2500, DateTime.Now, acct2, acct);
+      Assert.Fail();
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidAccountException))]
+    public void TransferFunds_throws_error_if_destination_account_does_not_exist() {
+      var cust = new Customer("Patrick", 1);
+      var acct = new CheckingAccount(1, cust.Id);
+      var acct2 = new CheckingAccount(0, cust.Id, 10000);
+      cust.OpenAccount(acct2);
+      cust.TransferFunds(2500, DateTime.Now, acct2, acct);
+
+      Assert.Fail();
+    }
 
     #endregion
 

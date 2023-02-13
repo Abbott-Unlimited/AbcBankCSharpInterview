@@ -18,7 +18,6 @@ namespace abc_bank.Reports {
 
       foreach (var account in c.Accounts) {
         sb.Append(AccountStatement(account));
-        sb.AppendLine();
         total += account.CurrentBalance;
       }
 
@@ -33,20 +32,18 @@ namespace abc_bank.Reports {
 
       sb.AppendLine(account.ReportLabel);
 
-      //Now total up all the transactions
-
+      // really not liking that this is so far the only way that I can get
+      // the actual transation type due to the implicit cast in List<ITransaction>
       foreach (var t in account.Transactions) {
-        // really not liking that this is so far the only way that I can get
-        // the actual transation type due to the implicit cast in List<ITransaction>
-        var lineItem = t is IDeposit
-          ? (t as IDeposit).GetLineItem()
-          : (t as IWithdraw).GetLineItem();
-
-        sb.AppendLine(lineItem);
+        if (t is IDeposit) {
+          (t as IDeposit).GetLineItem(ref sb);
+        } else {
+          (t as IWithdraw).GetLineItem(ref sb);
+        }
         total += t.GetStatementAmount();
       }
-
       sb.AppendLine("Total " + total.ToDollars());
+      sb.AppendLine();
 
       return sb.ToString();
     }

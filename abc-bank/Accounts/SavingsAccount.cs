@@ -11,8 +11,8 @@
       }
     }
 
-    public SavingsAccount(int lastAccountId, double initialDeposit = 0.00) 
-      : base(AccountType.SAVINGS, lastAccountId, initialDeposit) { }
+    public SavingsAccount(int accountId, int customerId, double initialDeposit = 0.00)
+      : base(AccountType.SAVINGS, accountId, customerId, initialDeposit) { }
 
   }
 }

@@ -2,6 +2,7 @@
 
 using abc_bank;
 using abc_bank.Accounts;
+using System.Text;
 
 namespace abc_bank_tests.BankTests {
 
@@ -11,15 +12,18 @@ namespace abc_bank_tests.BankTests {
     #region Setup and Teardown
 
     Bank bank;
+    StringBuilder sb;
 
     [TestInitialize]
     public void Init() {
       bank = new Bank();
+      sb = new StringBuilder();
     }
 
     [TestCleanup]
     public void Cleanup() {
       bank = null;
+      sb = null;
     }
 
     #endregion
@@ -43,6 +47,7 @@ namespace abc_bank_tests.BankTests {
       bank.AddCustomer(new Customer("Terry", bank.NumberOfCustomers));
       bank.AddCustomer(new Customer("Randy", bank.NumberOfCustomers));
       bank.AddCustomer(new Customer("Rusty", bank.NumberOfCustomers));
+      
       Assert.AreEqual(6, bank.NumberOfCustomers);
     }
 
@@ -91,34 +96,38 @@ namespace abc_bank_tests.BankTests {
 
     [TestMethod]
     public void Customer_Summary_With_1_Customer_1_account() {
-      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0)));
+      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers+1).OpenAccount(new CheckingAccount(0, 1)));
 
-      Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary);
+      sb.AppendLine("Customer Summary");
+      sb.AppendLine(" - John (1 account)");
+
+      Assert.AreEqual(sb.ToString(), bank.CustomerSummary);
     }
 
     [TestMethod]
     public void Customer_Summary_With_1_Customer_2_accounts() {
-      bank.AddCustomer(
-        new Customer("John", bank.NumberOfCustomers)
-          .OpenAccount(new CheckingAccount(0))
-          .OpenAccount(new SavingsAccount(0))
-      );
+      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers)
+          .OpenAccount(new CheckingAccount(0, 1))
+          .OpenAccount(new SavingsAccount(0, 1)));
 
-      Assert.AreEqual("Customer Summary\n - John (2 accounts)", bank.CustomerSummary);
+      sb.AppendLine("Customer Summary");
+      sb.AppendLine(" - John (2 accounts)");
+
+      Assert.AreEqual(sb.ToString(), bank.CustomerSummary);
     }
 
     [TestMethod]
     public void Customer_Summary_With_3_Customers_1_account_each() {
-      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0)));
-      bank.AddCustomer(new Customer("Jimmy", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0)));
-      bank.AddCustomer(new Customer("Jack", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0)));
+      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0, 1)));
+      bank.AddCustomer(new Customer("Jimmy", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1)));
+      bank.AddCustomer(new Customer("Jack", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1)));
 
-      string expected = "Customer Summary\n";
-      expected += " - John (1 account)\n";
-      expected += " - Jimmy (1 account)\n";
-      expected += " - Jack (1 account)";
+      sb.AppendLine("Customer Summary");
+      sb.AppendLine(" - John (1 account)");
+      sb.AppendLine(" - Jimmy (1 account)");
+      sb.AppendLine(" - Jack (1 account)");
 
-      Assert.AreEqual(expected, bank.CustomerSummary);
+      Assert.AreEqual(sb.ToString(), bank.CustomerSummary);
     }
 
     #endregion
@@ -145,21 +154,21 @@ namespace abc_bank_tests.BankTests {
 
     [TestMethod]
     public void Total_interest_paid_single_checking_account() {
-      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0, 100.00)));
+      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0, 1, 100.00)));
 
       Assert.AreEqual(0.10, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
     }
 
     [TestMethod]
     public void Total_interest_paid_single_savings_account() {
-      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1000.00)));
+      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1, 1000.00)));
 
       Assert.AreEqual(1.00, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
     }
 
     [TestMethod]
     public void Total_interest_paid_single_maxi_savings_account() {
-      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new MaxiSavingsAccount(0, 2000.00)));
+      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new MaxiSavingsAccount(0, 1, 2000.00)));
 
       Assert.AreEqual(100.00, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
     }

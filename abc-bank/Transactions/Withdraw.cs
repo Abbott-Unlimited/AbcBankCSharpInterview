@@ -8,13 +8,17 @@ namespace abc_bank.Transactions {
 
     #region Properties
 
-    public int Id => throw new NotImplementedException();
+    public int Id { get; }
 
     public int AccountId { get; }
 
     public DateTime Date { get; }
 
     public double Amount { get; }
+
+    public bool IsFromTransfer { get; }
+
+    public ITransfer TransferDetails { get; }
 
     #endregion
 
@@ -37,5 +41,6 @@ namespace abc_bank.Transactions {
     }
 
     #endregion
+    
   }
 }

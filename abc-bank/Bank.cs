@@ -1,59 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace abc_bank {
   public class Bank {
-    private List<Customer> _customers;
 
     #region Properties
 
-    protected List<Customer> Customers {
-      get {
-        if (_customers == null) {
-          _customers = new List<Customer>();
-        }
-        return _customers;
-      }
-    }
+    protected List<Customer> Customers { get; } = new List<Customer>();
 
-    public int NumberOfCustomers {
-      get {
-        return Customers.Count;
-      }
-    }
+    public int NumberOfCustomers => Customers.Count;
 
-    public bool HasCustomers {
-      get {
-        return Customers.Count > 0;
-      }
-    }
+    public bool HasCustomers => Customers.Count > 0;
 
     // todo:  Shouldn't this be based on sign-up date or something?  
     //        C# handles ordering in Lists/Arrays better than Javascript - but still poor practice
     //        to depend over-much on first index being actual first 'anything' in any collection.
-    public string FirstCustomer {
-      get {
-        return HasCustomers
+    public string FirstCustomer => HasCustomers
           ? Customers[0].Name
           : Messages.NO_CUSTOMERS_MSG;
-      }
-    }
 
-    public string CustomerSummary {
-      get {
-        if (HasCustomers) {
-          var summary = "Customer Summary";
-
-          foreach (var c in Customers) {
-            summary += "\n - " + c.Name + " (" + Format(c.NumberOfAccounts, "account") + ")";
-          }
-
-          return summary;
-        }
-
-        return Messages.NO_CUSTOMERS_MSG;
-      }
-    }
+    public string CustomerSummary => HasCustomers
+        ? Reports.CustomerSummary.Report(Customers)
+        : Messages.NO_CUSTOMERS_MSG;
 
     public double TotalInterestPaid {
       get {
@@ -71,18 +38,9 @@ namespace abc_bank {
 
     #region Public Methods
 
-    public void AddCustomer(Customer customer) {
-      Customers.Add(customer);
-    }
+    public void AddCustomer(Customer customer) => Customers.Add(customer);
 
     #endregion
 
-    #region Private Methods
-
-    private string Format(int number, string word) {
-      return number + " " + (number == 1 ? word : word + "s");
-    }
-
-    #endregion
   }
 }

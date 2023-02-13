@@ -1,17 +1,19 @@
-﻿
-using System;
+﻿using System;
 
 using abc_bank.Accounts;
+using abc_bank.Exceptions;
 
 namespace abc_bank.Transactions {
   public class Transfer : ITransfer {
 
     #region Properties
 
-    public int Id => throw new NotImplementedException();
     public DateTime Date { get; }
+
     public double Amount { get; }
+
     public int OriginAccountId { get; }
+
     public int DestinationAccountId { get; }
 
     #endregion
@@ -19,19 +21,35 @@ namespace abc_bank.Transactions {
     #region CTOR
 
     public Transfer(double transferAmount, DateTime transactionDate, IAccount originAccount, IAccount destinationAccount) {
+
+      #region Validation
+
+      if (originAccount.CustomerId != destinationAccount.CustomerId) {
+        throw new InvalidTransactionRequestException();
+      }
+
       Utilities.ValidateFundsAvailable(originAccount.CurrentBalance, transferAmount);
+
+      #endregion
+
       Date = transactionDate;
       OriginAccountId = originAccount.Id;
       DestinationAccountId = destinationAccount.Id;
+
+      // process the transfer as a normal Withdraw/Deposit - with some addtional information
+      if (originAccount.Withdraw(this)) {
+        // don't try the deposit unless the withdraw was successful.
+        destinationAccount.Deposit(this);
+      }
     }
 
     #endregion
 
-    #region Public Methods
+    #region Unused in Transfer transactions.
 
     public double GetStatementAmount() => throw new NotImplementedException();
 
     #endregion
-
+    
   }
 }
