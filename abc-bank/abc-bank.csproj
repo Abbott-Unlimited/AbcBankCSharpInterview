@@ -58,7 +58,6 @@
     <Compile Include="Transactions\Deposit.cs" />
     <Compile Include="Transactions\IDeposit.cs" />
     <Compile Include="Transactions\IWithdraw.cs" />
-    <Compile Include="Transactions\TransactionExtensions.cs" />
     <Compile Include="Transactions\Withdraw.cs" />
     <Compile Include="Transactions\ITransaction.cs" />
     <Compile Include="Utilities.cs" />
