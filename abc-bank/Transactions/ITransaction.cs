@@ -2,12 +2,13 @@
 
 namespace abc_bank.Transactions {
   public interface ITransaction {
+    int Id { get; }
+
+    DateTime Date { get; }
 
     double Amount { get; }
 
-    TransactionType TransactionType { get; }
-
-    DateTime TransactionDate { get; }
-
+    double GetStatementAmount();
+    
   }
 }

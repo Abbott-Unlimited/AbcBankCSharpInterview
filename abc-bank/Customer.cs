@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using abc_bank.Accounts;
-using abc_bank.Transactions;
 
 namespace abc_bank {
   public class Customer {
@@ -19,21 +18,7 @@ namespace abc_bank {
       get => Accounts.Count;
     }
 
-    public string Statement {
-      get {
-        var statement = "Statement for " + Name + "\n";
-        var total = 0.0;
-
-        foreach (var account in Accounts) {
-          statement += "\n" + StatementForAccount(account) + "\n";
-          total += account.CurrentBalance;
-        }
-
-        statement += "\nTotal In All Accounts " + ToDollars(total);
-
-        return statement;
-      }
-    }
+    public string Statement => abc_bank.Reports.Statements.CustomerStatement(this);
 
     public double TotalInterestEarned {
       get {
@@ -66,48 +51,7 @@ namespace abc_bank {
       return this;
     }
 
-    public Customer OpenAccount(AccountType accountType, int lastAccountId, double initialDeposit = 0.00) {
-      var acct = AccountCreator.GetAccount(accountType, lastAccountId, initialDeposit);
-
-      return OpenAccount(acct);
-    }
-
     public uint TransferFunds(uint fromAccountId, uint toAccountId, double amount) => throw new NotImplementedException();
-
-    #endregion
-
-    #region Protected Methods
-
-    protected string StatementForAccount(IAccount account) {
-      string s = "";
-
-      //Translate to pretty account type
-      switch (account.AccountType) {
-        case AccountType.CHECKING:
-          s += "Checking Account\n";
-          break;
-        case AccountType.SAVINGS:
-          s += "Savings Account\n";
-          break;
-        case AccountType.MAXI_SAVINGS:
-          s += "Maxi Savings Account\n";
-          break;
-      }
-
-      //Now total up all the transactions
-      var total = 0.0;
-
-      foreach (Transaction t in account.Transactions) {
-        s += "  " + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.Amount) + "\n";
-        total += t.Amount;
-      }
-
-      s += "Total " + ToDollars(total);
-
-      return s;
-    }
-
-    protected string ToDollars(double d) => string.Format("{0:C2}", Math.Abs(d));
 
     #endregion
 

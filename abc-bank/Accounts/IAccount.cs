@@ -11,6 +11,8 @@ namespace abc_bank.Accounts {
 
     int CustomerId { get; }
 
+    string ReportLabel { get; }
+
     AccountType AccountType { get; }
 
     List<ITransaction> Transactions { get; }
@@ -25,9 +27,9 @@ namespace abc_bank.Accounts {
 
     #region Public Methods
 
-    void Deposit(double amount);
-    
-    void Withdraw(double amount);
+    IDeposit Deposit(double amount);
+
+    IWithdraw Withdraw(double amount);
 
     #endregion
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using abc_bank.Exceptions;
 using abc_bank.Transactions;
 
 namespace abc_bank.Accounts {
@@ -13,6 +12,8 @@ namespace abc_bank.Accounts {
     public virtual int Id { get; }
 
     public virtual int CustomerId { get; }
+
+    public abstract string ReportLabel { get; }
 
     public virtual AccountType AccountType { get; }
 
@@ -27,7 +28,7 @@ namespace abc_bank.Accounts {
         var amount = 0.0;
 
         foreach (ITransaction t in Transactions) {
-          amount += t.Amount;
+          amount += t.GetStatementAmount();
         }
 
         return amount;
@@ -38,12 +39,12 @@ namespace abc_bank.Accounts {
 
     #region CTOR
 
-    public AccountBase(AccountType accountType, int lastAccountId, double initialDeposit = 0.00) {
+    public AccountBase(AccountType accountType, int accountId, double initialDeposit = 0.00) {
       if (initialDeposit > 0.00) {
         Deposit(initialDeposit);
       }
 
-      Id = lastAccountId + 1;
+      Id = accountId + 1;
       AccountType = accountType;
     }
 
@@ -55,23 +56,21 @@ namespace abc_bank.Accounts {
       return CurrentBalance * interestRate;
     }
 
-    public void Deposit(double amount) {
-      if (amount <= 0) {
-        throw new InvalidTransactionAmountException();
-      } else {
-        Transactions.Add(new Transaction(amount, TransactionType.Deposit));
-      }
+    public IDeposit Deposit(double amount) {
+      var depositTransaction = new Deposit(amount, DateTime.Now, this);
+      Transactions.Add(depositTransaction);
+
+      return depositTransaction;
     }
 
-    public void Withdraw(double amount) {
-      if (amount <= 0) {
-        throw new InvalidTransactionAmountException();
-      } else if (amount > CurrentBalance) {
-        throw new InsufficientFundsException();
-      } else {
-        Transactions.Add(new Transaction(-amount, TransactionType.Withdraw));
-      }
+
+    public IWithdraw Withdraw(double amount) {
+      var withdrawTransaction = new Withdraw(amount, DateTime.Now, this);
+
+      Transactions.Add(withdrawTransaction);
+      return withdrawTransaction;
     }
+
 
     #endregion
 

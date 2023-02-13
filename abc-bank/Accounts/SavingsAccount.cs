@@ -1,5 +1,8 @@
 ﻿namespace abc_bank.Accounts {
   public class SavingsAccount : AccountBase {
+
+    public override string ReportLabel { get; } = "Savings Account";
+
     public override double InterestEarned {
       get {
         return CurrentBalance <= 1000

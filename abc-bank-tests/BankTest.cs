@@ -91,7 +91,7 @@ namespace abc_bank_tests.BankTests {
 
     [TestMethod]
     public void Customer_Summary_With_1_Customer_1_account() {
-      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(AccountType.CHECKING, 0));
+      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0)));
 
       Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary);
     }
@@ -100,8 +100,8 @@ namespace abc_bank_tests.BankTests {
     public void Customer_Summary_With_1_Customer_2_accounts() {
       bank.AddCustomer(
         new Customer("John", bank.NumberOfCustomers)
-          .OpenAccount(AccountType.CHECKING, 0)
-          .OpenAccount(AccountType.SAVINGS, 0)
+          .OpenAccount(new CheckingAccount(0))
+          .OpenAccount(new SavingsAccount(0))
       );
 
       Assert.AreEqual("Customer Summary\n - John (2 accounts)", bank.CustomerSummary);
@@ -109,9 +109,9 @@ namespace abc_bank_tests.BankTests {
 
     [TestMethod]
     public void Customer_Summary_With_3_Customers_1_account_each() {
-      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(AccountType.CHECKING, 0));
-      bank.AddCustomer(new Customer("Jimmy", bank.NumberOfCustomers).OpenAccount(AccountType.SAVINGS, 0));
-      bank.AddCustomer(new Customer("Jack", bank.NumberOfCustomers).OpenAccount(AccountType.CHECKING, 0));
+      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0)));
+      bank.AddCustomer(new Customer("Jimmy", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0)));
+      bank.AddCustomer(new Customer("Jack", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0)));
 
       string expected = "Customer Summary\n";
       expected += " - John (1 account)\n";
@@ -159,7 +159,7 @@ namespace abc_bank_tests.BankTests {
 
     [TestMethod]
     public void Total_interest_paid_single_maxi_savings_account() {
-      bank.AddCustomer(new Customer("Bill",  bank.NumberOfCustomers).OpenAccount(new MaxiSavingsAccount(0, 2000.00)));
+      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new MaxiSavingsAccount(0, 2000.00)));
 
       Assert.AreEqual(100.00, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
     }

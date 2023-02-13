@@ -1,5 +1,6 @@
 ﻿namespace abc_bank.Accounts {
   public class MaxiSavingsAccount : AccountBase {
+    public override string ReportLabel { get; } = "Maxi Savings Account";
 
     public override double InterestEarned {
       get {

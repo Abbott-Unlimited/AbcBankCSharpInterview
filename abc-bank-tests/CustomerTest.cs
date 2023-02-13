@@ -3,6 +3,8 @@
 using abc_bank;
 using abc_bank.Accounts;
 using System.Collections.Generic;
+using System.Text;
+using System;
 
 namespace abc_bank_tests.Customers {
 
@@ -64,7 +66,7 @@ namespace abc_bank_tests.Customers {
     [TestMethod]
     public void Customer_NumberOfAccounts_result_with_1_account() {
       var oscar = new Customer("Oscar", 0)
-        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING, 0));
+        .OpenAccount(new CheckingAccount(0));
 
       Assert.AreEqual(1, oscar.NumberOfAccounts);
     }
@@ -72,9 +74,9 @@ namespace abc_bank_tests.Customers {
     [TestMethod]
     public void Customer_NumberOfAccounts_result_with_3_accounts() {
       var oscar = new Customer("Oscar", 0)
-        .OpenAccount(AccountCreator.GetAccount(AccountType.CHECKING, 0))
-        .OpenAccount(AccountCreator.GetAccount(AccountType.SAVINGS, 0))
-        .OpenAccount(AccountCreator.GetAccount(AccountType.MAXI_SAVINGS, 0));
+        .OpenAccount(new CheckingAccount(0))
+        .OpenAccount(new SavingsAccount(0))
+        .OpenAccount(new MaxiSavingsAccount(0));
 
       Assert.AreEqual(3, oscar.NumberOfAccounts);
     }
@@ -85,8 +87,6 @@ namespace abc_bank_tests.Customers {
 
     [TestMethod]
     public void Customer_Statement_Report_Test() {
-      // observation:   It's kinda weird we can open an account for a customer
-      //                without having the customer belong to a bank...
       var checkingAccount = new CheckingAccount(0);
       var savingsAccount = new SavingsAccount(0);
 
@@ -99,18 +99,22 @@ namespace abc_bank_tests.Customers {
       savingsAccount.Deposit(4000.0);
       savingsAccount.Withdraw(200.0);
 
-      Assert.AreEqual("Statement for Henry\n" +
-              "\n" +
-              "Checking Account\n" +
-              "  deposit $100.00\n" +
-              "Total $100.00\n" +
-              "\n" +
-              "Savings Account\n" +
-              "  deposit $4,000.00\n" +
-              "  withdrawal $200.00\n" +
-              "Total $3,800.00\n" +
-              "\n" +
-              "Total In All Accounts $3,900.00", henry.Statement);
+      var sb = new StringBuilder();
+      sb.AppendLine("Statement for Henry");
+      sb.AppendLine();
+      sb.AppendLine("Checking Account");
+      sb.AppendLine("  deposit $100.00");
+      sb.AppendLine("Total $100.00");
+      sb.AppendLine();
+      sb.AppendLine("Savings Account");
+      sb.AppendLine("  deposit $4,000.00");
+      sb.AppendLine("  withdrawal $200.00");
+      sb.AppendLine("Total $3,800.00");
+      sb.AppendLine();
+      sb.AppendLine("Total In All Accounts $3,900.00");
+
+
+      Assert.AreEqual(sb.ToString(), henry.Statement);
     }
 
     #endregion 
@@ -131,17 +135,14 @@ namespace abc_bank_tests.Customers {
 
     [TestMethod]
     public void OpenAccount_by_IAccount_Instance() {
-      var acct = AccountCreator.GetAccount(AccountType.CHECKING, cust.NumberOfAccounts);
+      var acct = new CheckingAccount(cust.NumberOfAccounts);
       Assert.AreEqual(1, cust.OpenAccount(acct).NumberOfAccounts);
     }
 
     [TestMethod]
     public void OpenAccount_by_AccountType_lastAccountId_and_maybe_initialDeposit() {
-      cust.OpenAccount(AccountType.CHECKING, cust.NumberOfAccounts);
+      cust.OpenAccount(new CheckingAccount(cust.NumberOfAccounts));
       Assert.AreEqual(1, cust.NumberOfAccounts);
-
-      //cust.OpenAccount(AccountType.CHECKING, cust.NumberOfAccounts);
-      //Assert.AreEqual(1, cust.NumberOfAccounts);
     }
 
     #endregion
@@ -150,7 +151,7 @@ namespace abc_bank_tests.Customers {
 
     [Ignore]
     [TestMethod]
-    public void TransferFunds_fromAccountId_arg_value_must___Aaaand___I_FORGET_WHAT_IT_MUST_getting_too_dang_late___() { }
+    public void TransferFunds_fromAccountId_NOT_IMPLEMENTED() => throw new NotImplementedException();
 
     #endregion
 
@@ -163,14 +164,6 @@ namespace abc_bank_tests.Customers {
     [Ignore]
     [TestMethod]
     public void StatementForAccount_Stub() { }
-
-    #endregion
-
-    #region ToDollars
-
-    [Ignore]
-    [TestMethod]
-    public void ToDollars_Stub() { }
 
     #endregion
 

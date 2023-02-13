@@ -13,7 +13,9 @@ namespace abc_bank_tests.Accounts {
   #region AccountBase Implementation Fixture
 
   public class AccountBaseMock : AccountBase {
+
     public override double InterestEarned => throw new System.NotImplementedException();
+    public override string ReportLabel => throw new System.NotImplementedException();
 
     public AccountBaseMock(AccountType accountType, int lastAccountId, double initialDeposit = 0.00)
       : base(accountType, lastAccountId, initialDeposit) { }
