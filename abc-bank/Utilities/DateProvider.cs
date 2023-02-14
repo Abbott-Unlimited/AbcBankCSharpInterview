@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace abc_bank {
+﻿namespace abc_bank {
 
   /*
    todo:  Ask about what the purpose of this class is.
@@ -8,6 +6,9 @@ namespace abc_bank {
                of anything that would prompt creation of this - nor any need...
         
           May learn something :)
+
+          and yes, I am literally leavving this file in the solution to possiblyl get
+          feedback/explanation of the 'why'
   */
   // public class DateProvider {
 

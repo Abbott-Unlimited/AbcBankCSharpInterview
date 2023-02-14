@@ -49,7 +49,7 @@ namespace abc_bank_tests.Bank {
       bank.AddCustomer(new Customer("Terry", bank.NumberOfCustomers));
       bank.AddCustomer(new Customer("Randy", bank.NumberOfCustomers));
       bank.AddCustomer(new Customer("Rusty", bank.NumberOfCustomers));
-      
+
       Assert.AreEqual(6, bank.NumberOfCustomers);
     }
 
@@ -98,7 +98,7 @@ namespace abc_bank_tests.Bank {
 
     [TestMethod]
     public void Customer_Summary_With_1_Customer_1_account() {
-      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers+1).OpenAccount(new CheckingAccount(0, 1)));
+      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers + 1).OpenAccount(new CheckingAccount(0, 1)));
 
       sb.AppendLine("Customer Summary");
       sb.AppendLine(" - John (1 account)");

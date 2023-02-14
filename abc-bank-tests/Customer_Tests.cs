@@ -1,11 +1,13 @@
 ﻿// names that begin with l-case as well as contain underscores IN UNIT TESTS AND TEST CLASSES are much easier to read.
 #pragma warning disable IDE1006 // Naming Styles
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using abc_bank.Accounts;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using System;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using abc_bank.Accounts;
 using abc_bank.Exceptions;
 using abc_bank.Customers;
 using abc_bank.Transactions;

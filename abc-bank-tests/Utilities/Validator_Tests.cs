@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank.Accounts;
 using abc_bank.Exceptions;
 using abc_bank.Utilities;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace abc_bank_tests.Utilities {
 
@@ -18,7 +19,7 @@ namespace abc_bank_tests.Utilities {
       var accounts = new List<IAccount>();
       var account = new CheckingAccount(1, 1);
       var account2 = new CheckingAccount(2, 1);
-      
+
       accounts.Add(account2);
       Validators.AccountIsInCollection(account, accounts);
 

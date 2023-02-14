@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using abc_bank.Accounts;
 
-using abc_bank.Accounts;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace abc_bank_tests.Accounts {
 
