@@ -39,13 +39,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
+    <Compile Include="Accounts\AccountBase.cs" />
+    <Compile Include="Accounts\AccountType.cs" />
+    <Compile Include="Accounts\MaxiSavingsAccount.cs" />
+    <Compile Include="Accounts\CheckingAccount.cs" />
+    <Compile Include="Accounts\IAccount.cs" />
+    <Compile Include="Accounts\SavingsAccount.cs" />
+    <Compile Include="Exceptions\InvalidAccountException.cs" />
+    <Compile Include="Exceptions\InvalidTransactionRequestException.cs" />
+    <Compile Include="Utilities\Messages.cs" />
+    <Compile Include="Exceptions\InsufficientFundsException.cs" />
+    <Compile Include="Exceptions\InvalidTransactionAmountException.cs" />
     <Compile Include="Bank.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="DateProvider.cs" />
+    <Compile Include="Customers\Customer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Transaction.cs" />
+    <Compile Include="Reports\CustomerSummary.cs" />
+    <Compile Include="Reports\Statements.cs" />
+    <Compile Include="Transactions\Deposit.cs" />
+    <Compile Include="Transactions\IDeposit.cs" />
+    <Compile Include="Transactions\IWithdraw.cs" />
+    <Compile Include="Transactions\Withdraw.cs" />
+    <Compile Include="Transactions\ITransaction.cs" />
+    <Compile Include="Transactions\ITransfer.cs" />
+    <Compile Include="Transactions\Transfer.cs" />
+    <Compile Include="Utilities\Validators.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

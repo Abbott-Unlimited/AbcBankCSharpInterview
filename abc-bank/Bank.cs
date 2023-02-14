@@ -1,58 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace abc_bank
-{
-    public class Bank
-    {
-        private List<Customer> customers;
+using abc_bank.Customers;
 
-        public Bank()
-        {
-            customers = new List<Customer>();
+namespace abc_bank {
+  public class Bank {
+
+    #region Properties
+
+    protected List<Customer> Customers { get; } = new List<Customer>();
+
+    public int NumberOfCustomers => Customers.Count;
+
+    public bool HasCustomers => Customers.Count > 0;
+
+    public string FirstCustomer => HasCustomers
+          ? Customers[0].Name
+          : Messages.NO_CUSTOMERS_MSG;
+
+    public string CustomerSummary => HasCustomers
+        ? Reports.CustomerSummary.Report(Customers)
+        : Messages.NO_CUSTOMERS_MSG;
+
+    public decimal TotalInterestPaid {
+      get {
+        decimal total = 0;
+
+        foreach (var c in Customers) {
+          total += c.TotalInterestEarned;
         }
 
-        public void AddCustomer(Customer customer)
-        {
-            customers.Add(customer);
-        }
-
-        public String CustomerSummary() {
-            String summary = "Customer Summary";
-            foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
-            return summary;
-        }
-
-        //Make sure correct plural of word is created based on the number passed in:
-        //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
-        {
-            return number + " " + (number == 1 ? word : word + "s");
-        }
-
-        public double totalInterestPaid() {
-            double total = 0;
-            foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
-            return total;
-        }
-
-        public String GetFirstCustomer()
-        {
-            try
-            {
-                customers = null;
-                return customers[0].GetName();
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.StackTrace);
-                return "Error";
-            }
-        }
+        return total;
+      }
     }
+
+    #endregion
+
+    #region Public Methods
+
+    public void AddCustomer(Customer customer) => Customers.Add(customer);
+
+    #endregion
+
+  }
 }
