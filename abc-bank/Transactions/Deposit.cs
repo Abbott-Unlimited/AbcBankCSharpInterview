@@ -14,7 +14,7 @@ namespace abc_bank.Transactions {
 
     public DateTime Date { get; }
 
-    public double Amount { get; }
+    public decimal Amount { get; }
 
     public bool IsFromTransfer { get; }
 
@@ -24,7 +24,7 @@ namespace abc_bank.Transactions {
 
     #region CTOR
 
-    public Deposit(double amount, DateTime transactionDate, IAccount depositAccount, ITransfer transferDetails = null) {
+    public Deposit(decimal amount, DateTime transactionDate, IAccount depositAccount, ITransfer transferDetails = null) {
       Validators.TransactionAmount(amount);
 
       Amount = amount;
@@ -41,9 +41,7 @@ namespace abc_bank.Transactions {
 
     #region Public Methods
 
-    public double GetStatementAmount() {
-      return Amount;
-    }
+    public decimal GetStatementAmount() => Amount;
 
     #endregion
   }

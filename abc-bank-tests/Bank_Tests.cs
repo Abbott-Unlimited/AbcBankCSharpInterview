@@ -156,23 +156,23 @@ namespace abc_bank_tests.Bank {
 
     [TestMethod]
     public void Total_interest_paid_single_checking_account() {
-      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0, 1, 100.00)));
+      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0, 1, 100)));
 
-      Assert.AreEqual(0.10, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
+      Assert.AreEqual(0.10M, bank.TotalInterestPaid);
     }
 
     [TestMethod]
     public void Total_interest_paid_single_savings_account() {
-      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1, 1000.00)));
+      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1, 1000)));
 
-      Assert.AreEqual(1.00, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
+      Assert.AreEqual(1, bank.TotalInterestPaid);
     }
 
     [TestMethod]
     public void Total_interest_paid_single_maxi_savings_account() {
-      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new MaxiSavingsAccount(0, 1, 2000.00)));
+      bank.AddCustomer(new Customer("Bill", bank.NumberOfCustomers).OpenAccount(new MaxiSavingsAccount(0, 1, 2000)));
 
-      Assert.AreEqual(100.00, bank.TotalInterestPaid, Constants.DOUBLE_DELTA);
+      Assert.AreEqual(100, bank.TotalInterestPaid);
     }
 
     #endregion

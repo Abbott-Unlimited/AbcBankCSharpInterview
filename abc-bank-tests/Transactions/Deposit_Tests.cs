@@ -15,7 +15,7 @@ namespace abc_bank_tests.Transactions {
 
     [TestMethod]
     public void AccountId_Property_is_set_to_depositAccount_Id_in_constructor() {
-      var acct = new SavingsAccount(0, 1, 1000.00);
+      var acct = new SavingsAccount(0, 1, 1000);
       var transaction = acct.Deposit(1000);
 
       Assert.AreEqual(acct.Id, transaction.AccountId);
@@ -56,7 +56,7 @@ namespace abc_bank_tests.Transactions {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Deposit_constructor_throws_error_if_amount_arg_is_negative() {
-      new Deposit(-0.01, DateTime.Now, new SavingsAccount(0, 1));
+      new Deposit(-0.01M, DateTime.Now, new SavingsAccount(0, 1));
       Assert.Fail();
     }
 

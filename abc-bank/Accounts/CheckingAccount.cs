@@ -2,11 +2,11 @@
   public class CheckingAccount : AccountBase {
     public override string ReportLabel { get; } = "Checking Account";
 
-    public override double InterestEarned {
-      get => CalculateInterest(0.001);
+    public override decimal InterestEarned {
+      get => CalculateInterest(0.001M);
     }
 
-    public CheckingAccount(int accountId, int customerId, double initialDeposit = 0.00)
+    public CheckingAccount(int accountId, int customerId, decimal initialDeposit = 0)
       : base(AccountType.CHECKING, accountId, customerId, initialDeposit) { }
 
   }

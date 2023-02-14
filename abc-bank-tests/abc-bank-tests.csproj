@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="Bank_Tests.cs" />
     <Compile Include="Reports\Statements_Tests.cs" />
-    <Compile Include="Test Helpers\Constants.cs" />
     <Compile Include="Customer_Tests.cs" />
     <Compile Include="Extensions\Statement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

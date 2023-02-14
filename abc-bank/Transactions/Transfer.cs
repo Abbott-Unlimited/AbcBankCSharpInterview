@@ -11,7 +11,7 @@ namespace abc_bank.Transactions {
 
     public DateTime Date { get; }
 
-    public double Amount { get; }
+    public decimal Amount { get; }
 
     public int OriginAccountId { get; }
 
@@ -21,7 +21,7 @@ namespace abc_bank.Transactions {
 
     #region CTOR
 
-    public Transfer(double transferAmount, DateTime transactionDate, IAccount originAccount, IAccount destinationAccount) {
+    public Transfer(decimal transferAmount, DateTime transactionDate, IAccount originAccount, IAccount destinationAccount) {
 
       #region Validation
 
@@ -38,18 +38,16 @@ namespace abc_bank.Transactions {
       OriginAccountId = originAccount.Id;
       DestinationAccountId = destinationAccount.Id;
 
-      // process the transfer as a normal Withdraw/Deposit - with some addtional information
       if (originAccount.Withdraw(this)) {
-        // don't try the deposit unless the withdraw was successful.
         destinationAccount.Deposit(this);
       }
     }
 
     #endregion
 
-    #region Unused in Transfer transactions.
+    #region Unused in Transfer transactions, however it's part of the ITransaction interface.
 
-    public double GetStatementAmount() => throw new NotImplementedException();
+    public decimal GetStatementAmount() => throw new NotImplementedException();
 
     #endregion
 

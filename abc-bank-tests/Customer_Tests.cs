@@ -18,19 +18,19 @@ namespace abc_bank_tests.Customers {
 
   public class CheckingAccountFake : CheckingAccount {
     public override List<ITransaction> Transactions { get; protected set; } = new List<ITransaction>();
-    public CheckingAccountFake(int accountId, int customerId, double initialDeposit = 0)
+    public CheckingAccountFake(int accountId, int customerId, decimal initialDeposit = 0)
       : base(accountId, customerId, initialDeposit) {
     }
   }
   public class SavingsAccountFake : SavingsAccount {
     public override List<ITransaction> Transactions { get; protected set; } = new List<ITransaction>();
-    public SavingsAccountFake(int accountId, int customerId, double initialDeposit = 0)
+    public SavingsAccountFake(int accountId, int customerId, decimal initialDeposit = 0)
       : base(accountId, customerId, initialDeposit) {
     }
   }
   public class MaxiSavingsFake : MaxiSavingsAccount {
     public override List<ITransaction> Transactions { get; protected set; } = new List<ITransaction>();
-    public MaxiSavingsFake(int accountId, int customerId, double initialDeposit = 0)
+    public MaxiSavingsFake(int accountId, int customerId, decimal initialDeposit = 0)
       : base(accountId, customerId, initialDeposit) {
     }
   }
@@ -124,9 +124,9 @@ namespace abc_bank_tests.Customers {
       henry.OpenAccount(checkingAccount);
       henry.OpenAccount(savingsAccount);
 
-      checkingAccount.Deposit(100.0);
-      savingsAccount.Deposit(4000.0);
-      savingsAccount.Withdraw(200.0);
+      checkingAccount.Deposit(100);
+      savingsAccount.Deposit(4000);
+      savingsAccount.Withdraw(200);
 
       henry.TransferFunds(500, DateTime.Now, savingsAccount, checkingAccount);
 
@@ -142,8 +142,8 @@ namespace abc_bank_tests.Customers {
 
       sb.AppendLine("Savings Account");
       sb.AppendLine("    deposit         $4,000.00");
-      sb.AppendLine("    withdrawal        $200.00");
-      sb.AppendLine("    withdrawal        $500.00    transfer to acct #00000001");
+      sb.AppendLine("    withdrawal       -$200.00");
+      sb.AppendLine("    withdrawal       -$500.00    transfer to acct #00000001");
       sb.AppendLine("Total $3,300.00");
       sb.AppendLine();
 
@@ -168,9 +168,9 @@ namespace abc_bank_tests.Customers {
     private void add_acct_transactions<T>(ref T fakeAcct) where T : IAccount {
       fakeAcct.Transactions.Add(new Deposit(500, DateTime.Now.AddDays(-45), fakeAcct));
       fakeAcct.Transactions.Add(new Withdraw(50, DateTime.Now.AddDays(-44), fakeAcct));
-      fakeAcct.Transactions.Add(new Withdraw(10.75, DateTime.Now.AddDays(-37), fakeAcct));
-      fakeAcct.Transactions.Add(new Deposit(448.12, DateTime.Now.AddDays(-19), fakeAcct));
-      fakeAcct.Transactions.Add(new Withdraw(284.71, DateTime.Now.AddDays(-5), fakeAcct));
+      fakeAcct.Transactions.Add(new Withdraw(10.75M, DateTime.Now.AddDays(-37), fakeAcct));
+      fakeAcct.Transactions.Add(new Deposit(448.12M, DateTime.Now.AddDays(-19), fakeAcct));
+      fakeAcct.Transactions.Add(new Withdraw(284.71M, DateTime.Now.AddDays(-5), fakeAcct));
 
       cust.OpenAccount(fakeAcct);
     }
@@ -185,26 +185,26 @@ namespace abc_bank_tests.Customers {
       sb.AppendLine("");
       sb.AppendLine("Checking Account");
       sb.AppendLine("    deposit           $500.00");
-      sb.AppendLine("    withdrawal         $50.00");
-      sb.AppendLine("    withdrawal         $10.75");
+      sb.AppendLine("    withdrawal        -$50.00");
+      sb.AppendLine("    withdrawal        -$10.75");
       sb.AppendLine("    deposit           $448.12");
-      sb.AppendLine("    withdrawal        $284.71");
+      sb.AppendLine("    withdrawal       -$284.71");
       sb.AppendLine("Total $602.66");
       sb.AppendLine("");
       sb.AppendLine("Savings Account");
       sb.AppendLine("    deposit           $500.00");
-      sb.AppendLine("    withdrawal         $50.00");
-      sb.AppendLine("    withdrawal         $10.75");
+      sb.AppendLine("    withdrawal        -$50.00");
+      sb.AppendLine("    withdrawal        -$10.75");
       sb.AppendLine("    deposit           $448.12");
-      sb.AppendLine("    withdrawal        $284.71");
+      sb.AppendLine("    withdrawal       -$284.71");
       sb.AppendLine("Total $602.66");
       sb.AppendLine("");
       sb.AppendLine("Maxi Savings Account");
       sb.AppendLine("    deposit           $500.00");
-      sb.AppendLine("    withdrawal         $50.00");
-      sb.AppendLine("    withdrawal         $10.75");
+      sb.AppendLine("    withdrawal        -$50.00");
+      sb.AppendLine("    withdrawal        -$10.75");
       sb.AppendLine("    deposit           $448.12");
-      sb.AppendLine("    withdrawal        $284.71");
+      sb.AppendLine("    withdrawal       -$284.71");
       sb.AppendLine("Total $602.66");
       sb.AppendLine("");
       sb.AppendLine("Total In All Accounts $1,807.98");
@@ -214,7 +214,6 @@ namespace abc_bank_tests.Customers {
       return sb.ToString();
     }
 
-#pragma warning disable IDE0051 // Remove unused private members
     [Ignore]
     private void debug_output(Customer cust) {
       System.Diagnostics.Debug.WriteLine("---------------");
@@ -229,7 +228,6 @@ namespace abc_bank_tests.Customers {
       var actual_statement = cust.Statement;
       Assert.AreEqual(expected_statement, actual_statement);
     }
-#pragma warning restore IDE0051 // Remove unused private members
 
 
     #endregion
@@ -244,13 +242,10 @@ namespace abc_bank_tests.Customers {
       add_acct_transactions(ref savingsFake);
       add_acct_transactions(ref maxsaveFake);
 
-      double expected = 13.25852;
-      double actual = cust.TotalInterestEarned;
+      decimal expected = 13.25852M;
+      decimal actual = cust.TotalInterestEarned;
 
-      //Assert.AreEqual(expected, actual, Constants.DOUBLE_DELTA); // and of course I'm having trouble with this... 
-      //Assert.AreEqual(Math.Abs(expected), Math.Abs(actual)); // this didnt work either
-      //Assert.AreEqual(Math.Abs(expected), Math.Abs(actual), Constants.DOUBLE_DELTA); // nor did this
-      Assert.AreEqual(expected.ToString(), actual.ToString()); // this works - for now - since the delta param didn't.
+      Assert.AreEqual(expected, actual);
 
       /*  Uncomment the following line for easier debugging if something goes sideways */
       //debug_output(cust);
@@ -361,7 +356,7 @@ namespace abc_bank_tests.Customers {
       Assert.IsTrue(customer.NumberOfAccounts == 3); // sanity check
 
       addAccountsToCustomer(ref customer, AccountType.SAVINGS, 5);
-      Assert.IsTrue(customer.NumberOfAccounts == 8);    // sanity check
+      Assert.IsTrue(customer.NumberOfAccounts == 8); // sanity check
 
       addAccountsToCustomer(ref customer, AccountType.MAXI_SAVINGS, 2);
       Assert.IsTrue(customer.NumberOfAccounts == 10); // sanity check

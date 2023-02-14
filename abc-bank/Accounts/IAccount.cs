@@ -19,19 +19,19 @@ namespace abc_bank.Accounts {
 
     bool HasTransactions { get; }
 
-    double CurrentBalance { get; }
+    decimal CurrentBalance { get; }
 
-    double InterestEarned { get; }
+    decimal InterestEarned { get; }
 
     #endregion
 
     #region Public Methods
 
-    IDeposit Deposit(double amount);
+    IDeposit Deposit(decimal amount);
 
     bool Deposit(ITransfer fromTransfer);
 
-    IWithdraw Withdraw(double amount);
+    IWithdraw Withdraw(decimal amount);
 
     bool Withdraw(ITransfer fromTransfer);
 

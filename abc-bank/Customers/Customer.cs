@@ -22,9 +22,9 @@ namespace abc_bank.Customers {
 
     public string Statement => Statements.CustomerStatement(this);
 
-    public double TotalInterestEarned {
+    public decimal TotalInterestEarned {
       get {
-        var total = 0.0;
+        decimal total = 0;
 
         foreach (IAccount account in Accounts) {
           total += account.InterestEarned;
@@ -53,7 +53,7 @@ namespace abc_bank.Customers {
       return this;
     }
 
-    public void TransferFunds(double amount, DateTime transactionDate, IAccount originAccount, IAccount destinationAccount) {
+    public void TransferFunds(decimal amount, DateTime transactionDate, IAccount originAccount, IAccount destinationAccount) {
       Validators.AccountIsInCollection(originAccount, Accounts);
       Validators.AccountIsInCollection(destinationAccount, Accounts);
 

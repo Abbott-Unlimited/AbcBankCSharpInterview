@@ -15,10 +15,10 @@ namespace abc_bank_tests.Accounts {
 
   public class AccountBaseMock : AccountBase {
 
-    public override double InterestEarned => throw new System.NotImplementedException();
+    public override decimal InterestEarned => throw new System.NotImplementedException();
     public override string ReportLabel => throw new System.NotImplementedException();
 
-    public AccountBaseMock(AccountType accountType, int accountId, int customerId, double initialDeposit = 0.00)
+    public AccountBaseMock(AccountType accountType, int accountId, int customerId, decimal initialDeposit = 0)
       : base(accountType, accountId, customerId, initialDeposit) { }
   }
 
@@ -52,7 +52,7 @@ namespace abc_bank_tests.Accounts {
 
     [TestMethod]
     public void CTOR_Deposit_made_if_initialDeposit_amount_greater_than_0() {
-      Assert.IsTrue(new AccountBaseMock(AccountType.CHECKING, 0, 1, 0.01).HasTransactions);
+      Assert.IsTrue(new AccountBaseMock(AccountType.CHECKING, 0, 1, 0.01M).HasTransactions);
     }
 
     #endregion
@@ -62,10 +62,10 @@ namespace abc_bank_tests.Accounts {
     [TestMethod]
     public void Current_Balance_Property_Returns_Accurate_Current_Balance() {
       acct.Deposit(100);
-      acct.Deposit(200.75);
-      acct.Withdraw(52.75);
+      acct.Deposit(200.75M);
+      acct.Withdraw(52.75M);
 
-      Assert.AreEqual(248.00, acct.CurrentBalance);
+      Assert.AreEqual(248, acct.CurrentBalance);
     }
 
     [TestMethod]
@@ -96,7 +96,7 @@ namespace abc_bank_tests.Accounts {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Account_Zero_Dollar_Deposit_Does_Not_Work() {
-      acct.Deposit(0.0);
+      acct.Deposit(0);
       Assert.Fail();
     }
 
@@ -129,14 +129,14 @@ namespace abc_bank_tests.Accounts {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Account_Zero_Dollar_Withdraw_Does_Not_Work() {
-      acct.Withdraw(0.0);
+      acct.Withdraw(0);
       Assert.Fail();
     }
 
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Account_Negative_Amount_Withdraw_Does_Not_Work() {
-      acct.Withdraw(-1.0);
+      acct.Withdraw(-1);
       Assert.Fail();
     }
 

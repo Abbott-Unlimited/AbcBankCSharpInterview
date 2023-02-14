@@ -3,7 +3,7 @@
 namespace abc_bank.Transactions {
   public interface ITransaction {
     DateTime Date { get; }
-    double Amount { get; }
-    double GetStatementAmount();
+    decimal Amount { get; }
+    decimal GetStatementAmount();
   }
 }

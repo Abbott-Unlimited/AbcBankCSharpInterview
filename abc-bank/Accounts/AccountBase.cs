@@ -17,15 +17,15 @@ namespace abc_bank.Accounts {
 
     public virtual AccountType AccountType { get; }
 
-    public abstract double InterestEarned { get; }
+    public abstract decimal InterestEarned { get; }
 
     public virtual List<ITransaction> Transactions { get; protected set; } = new List<ITransaction>();
 
     public virtual bool HasTransactions { get => Transactions.Count() > 0; }
 
-    public virtual double CurrentBalance {
+    public virtual decimal CurrentBalance {
       get {
-        var amount = 0.0;
+        decimal amount = 0;
 
         foreach (ITransaction t in Transactions) {
           amount += t.GetStatementAmount();
@@ -39,8 +39,8 @@ namespace abc_bank.Accounts {
 
     #region CTOR
 
-    public AccountBase(AccountType accountType, int accountId, int customerId, double initialDeposit = 0.00) {
-      if (initialDeposit > 0.00) {
+    public AccountBase(AccountType accountType, int accountId, int customerId, decimal initialDeposit = 0) {
+      if (initialDeposit > 0) {
         Deposit(initialDeposit);
       }
 
@@ -53,18 +53,18 @@ namespace abc_bank.Accounts {
 
     #region Methods
 
-    protected double CalculateInterest(double interestRate) {
+    protected decimal CalculateInterest(decimal interestRate) {
       return CurrentBalance * interestRate;
     }
 
-    public IDeposit Deposit(double amount) {
+    public IDeposit Deposit(decimal amount) {
       var depositTransaction = new Deposit(amount, DateTime.Now, this);
       Transactions.Add(depositTransaction);
 
       return depositTransaction;
     }
 
-    public IWithdraw Withdraw(double amount) {
+    public IWithdraw Withdraw(decimal amount) {
       var withdrawTransaction = new Withdraw(amount, DateTime.Now, this);
 
       Transactions.Add(withdrawTransaction);

@@ -22,15 +22,15 @@ namespace abc_bank_tests.Extensions {
     #region GetStatementAmount
 
     [TestMethod]
-    public void GetStatementAmount_extention_for_deposit_transaction_returns_Amount_property_value() {
-      var deposit = new Deposit(1000.00, DateTime.Now, new CheckingAccount(1, 1, 0));
-      Assert.AreEqual(1000.00, deposit.GetStatementAmount());
+    public void GetStatementAmount_extensions_for_deposit_transaction_returns_Amount_property_value() {
+      var deposit = new Deposit(1000, DateTime.Now, new CheckingAccount(1, 1, 0));
+      Assert.AreEqual(1000, deposit.GetStatementAmount());
     }
 
     [TestMethod]
-    public void GetStatementAmount_extention_for_withdraw_transaction_returns_Amount_property_value_as_negative_value() {
-      var deposit = new Withdraw(1000.00, DateTime.Now, new CheckingAccount(1, 1, 1000));
-      Assert.AreEqual(-1000.00, deposit.GetStatementAmount());
+    public void GetStatementAmount_extensions_for_withdraw_transaction_returns_Amount_property_value_as_negative_value() {
+      var deposit = new Withdraw(1000, DateTime.Now, new CheckingAccount(1, 1, 1000));
+      Assert.AreEqual(-1000, deposit.GetStatementAmount());
     }
 
     #endregion
@@ -50,7 +50,7 @@ namespace abc_bank_tests.Extensions {
     [TestMethod]
     public void GetLineItem_for_withdrawal() {
       var withdrawal = new Withdraw(100, DateTime.Now, new SavingsAccount(0, 1, 100));
-      var expected = "withdrawal        $100.00";
+      var expected = "withdrawal       -$100.00";
       var actual = withdrawal.GetLineItem();
 
       LineItemDebugVisualizer(expected, actual);
@@ -66,7 +66,7 @@ namespace abc_bank_tests.Extensions {
       var originAccount = new SavingsAccount(1, 1, 10000);
       var destinationAccount = new CheckingAccount(2, 1);
 
-      new Transfer(1428.23, DateTime.Now, originAccount, destinationAccount);
+      new Transfer(1428.23M, DateTime.Now, originAccount, destinationAccount);
 
       var expected = "deposit         $1,428.23  transfer from acct #00000002";
       var actual = destinationAccount.Transactions[0].GetLineItem();
@@ -78,11 +78,11 @@ namespace abc_bank_tests.Extensions {
     [TestMethod]
     public void GetLineItem_for_transfer_withdrawal() {
       var originAccount = new SavingsAccount(1, 1, 10000);
-      var destionationAccount = new CheckingAccount(2, 1);
+      var destinationAccount = new CheckingAccount(2, 1);
 
-      new Transfer(1428.23, DateTime.Now, originAccount, destionationAccount);
+      new Transfer(1428.23M, DateTime.Now, originAccount, destinationAccount);
 
-      var expected = "withdrawal      $1,428.23    transfer to acct #00000002";
+      var expected = "withdrawal     -$1,428.23    transfer to acct #00000002";
       var actual = originAccount.Transactions[1].GetLineItem();
 
       LineItemDebugVisualizer(expected, actual);
@@ -97,7 +97,7 @@ namespace abc_bank_tests.Extensions {
     public void ToDollars_formatting_extension_sanity_test() {
       var expected = "$1,000.00";
 
-      Assert.AreEqual(expected, (1000.0).ToDollars());
+      Assert.AreEqual(expected, (1000M).ToDollars());
     }
 
     #endregion

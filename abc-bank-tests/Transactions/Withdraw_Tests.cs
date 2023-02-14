@@ -15,7 +15,7 @@ namespace abc_bank_tests.Transactions {
 
     [TestMethod]
     public void AccountId_Property_is_set_to_withdrawAccount_Id_constructor_arg() {
-      var acct = new SavingsAccount(0, 1, 1000.00);
+      var acct = new SavingsAccount(0, 1, 1000);
       var transaction = acct.Withdraw(1000);
 
       Assert.AreEqual(acct.Id, transaction.AccountId);
@@ -41,10 +41,10 @@ namespace abc_bank_tests.Transactions {
 
     [TestMethod]
     public void Amount_Property_is_set_to_transactionDate_constructor_arg() {
-      var acct = new SavingsAccount(0, 1, 1000.00);
-      var transaction = acct.Withdraw(500.50);
+      var acct = new SavingsAccount(0, 1, 1000);
+      var transaction = acct.Withdraw(500.50M);
 
-      Assert.AreEqual(500.50, transaction.Amount);
+      Assert.AreEqual(500.50M, transaction.Amount);
     }
 
     #endregion
@@ -56,7 +56,7 @@ namespace abc_bank_tests.Transactions {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Withdraw_constructor_throws_error_if_amount_arg_is_negative() {
-      new Withdraw(-0.01, DateTime.Now, new SavingsAccount(0, 1));
+      new Withdraw(-0.01M, DateTime.Now, new SavingsAccount(0, 1));
       Assert.Fail();
     }
 
@@ -70,7 +70,7 @@ namespace abc_bank_tests.Transactions {
     [TestMethod]
     [ExpectedException(typeof(InsufficientFundsException))]
     public void Withdraw_constructor_throws_error_if_amount_exceeds_current_balance() {
-      new Withdraw(0.01, DateTime.Now, new SavingsAccount(0, 1));
+      new Withdraw(0.01M, DateTime.Now, new SavingsAccount(0, 1));
 
       Assert.Fail();
     }

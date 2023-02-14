@@ -52,7 +52,6 @@
     <Compile Include="Exceptions\InvalidTransactionAmountException.cs" />
     <Compile Include="Bank.cs" />
     <Compile Include="Customers\Customer.cs" />
-    <Compile Include="Utilities\DateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\CustomerSummary.cs" />
     <Compile Include="Reports\Statements.cs" />

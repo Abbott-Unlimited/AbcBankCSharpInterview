@@ -16,7 +16,7 @@ namespace abc_bank.Reports {
       sb.AppendLine($"Statement for {c.Name}");
       sb.AppendLine();
 
-      var total = 0.0;
+      decimal total = 0;
 
       foreach (var account in c.Accounts) {
         sb.Append(AccountStatement(account));
@@ -31,7 +31,7 @@ namespace abc_bank.Reports {
 
     public static string AccountStatement(IAccount account) {
       var sb = new StringBuilder();
-      var total = 0.0;
+      decimal total = 0;
       string lineItem;
 
       sb.AppendLine(account.ReportLabel);
@@ -55,14 +55,9 @@ namespace abc_bank.Reports {
 
     #region Utilities, Helpers and Extension Methods
 
-    public static string ToDollars(this double value) => string.Format("{0:C2}", Math.Abs(value));
-
-    #region GetStatementAmount
-
-    public static double GetStatementAmount(this IDeposit t) => t.Amount;
-    public static double GetStatementAmount(this IWithdraw t) => (t.Amount * -1);
-
-    #endregion
+    public static string ToDollars(this decimal value, bool isWithdraw = false) {
+      return $"{(isWithdraw ? "-" : "")}{string.Format("{0:C2}", Math.Abs(value))}";
+    }
 
     #region GetLineItem
 
@@ -96,10 +91,8 @@ namespace abc_bank.Reports {
         lineItem = (t as IWithdraw).GetLineItem();
       } else {
         // guard against future me (or someone like me anyway)
-        throw new System.Exception("Unknown transaction type arg to GetLineItem(this ITransaction t");
+        throw new System.Exception("Unknown transaction type arg to GetLineItem(this ITransaction t)");
       }
-
-      System.Diagnostics.Debug.WriteLine(lineItem);
 
       return lineItem;
     }
@@ -112,7 +105,7 @@ namespace abc_bank.Reports {
     private static string FormatLineItemLabel(string line) => (line).PadRight(10);
 
     // padding the amount by 15 preserve alignment of all statement line items (variable dollar amounts).
-    private static string FormatLineItemAmount(ITransaction t) => t.GetStatementAmount().ToDollars().PadLeft(15);
+    private static string FormatLineItemAmount(ITransaction t) => t.GetStatementAmount().ToDollars(t is IWithdraw).PadLeft(15);
 
     private static string GetTransferLineItemDetails(string direction, int accountId) {
       var details = $"transfer {direction} acct #{FormatLineItemAccountId(accountId)}";

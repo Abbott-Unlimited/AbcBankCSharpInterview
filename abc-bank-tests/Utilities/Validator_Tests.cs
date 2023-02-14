@@ -68,7 +68,7 @@ namespace abc_bank_tests.Utilities {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void TransactionAmount_throws_error_if_amount_arg_is_negative() {
-      Validators.TransactionAmount(-0.01);
+      Validators.TransactionAmount(-0.01M);
 
       Assert.Fail("Expected exception not thrown: abc_bank.Exceptions.InvalidTransactionAmountException");
     }
@@ -76,7 +76,7 @@ namespace abc_bank_tests.Utilities {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void TransactionAmount_throws_error_if_amount_arg_is_0() {
-      Validators.TransactionAmount(0.0);
+      Validators.TransactionAmount(0);
 
       Assert.Fail("Expected exception not thrown: abc_bank.Exceptions.InvalidTransactionAmountException");
     }

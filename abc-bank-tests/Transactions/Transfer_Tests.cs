@@ -53,7 +53,7 @@ namespace abc_bank_tests.Transactions {
     }
 
     [TestMethod]
-    public void DestinationAccountId_property_is_initialized_to_destinationAccount_Id_in_constructo() {
+    public void DestinationAccountId_property_is_initialized_to_destinationAccount_Id_in_constructor() {
       var transfer = new Transfer(1, transDate, originAccount, destinationAccount);
       Assert.AreEqual(transDate, transfer.Date);
     }
@@ -83,7 +83,7 @@ namespace abc_bank_tests.Transactions {
     [TestMethod]
     [ExpectedException(typeof(InvalidTransactionAmountException))]
     public void Transfer_constructor_throws_error_if_transfer_amount_is_negative() {
-      new Transfer(-0.01, DateTime.Now, originAccount, destinationAccount);
+      new Transfer(-0.01M, DateTime.Now, originAccount, destinationAccount);
 
       Assert.Fail();
     }
