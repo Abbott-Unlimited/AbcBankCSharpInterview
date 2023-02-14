@@ -20,10 +20,17 @@ namespace abc_bank
             customers.Add(customer);
         }
 
+        public Customer GetCustomer(string customerName)
+        {
+            return customers.Where(x => x.GetName() == customerName).FirstOrDefault();
+        }
         public String CustomerSummary() {
             String summary = "Customer Summary";
             foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+            {
+                var accounts = c.GetAccounts();
+                summary += "\n - " + c.GetName() + " (" + format(accounts.Count, "account") + ")";
+            }
             return summary;
         }
 
@@ -45,7 +52,8 @@ namespace abc_bank
         {
             try
             {
-                customers = null;
+                // I don't know if this is intentional but you would always throw here if you set customers to null
+                // customers = null;
                 return customers[0].GetName();
             }
             catch (Exception e)

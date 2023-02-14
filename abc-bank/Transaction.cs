@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    public enum TransactionType
+    {
+        WITHDRAWEL,
+        DEPOSIT
+    }
     public class Transaction
     {
         public readonly double amount;
 
-        private DateTime transactionDate;
+        public DateTime transactionDate;
 
-        public Transaction(double amount) 
+        public TransactionType transactionType;
+
+        public Transaction(double amount, TransactionType transactionType, DateTime transactionDate) 
         {
             this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            this.transactionDate = transactionDate;
+            this.transactionType = transactionType;
         }
     }
 }

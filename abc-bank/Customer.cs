@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using abc_bank.Accounts;
+using abc_bank.Models;
 
 namespace abc_bank
 {
+    
     public class Customer
     {
         private String name;
@@ -21,17 +22,74 @@ namespace abc_bank
         {
             return name;
         }
-
-        public Customer OpenAccount(Account account)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="account"></param>
+        public void AddAccount(Account account)
         {
             accounts.Add(account);
-            return this;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>List<Account> accounts</Account></returns>
+        public List<Account> GetAccounts()
+        {
+            return accounts;
         }
 
-        public int GetNumberOfAccounts()
+        public Account GetAccount(AccountTypes accountType)
         {
-            return accounts.Count;
+            return accounts.Where(x => x.GetAccountType() == accountType).FirstOrDefault();
         }
+
+        //public Customer OpenAccount(Account account)
+        //{
+        //    accounts.Add(account);
+        //    return this;
+        //}
+
+        //public Account OpenAccount(AccountTypes accountType)
+        //{
+        //    var account = accounts.Where(x => x.GetAccountType() == accountType).FirstOrDefault();
+        //    if(account == null)
+        //    {
+        //        return null;
+        //    }
+        //    return account;
+        //}
+
+        public TransactionResponse TransferAccountValue(Account fromAccount, double amount, Account toAccount)
+        {
+
+            if (fromAccount == null)
+            {
+                return new TransactionResponse($"Account {fromAccount.GetType()} does not exist.", false);
+            }
+            if (toAccount == null)
+            {
+                return new TransactionResponse($"Account {toAccount.GetType()} does not exist.", false);
+            }
+
+            try
+            {
+                fromAccount.Withdraw(amount);
+                toAccount.Deposit(amount);
+            }
+            catch (Exception e)
+            {
+                //This would go to some alert
+                Console.WriteLine(e.Message.ToString());
+            }
+
+            return new TransactionResponse(GetStatement(), true);
+        }
+
+        //public int GetNumberOfAccounts()
+        //{
+        //    return accounts.Count;
+        //}
 
         public double TotalInterestEarned() 
         {
@@ -41,40 +99,42 @@ namespace abc_bank
             return total;
         }
 
-        public String GetStatement() 
+        public String GetStatement()
         {
             String statement = null;
             statement = "Statement for " + name + "\n";
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (Account a in accounts)
             {
                 statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                total += a.SumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        private String statementForAccount(Account a)
         {
             String s = "";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
+            //Translate to pretty account type
+            switch (a.GetAccountType())
+            {
+                case Accounts.AccountTypes.CHECKING:
                     s += "Checking Account\n";
                     break;
-                case Account.SAVINGS:
+                case Accounts.AccountTypes.SAVINGS:
                     s += "Savings Account\n";
                     break;
-                case Account.MAXI_SAVINGS:
+                case Accounts.AccountTypes.MAXI_SAVINGS:
                     s += "Maxi Savings Account\n";
                     break;
             }
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
+            foreach (Transaction t in a.GetTransactions())
+            {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
@@ -84,7 +144,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C}", Math.Abs(d));
         }
     }
 }
