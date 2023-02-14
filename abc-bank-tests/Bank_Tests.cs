@@ -1,22 +1,24 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Text;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using abc_bank;
 using abc_bank.Accounts;
-using System.Text;
+using abc_bank.Customers;
 
-namespace abc_bank_tests.BankTests {
+namespace abc_bank_tests.Bank {
 
   [TestClass]
-  public class BankTest {
+  public class Bank_Tests {
 
     #region Setup and Teardown
 
-    Bank bank;
+    abc_bank.Bank bank;
     StringBuilder sb;
 
     [TestInitialize]
     public void Init() {
-      bank = new Bank();
+      bank = new abc_bank.Bank();
       sb = new StringBuilder();
     }
 
@@ -118,9 +120,9 @@ namespace abc_bank_tests.BankTests {
 
     [TestMethod]
     public void Customer_Summary_With_3_Customers_1_account_each() {
-      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(0, 1)));
-      bank.AddCustomer(new Customer("Jimmy", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1)));
-      bank.AddCustomer(new Customer("Jack", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(0, 1)));
+      bank.AddCustomer(new Customer("John", bank.NumberOfCustomers).OpenAccount(new CheckingAccount(1, 1)));
+      bank.AddCustomer(new Customer("Jimmy", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(1, 1)));
+      bank.AddCustomer(new Customer("Jack", bank.NumberOfCustomers).OpenAccount(new SavingsAccount(1, 1)));
 
       sb.AppendLine("Customer Summary");
       sb.AppendLine(" - John (1 account)");

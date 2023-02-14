@@ -11,14 +11,6 @@ namespace abc_bank_tests.Transactions {
 
     #region Properties
 
-    #region Id 
-
-    [Ignore]
-    [TestMethod]
-    public void Id_Property__TEST_NOT_IMPLEMENTED() => throw new NotImplementedException();
-
-    #endregion
-
     #region AccountId
 
     [TestMethod]

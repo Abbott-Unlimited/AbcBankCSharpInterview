@@ -50,9 +50,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BankTest.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Customer_Test.cs" />
+    <Compile Include="Bank_Tests.cs" />
+    <Compile Include="Reports\Statements_Tests.cs" />
+    <Compile Include="Test Helpers\Constants.cs" />
+    <Compile Include="Customer_Tests.cs" />
     <Compile Include="Extensions\Statement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Accounts\MaxiSavingsAccountTests.cs" />
@@ -62,8 +63,7 @@
     <Compile Include="Transactions\Deposit_Tests.cs" />
     <Compile Include="Transactions\Transfer_Tests.cs" />
     <Compile Include="Transactions\Withdraw_Tests.cs" />
-    <Compile Include="Extensions\Formatting.cs" />
-    <Compile Include="Utilities_Tests\UtilityTests.cs" />
+    <Compile Include="Utilities\Validator_Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\abc-bank\abc-bank.csproj">

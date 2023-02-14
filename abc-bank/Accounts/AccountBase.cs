@@ -45,7 +45,7 @@ namespace abc_bank.Accounts {
       }
 
       AccountType = accountType;
-      Id = accountId + 1;
+      Id = accountId;
       CustomerId = customerId;
     }
 
@@ -71,25 +71,28 @@ namespace abc_bank.Accounts {
       return withdrawTransaction;
     }
 
-    public bool Deposit(ITransfer fromTransfer) {
+    public bool Deposit(ITransfer transfer) {
       try {
-        var deposit = new Withdraw(fromTransfer.Amount, DateTime.Now, this);
+        var deposit = new Deposit(transfer.Amount, DateTime.Now, this, transfer);
         Transactions.Add(deposit);
-      } catch {
+      } catch (Exception e) {
         // real-world implementation, there would be something logging the caught error here.
-        return false;
+        // also wouldn't throw the exception - would be handled differently.
+        throw new Exception(e.Message);
       }
 
       return true;
     }
 
-    public bool Withdraw(ITransfer fromTransfer) {
+    public bool Withdraw(ITransfer transfer) {
       try {
-        var withdrawTransaction = new Withdraw(fromTransfer.Amount, DateTime.Now, this);
-        Transactions.Add(withdrawTransaction);
-      } catch {
+        var withdraw = new Withdraw(transfer.Amount, DateTime.Now, this, transfer);
+
+        Transactions.Add(withdraw);
+      } catch (Exception e) {
         // real-world implementation, there would be something logging the caught error here.
-        return false;
+        // also wouldn't throw the exception - would be handled differently.
+        throw new Exception(e.Message);
       }
 
       return true;

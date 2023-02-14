@@ -1,6 +1,7 @@
 ﻿using System;
 
 using abc_bank.Accounts;
+using abc_bank.Utilities;
 
 namespace abc_bank.Transactions {
 
@@ -24,12 +25,17 @@ namespace abc_bank.Transactions {
 
     #region CTOR
 
-    public Withdraw(double amount, DateTime transactionDate, IAccount withdrawAccount) {
-      Utilities.ValidateFundsAvailable(withdrawAccount.CurrentBalance, amount);
+    public Withdraw(double amount, DateTime transactionDate, IAccount withdrawAccount, ITransfer transferDetails = null) {
+      Validators.FundsAvailableForWithdraw(withdrawAccount.CurrentBalance, amount);
 
       Amount = amount;
       Date = transactionDate;
       AccountId = withdrawAccount.Id;
+
+      if (transferDetails != null) {
+        IsFromTransfer = true;
+        TransferDetails = transferDetails;
+      }
     }
 
     #endregion
@@ -41,6 +47,6 @@ namespace abc_bank.Transactions {
     }
 
     #endregion
-    
+
   }
 }

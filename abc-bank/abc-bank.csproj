@@ -47,14 +47,12 @@
     <Compile Include="Accounts\SavingsAccount.cs" />
     <Compile Include="Exceptions\InvalidAccountException.cs" />
     <Compile Include="Exceptions\InvalidTransactionRequestException.cs" />
-    <Compile Include="Extensions\TransactionExtensions.cs" />
-    <Compile Include="Extensions\FormattingExtensions.cs" />
-    <Compile Include="Messages.cs" />
+    <Compile Include="Utilities\Messages.cs" />
     <Compile Include="Exceptions\InsufficientFundsException.cs" />
     <Compile Include="Exceptions\InvalidTransactionAmountException.cs" />
     <Compile Include="Bank.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="DateProvider.cs" />
+    <Compile Include="Customers\Customer.cs" />
+    <Compile Include="Utilities\DateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\CustomerSummary.cs" />
     <Compile Include="Reports\Statements.cs" />
@@ -65,7 +63,7 @@
     <Compile Include="Transactions\ITransaction.cs" />
     <Compile Include="Transactions\ITransfer.cs" />
     <Compile Include="Transactions\Transfer.cs" />
-    <Compile Include="Utilities.cs" />
+    <Compile Include="Utilities\Validators.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

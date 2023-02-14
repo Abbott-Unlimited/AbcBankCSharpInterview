@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using abc_bank.Accounts;
 using abc_bank.Transactions;
 using abc_bank.Reports;
+using abc_bank.Utilities;
+using System.Linq;
 
-namespace abc_bank {
+namespace abc_bank.Customers {
   public class Customer {
 
     #region Properties  
@@ -52,12 +54,17 @@ namespace abc_bank {
     }
 
     public void TransferFunds(double amount, DateTime transactionDate, IAccount originAccount, IAccount destinationAccount) {
-      Utilities.ValidateAccountInCollection(originAccount, Accounts);
-      Utilities.ValidateAccountInCollection(destinationAccount, Accounts);
-      var transfer = new Transfer(amount, transactionDate, originAccount, destinationAccount);
+      Validators.AccountIsInCollection(originAccount, Accounts);
+      Validators.AccountIsInCollection(destinationAccount, Accounts);
+
+      new Transfer(amount, transactionDate, originAccount, destinationAccount);
     }
 
-    #endregion
+    #endregion   
+
+    public IAccount GetAccountById(int accountId) => Accounts.Find(acct => acct.Id == accountId);
+
+    public IList<IAccount> GetAccountsByType(AccountType acctType) => Accounts.Where(acct => acct.AccountType == acctType).ToList();
 
   }
 }

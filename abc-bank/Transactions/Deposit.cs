@@ -1,6 +1,7 @@
 ﻿using System;
 
 using abc_bank.Accounts;
+using abc_bank.Utilities;
 
 namespace abc_bank.Transactions {
   public class Deposit : IDeposit {
@@ -23,12 +24,17 @@ namespace abc_bank.Transactions {
 
     #region CTOR
 
-    public Deposit(double amount, DateTime transactionDate, IAccount depositAccount) {
-      Utilities.ValidateTransactionAmount(amount);
+    public Deposit(double amount, DateTime transactionDate, IAccount depositAccount, ITransfer transferDetails = null) {
+      Validators.TransactionAmount(amount);
 
       Amount = amount;
       Date = transactionDate;
       AccountId = depositAccount.Id;
+
+      if (transferDetails != null) {
+        IsFromTransfer = true;
+        TransferDetails = transferDetails;
+      }
     }
 
     #endregion

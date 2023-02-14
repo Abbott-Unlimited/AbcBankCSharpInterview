@@ -2,6 +2,7 @@
 
 using abc_bank.Accounts;
 using abc_bank.Exceptions;
+using abc_bank.Utilities;
 
 namespace abc_bank.Transactions {
   public class Transfer : ITransfer {
@@ -28,10 +29,11 @@ namespace abc_bank.Transactions {
         throw new InvalidTransactionRequestException();
       }
 
-      Utilities.ValidateFundsAvailable(originAccount.CurrentBalance, transferAmount);
+      Validators.FundsAvailableForWithdraw(originAccount.CurrentBalance, transferAmount);
 
       #endregion
 
+      Amount = transferAmount;
       Date = transactionDate;
       OriginAccountId = originAccount.Id;
       DestinationAccountId = destinationAccount.Id;
@@ -50,6 +52,6 @@ namespace abc_bank.Transactions {
     public double GetStatementAmount() => throw new NotImplementedException();
 
     #endregion
-    
+
   }
 }
