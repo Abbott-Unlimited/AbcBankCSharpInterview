@@ -50,13 +50,51 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void TestAccountCustomerAccountTransfer()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer oscar = new Customer("Oscar")
+                    .OpenAccount(new Account(Account.SAVINGS)).OpenAccount(new Account(Account.CHECKING));
+
+            checkingAccount.Deposit(1000.0);
+            oscar.Transfer(100, checkingAccount, savingsAccount);
+
+
+            Assert.AreEqual(900, checkingAccount.sumTransactions());
+            Assert.AreEqual(100, savingsAccount.sumTransactions());
+        }
+
+        [TestMethod]
+        public void TestCustomerAccountTransferError()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer oscar = new Customer("Oscar")
+                    .OpenAccount(new Account(Account.SAVINGS)).OpenAccount(new Account(Account.CHECKING));
+
+            checkingAccount.Deposit(10.0);
+            try
+            {
+                oscar.Transfer(100, checkingAccount, savingsAccount);
+                Assert.Fail(); // If it gets to this line, no exception was thrown
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual("amount greater then funds available", ex.Message);
+            }
         }
     }
 }

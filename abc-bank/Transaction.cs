@@ -10,12 +10,24 @@ namespace abc_bank
     {
         public readonly double amount;
 
-        private DateTime transactionDate;
+        public DateTime transactionDate;
 
-        public Transaction(double amount) 
+        public Transaction(double amount)
         {
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
+        }
+
+        public Boolean isWithdrawal()
+        {
+            if (amount < 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

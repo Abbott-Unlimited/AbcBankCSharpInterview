@@ -33,7 +33,7 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public double TotalInterestEarned()
         {
             double total = 0;
             foreach (Account a in accounts)
@@ -41,12 +41,12 @@ namespace abc_bank
             return total;
         }
 
-        public String GetStatement() 
+        public String GetStatement()
         {
             String statement = null;
             statement = "Statement for " + name + "\n";
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (Account a in accounts)
             {
                 statement += "\n" + statementForAccount(a) + "\n";
                 total += a.sumTransactions();
@@ -55,12 +55,28 @@ namespace abc_bank
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        public Boolean Transfer(double amount, Account fromAccount, Account toAccount)
+        {
+
+            if (fromAccount.sumTransactions() > amount)
+            {
+                fromAccount.Withdraw(amount);
+                toAccount.Deposit(amount);
+                return true;
+            }
+            else
+            {
+                throw new ArgumentException("amount greater then funds available");
+            }
+        }
+
+        private String statementForAccount(Account a)
         {
             String s = "";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
+            //Translate to pretty account type
+            switch (a.GetAccountType())
+            {
                 case Account.CHECKING:
                     s += "Checking Account\n";
                     break;
@@ -74,7 +90,8 @@ namespace abc_bank
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
+            foreach (Transaction t in a.transactions)
+            {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
                 total += t.amount;
             }
@@ -84,7 +101,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C}", Math.Abs(d));
         }
     }
 }
