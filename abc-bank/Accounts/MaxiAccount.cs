@@ -31,6 +31,7 @@ namespace abc_bank.Accounts
             {
                 balanceAtDate = Transactions.Where(t => t.Date <= interestDate).Sum(t => t.Amount);
 
+                // Check if any withdrawal happened in the previous 10 days and adjust interest rate accordingly
                 if(Transactions.Exists(t => t.Type == "withdrawal" && (interestDate - t.Date).TotalDays <= 10))
                 {
                     interest += balanceAtDate * interestRate;
