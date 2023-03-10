@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
+using abc_bank.Accounts;
 
 namespace abc_bank_tests
 {
@@ -15,44 +16,103 @@ namespace abc_bank_tests
         {
             Bank bank = new Bank();
             Customer john = new Customer("John");
-            john.OpenAccount(new Account(Account.CHECKING));
+            john.OpenAccount(AccountType.Checking);
             bank.AddCustomer(john);
 
             Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary());
         }
+        [TestMethod]
+        public void CustomerSummaryMultipleAccounts()
+        {
+            Bank bank = new Bank();
+            Customer john = new Customer("John");
+            john.OpenAccount(AccountType.Checking);
+            john.OpenAccount(AccountType.Checking);
+
+            bank.AddCustomer(john);
+
+            Assert.AreEqual("Customer Summary\n - John (2 accounts)", bank.CustomerSummary());
+        }
 
         [TestMethod]
-        public void CheckingAccount() {
+        public void TestChecking() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.CHECKING);
-            Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
+            Customer bill = new Customer("Bill");
             bank.AddCustomer(bill);
+            Account checkingAccount = bill.OpenAccount(AccountType.Checking);
 
             checkingAccount.Deposit(100.0);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            DateProvider.AdjustDateByDays(1);
+
+            Assert.AreEqual(0.1, bank.GetTotalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
-        public void Savings_account() {
+        public void TestSavings() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Customer bill = new Customer("Bill");
+            bank.AddCustomer(bill);
+            Account savingsAccount = bill.OpenAccount(AccountType.Savings);
 
-            checkingAccount.Deposit(1500.0);
+            savingsAccount.Deposit(1500.0);
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            DateProvider.AdjustDateByDays(1);
+
+            var interest = bank.GetTotalInterestPaid();
+
+            Assert.AreEqual(2.0, interest, DOUBLE_DELTA);
         }
 
         [TestMethod]
-        public void Maxi_savings_account() {
+        [Ignore]
+        public void TestMaxiSavingsOld() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Customer bill = new Customer("Bill");
+            bank.AddCustomer(bill);
+            Account maxiAccount = bill.OpenAccount(AccountType.Maxi);
 
-            checkingAccount.Deposit(3000.0);
+            maxiAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            DateProvider.AdjustDateByDays(1);
+
+            var interest = bank.GetTotalInterestPaid();
+
+            Assert.AreEqual(170.0, interest, DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void TestMaxiSavingsWithNoRecentWithdrawal()
+        {
+            Bank bank = new Bank();
+            Customer bill = new Customer("Bill");
+            bank.AddCustomer(bill);
+            Account maxiAccount = bill.OpenAccount(AccountType.Maxi);
+
+            maxiAccount.Deposit(100.00);
+
+            DateProvider.AdjustDateByDays(12);
+
+            var interest = bank.GetTotalInterestPaid();
+
+            Assert.AreEqual(60, interest, DOUBLE_DELTA);
+        }
+        [TestMethod]
+        public void TestMaxiSavingsWithRecentWithdrawal()
+        {
+            Bank bank = new Bank();
+            Customer bill = new Customer("Bill");
+            bank.AddCustomer(bill);
+            Account maxiAccount = bill.OpenAccount(AccountType.Maxi);
+
+            maxiAccount.Deposit(101.00);
+            maxiAccount.Withdraw(1.00);
+
+            DateProvider.AdjustDateByDays(12);
+
+            var interest = bank.GetTotalInterestPaid();
+
+            Assert.AreEqual(6.1, interest, DOUBLE_DELTA);
         }
     }
 }

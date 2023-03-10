@@ -1,4 +1,5 @@
-﻿using System;
+﻿using abc_bank.Accounts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +9,13 @@ namespace abc_bank
 {
     public class Customer
     {
-        private String name;
+        private readonly string name;
         private List<Account> accounts;
 
-        public Customer(String name)
+        public Customer(string name)
         {
             this.name = name;
-            this.accounts = new List<Account>();
+            accounts = new List<Account>();
         }
 
         public String GetName()
@@ -22,10 +23,25 @@ namespace abc_bank
             return name;
         }
 
-        public Customer OpenAccount(Account account)
+        public Account OpenAccount(AccountType accountType)
         {
-            accounts.Add(account);
-            return this;
+            Account newAccount;
+
+            switch (accountType)
+            {
+                case AccountType.Savings:
+                    newAccount = new SavingsAccount();
+                    break;
+                case AccountType.Maxi:
+                    newAccount = new MaxiAccount();
+                    break;
+                default:
+                    newAccount = new CheckingAccount();
+                    break;
+            }
+
+            accounts.Add(newAccount);
+            return newAccount;
         }
 
         public int GetNumberOfAccounts()
@@ -37,54 +53,28 @@ namespace abc_bank
         {
             double total = 0;
             foreach (Account a in accounts)
-                total += a.InterestEarned();
+                total += a.CalculateSimpleInterest();
             return total;
         }
 
-        public String GetStatement() 
+        public string GetStatement() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
-            double total = 0.0;
-            foreach (Account a in accounts) 
-            {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
-            }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
-            return statement;
+            var sb = new StringBuilder();
+            sb.AppendLine($"Statement for {name}{Environment.NewLine}");
+            accounts.ForEach(a => sb.AppendLine(statementForAccount(a)));
+            sb.Append($"Total In All Accounts {accounts.Sum(a => a.CurrentBalance).ToString("C")}");
+            return sb.ToString();
         }
 
-        private String statementForAccount(Account a) 
+        public void Transfer(Account fromAccount, Account toAccount, double amount)
         {
-            String s = "";
+            fromAccount.Withdraw(amount);
+            toAccount.Deposit(amount);
+        } 
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
-
-            //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
-            }
-            s += "Total " + ToDollars(total);
-            return s;
-        }
-
-        private String ToDollars(double d)
+        private string statementForAccount(Account account) 
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return account.GetStatement();
         }
     }
 }

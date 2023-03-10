@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
-    public class DateProvider
+    public static class DateProvider
     {
-        private static DateProvider instance = null;
+        private static DateTime currentDate = DateTime.Now;
+        public static DateTime Now { get { return currentDate; } set { currentDate = value; } }
 
-        public static DateProvider getInstance()
+        public static void Reset()
         {
-            if (instance == null)
-                instance = new DateProvider();
-            return instance;
+            currentDate = DateTime.Now;
         }
 
-        public DateTime Now()
+        ///<summary>
+        /// Accepts positive or negative numbers
+        ///</summary>
+        public static void AdjustDateByDays(int days)
         {
-            return DateTime.Now;
+            currentDate = currentDate.AddDays(days);
         }
     }
 }
