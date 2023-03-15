@@ -38,7 +38,7 @@ namespace abc_bank
             double total = 0;
             foreach (Account a in accounts)
                 total += a.InterestEarned();
-            return total;
+            return Math.Round(total, 2);
         }
 
         public String GetStatement() 
@@ -84,7 +84,13 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            //changed by Robert Murrell
+            // format double "d" to positive amount as currency, eg. "100" becomes "$100.00"
+            // method was returning string value "$%,.2f" as originally written
+
+            return Math.Abs(d).ToString("C");
+
+            //return String.Format("$%,.2f", Math.Abs(d));
         }
     }
 }
