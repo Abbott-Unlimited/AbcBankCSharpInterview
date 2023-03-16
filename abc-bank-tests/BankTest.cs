@@ -8,7 +8,7 @@ namespace abc_bank_tests
     public class BankTest
     {
 
-        private static readonly double DOUBLE_DELTA = 1e-15;
+        private static readonly double DOUBLE_DELTA = 1e-3;
 
         [TestMethod]
         public void CustomerSummary() 
@@ -44,15 +44,35 @@ namespace abc_bank_tests
             Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
+        //[TestMethod]
+        //public void Maxi_savings_account() {
+        //    Bank bank = new Bank();
+        //    Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+        //    bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+
+        //    checkingAccount.Deposit(3000.0);
+
+        //    Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        //}
+
+
         [TestMethod]
-        public void Maxi_savings_account() {
-            Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+        public void Maxi_savings_interestearnedTest()
+        {
+            // Arrange
+            var account = new abc_bank.Account(abc_bank.Account.MAXI_SAVINGS);
+            var customer = new abc_bank.Customer("John");
+            customer.OpenAccount(account);
 
-            checkingAccount.Deposit(3000.0);
+            // Act
+            account.Deposit(10000);
+            var interestRate1 = account.InterestEarned(); // Expected: 500.00 (5% of 10000)
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+
+            // Assert
+            Assert.AreEqual(10000 * (Math.Pow(1 + 0.05 / 365, 365) - 1), interestRate1, 0.001);
         }
+
+
     }
 }

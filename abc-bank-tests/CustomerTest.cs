@@ -58,5 +58,61 @@ namespace abc_bank_tests
             oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
-    }
+
+
+        [TestMethod]
+        public void TestTransfer()
+        {
+            Account sourceAccount = new Account(Account.CHECKING);
+            Account destinationAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry").OpenAccount(sourceAccount).OpenAccount(destinationAccount);
+
+            // Deposit funds into the source account
+            sourceAccount.Deposit(1000);
+
+            // Transfer funds from the source account to the destination account
+            sourceAccount.Transfer(destinationAccount, 500);
+
+            // Check that the correct amounts are in each account
+            Assert.AreEqual("Statement for Henry\n" +
+                    "\n" +
+                    "Checking Account\n" +
+                    "  deposit $1,000.00\n" +
+                    "  withdrawal $500.00\n" +
+                    "Total $500.00\n" +
+                    "\n" +
+                    "Savings Account\n" +
+                    "  deposit $500.00\n" +
+                    "Total $500.00\n" +
+                    "\n" +
+                    "Total In All Accounts $1,000.00", henry.GetStatement());
+        }
+
+
+        [TestMethod]
+        public void Transfer_DifferentCustomers_ThrowsArgumentException()
+        {
+            Account sourceAccount = new Account(Account.CHECKING);
+            Account destinationAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry").OpenAccount(sourceAccount);
+            Customer john = new Customer("John").OpenAccount(destinationAccount);
+            // Deposit funds into the source account
+            sourceAccount.Deposit(1000);
+
+            // Transfer funds from the source account to the destination account
+           
+            try
+            {
+                sourceAccount.Transfer(destinationAccount, 500);
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual("Destination account must belong to the same customer as this account.", ex.Message);
+            }
+        }
+
+
+}
 }

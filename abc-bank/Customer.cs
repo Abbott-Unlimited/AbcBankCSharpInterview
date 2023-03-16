@@ -24,7 +24,9 @@ namespace abc_bank
 
         public Customer OpenAccount(Account account)
         {
+            account.SetCustomer(this);
             accounts.Add(account);
+
             return this;
         }
 
