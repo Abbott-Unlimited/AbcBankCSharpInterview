@@ -9,17 +9,29 @@ namespace abc_bank
     public class Account
     {
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
+        private readonly AccountTypeEnum _accountTypeEnum;
+        private List<Transaction> _transactions;
 
-        private readonly int accountType;
-        public List<Transaction> transactions;
-
-        public Account(int accountType) 
+        public Account(AccountTypeEnum accountTypeEnum) 
         {
-            this.accountType = accountType;
-            this.transactions = new List<Transaction>();
+            this._accountTypeEnum = accountTypeEnum;
+            this._transactions = new List<Transaction>();
+        }
+
+        public AccountTypeEnum AccountType
+        {
+            get 
+            { 
+                return _accountTypeEnum; 
+            } 
+        }
+
+        public List<Transaction> AccountTransactions
+        {
+            get
+            {
+                return _transactions;
+            }
         }
 
         public void Deposit(double amount) 
@@ -27,7 +39,7 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(amount));
+                _transactions.Add(new Transaction(amount));
             }
         }
 
@@ -36,28 +48,29 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(-amount));
+                _transactions.Add(new Transaction(-amount));
             }
         }
 
-        public double InterestEarned() 
+        public double InterestEarned()
         {
             double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
+            switch (_accountTypeEnum)
+            {
+                case AccountTypeEnum.SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.001;
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
+                        return 1 + (amount - 1000) * 0.002;
+                //            case SUPER_SAVINGS:
+                //                if (amount <= 4000)
+                //                    return 20;
+                case AccountTypeEnum.MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.02;
                     if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                        return 20 + (amount - 1000) * 0.05;
+                    return 70 + (amount - 2000) * 0.1;
                 default:
                     return amount * 0.001;
             }
@@ -70,15 +83,9 @@ namespace abc_bank
         private double CheckIfTransactionsExist(bool checkAll) 
         {
             double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
+            foreach (Transaction t in _transactions)
+                amount += t.TransactionAmount;
             return amount;
         }
-
-        public int GetAccountType() 
-        {
-            return accountType;
-        }
-
     }
 }

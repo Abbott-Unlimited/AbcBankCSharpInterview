@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
+    <Compile Include="AccountTypeEnum.cs" />
     <Compile Include="Bank.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="DateProvider.cs" />
