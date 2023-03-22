@@ -86,5 +86,11 @@ namespace abc_bank
         {
             return String.Format("{0:C}", Math.Abs(d));
         }
+
+        public void Transfer(Account sourceAccount, Account destAccount, double amount)
+        {
+            sourceAccount.Withdraw(amount);
+            destAccount.Deposit(amount);
+        }
     }
 }

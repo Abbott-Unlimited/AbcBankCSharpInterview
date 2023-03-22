@@ -7,6 +7,8 @@ namespace abc_bank_tests
     [TestClass]
     public class CustomerTest
     {
+        private static readonly double DOUBLE_DELTA = 1e-15;
+
         [TestMethod]
         public void TestApp()
         {
@@ -86,6 +88,34 @@ namespace abc_bank_tests
             hasRecent = checkingAccount.hasRecentWithdrawals(daysToCheckfor);
             Assert.AreEqual(hasRecent, true);
 
+
+        }
+
+        [TestMethod]
+        public void TestTransfer()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(1000.0);
+            savingsAccount.Deposit(4000.0);
+            savingsAccount.Withdraw(200.0);
+
+            var beforeChecking = checkingAccount.sumTransactions();
+            var beforeSavings = savingsAccount.sumTransactions();
+
+            Assert.AreEqual(1000, beforeChecking, DOUBLE_DELTA);
+            Assert.AreEqual(3800, beforeSavings, DOUBLE_DELTA);
+
+            henry.Transfer(checkingAccount, savingsAccount, 150);
+
+            var afterChecking = checkingAccount.sumTransactions();
+            var afterSavings = savingsAccount.sumTransactions();
+
+            Assert.AreEqual(850, afterChecking, DOUBLE_DELTA);
+            Assert.AreEqual(3950, afterSavings, DOUBLE_DELTA);
 
         }
     }
