@@ -31,12 +31,36 @@ namespace abc_bank
             }
         }
 
+        public void Deposit(double amount, DateTime transDate)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+            else
+            {
+                transactions.Add(new Transaction(amount, transDate));
+            }
+        }
+
         public void Withdraw(double amount) 
         {
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
                 transactions.Add(new Transaction(-amount));
+            }
+        }
+
+        public void Withdraw(double amount, DateTime transDate)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+            else
+            {
+                transactions.Add(new Transaction(-amount, transDate));
             }
         }
 
@@ -49,9 +73,6 @@ namespace abc_bank
                         return amount * 0.001;
                     else
                         return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.02;
@@ -73,6 +94,28 @@ namespace abc_bank
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
+        }
+
+        /// <summary>
+        /// Check if recent withdrawls exist
+        /// </summary>
+        /// <param name="days">Number of days to look back</param>
+        /// <returns></returns>
+        public bool hasRecentWithdrawals(int days)
+        {
+            if (days <= 0)
+            {
+                throw new ArgumentException("days must be greater than zero");
+            }
+
+            DateTime midnight = DateTime.Now.Date;
+
+            var recentTransactions = from t in transactions
+                                       where t.transactionDate > midnight.AddDays(-days)    
+                                                && t.amount < 0
+                                       select t;
+
+            return recentTransactions.Count() > 0;
         }
 
         public int GetAccountType() 

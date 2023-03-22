@@ -50,13 +50,43 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+        }
+
+        [TestMethod]
+        public void TestRecentWithdrawals()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Customer henry = new Customer("Henry").OpenAccount(checkingAccount);
+            
+            bool hasRecent;
+            int daysToCheckfor = 10;
+            checkingAccount.Deposit(1000.0);
+
+            checkingAccount.Withdraw(200.0, DateTime.Now.AddDays(-15));          
+            hasRecent = checkingAccount.hasRecentWithdrawals(daysToCheckfor);
+            Assert.AreEqual(hasRecent, false);
+
+            //check edge cases
+            checkingAccount.Withdraw(200.0, DateTime.Now.AddDays(-11));
+            hasRecent = checkingAccount.hasRecentWithdrawals(daysToCheckfor);
+            Assert.AreEqual(hasRecent, false);
+
+            checkingAccount.Withdraw(200.0, DateTime.Now.AddDays(-10));
+            hasRecent = checkingAccount.hasRecentWithdrawals(daysToCheckfor);
+            Assert.AreEqual(hasRecent, true);
+
+            checkingAccount.Withdraw(200.0);
+            hasRecent = checkingAccount.hasRecentWithdrawals(daysToCheckfor);
+            Assert.AreEqual(hasRecent, true);
+
+
         }
     }
 }
