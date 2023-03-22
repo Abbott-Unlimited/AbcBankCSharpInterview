@@ -38,7 +38,7 @@ namespace abc_bank
             double total = 0;
             foreach(Customer c in customers)
                 total += c.TotalInterestEarned();
-            return total;
+            return Math.Round(total, 2);
         }
 
         public String GetFirstCustomer()
