@@ -22,6 +22,24 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
+        public void TotalInterestSummary()
+        {
+            Bank bank = new Bank();
+            var johnsAccount = new Account(Account.CHECKING);
+            Customer john = new Customer("John").OpenAccount(johnsAccount);
+            bank.AddCustomer(john);
+
+            var billsAccount = new Account(Account.SAVINGS);
+            Customer bill = new Customer("Bill").OpenAccount(billsAccount);
+            bank.AddCustomer(bill);
+
+           johnsAccount.Deposit(1000);
+           billsAccount.Deposit(800);
+ 
+            Assert.AreEqual("Total Interest Paid: $1.80", bank.TotalInterestReport());
+        }
+
+        [TestMethod]
         public void CheckingAccount() {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.CHECKING);

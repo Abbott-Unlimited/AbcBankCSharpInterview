@@ -33,7 +33,11 @@ namespace abc_bank
         {
             return number + " " + (number == 1 ? word : word + "s");
         }
-
+        public String TotalInterestReport()
+        {
+            var totalInterest = totalInterestPaid();
+            return "Total Interest Paid: " + totalInterest.ToString("C");
+        }
         public double totalInterestPaid() {
             double total = 0;
             foreach(Customer c in customers)
