@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -62,5 +63,7 @@ namespace abc_bank
 				.AppendLine("Total " + SumTransactions().ToDollars())
 				.ToString();
 		}
+		public void AccrueDailyInterest(int days = 1) => Deposit(InterestEarned() * days / Calendar.GetDaysInYear(DateTime.Now.Year)); // Known issue: the calculation can be inaccurate if the period of time for which the interest is accruing has some days inside and some days outside a leap year. I could fix this issue by requiring the specific date range to be specified instead of using a number of days, but I am assuming that case to be beyond the scope of this test.
+		public static readonly GregorianCalendar Calendar = new GregorianCalendar();
 	}
 }
