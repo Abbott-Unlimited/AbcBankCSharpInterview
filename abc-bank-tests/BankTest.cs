@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
+using System.Text;
 
 namespace abc_bank_tests
 {
@@ -15,8 +16,10 @@ namespace abc_bank_tests
 			john.OpenAccount(new Account(Account.AccountTypeEnum.CHECKING));
 			bank.AddCustomer(john);
 			Assert.AreEqual(
-				expected: @"Customer Summary
- - John (1 account)",
+				expected: new StringBuilder()
+					.AppendLine("Customer Summary")
+					.AppendLine(" - John (1 account)")
+					.ToString(),
 				actual: bank.CustomerSummary());
 		}
 		[TestMethod]
