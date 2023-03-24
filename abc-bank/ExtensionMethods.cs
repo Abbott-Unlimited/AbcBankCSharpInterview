@@ -22,6 +22,6 @@ namespace abc_bank
 				: expression(attribute);
 		}
 		public static string GetDescription(this Enum enumeration) => enumeration.GetAttributeValue<DescriptionAttribute, string>(x => x.Description);
-		public static string ToDollars(this decimal d) => string.Format("$%,.2f", Math.Abs(d));
+		public static string ToDollars(this decimal d) => string.Format("{0:C2}", Math.Abs(d));
 	}
 }

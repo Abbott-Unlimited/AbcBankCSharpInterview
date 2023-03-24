@@ -19,7 +19,8 @@ namespace abc_bank
 		public string GetStatement()
 		{
 			StringBuilder statement = new StringBuilder()
-				.AppendLine("Statement for " + Name);
+				.AppendLine("Statement for " + Name)
+				.AppendLine();
 			foreach (Account account in Accounts)
 				statement.AppendLine(account.GetStatement());
 			return statement
