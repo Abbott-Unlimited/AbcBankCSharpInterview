@@ -41,13 +41,16 @@ namespace abc_bank
 					return amount <= 1000m ? amount * 0.001m
 						: 1m + (amount - 1000m) * 0.002m;
 				case AccountTypeEnum.MAXI_SAVINGS:
-					return amount <= 1000m ? amount * 0.02m
-						: amount <= 2000m ? 20m + (amount - 1000m) * 0.05m
-						: 70m + (amount - 2000m) * 0.1m;
+					//Change **Maxi-Savings accounts** to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%.
+					return amount * (!IsWithdrawAfter(DateTime.Now - TimeSpan.FromDays(10)) ? 0.05m : 0.001m);
 				default:
 					return amount * 0.001m;
 			}
 		}
+		public bool IsWithdrawAfter(DateTime dateTime) => Transactions
+			.Where(t => t.Amount < 0
+				&& t.TransactionDate >= dateTime)
+			.Any();
 		public decimal SumTransactions() => Transactions.Sum(t => t.Amount);
 		public string GetStatement()
 		{

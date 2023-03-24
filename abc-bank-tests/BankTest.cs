@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
 using System.Text;
+using System;
 
 namespace abc_bank_tests
 {
@@ -38,9 +39,9 @@ namespace abc_bank_tests
 		public void Savings_account()
 		{
 			Bank bank = new Bank();
-			Account checkingAccount = new Account(Account.AccountTypeEnum.SAVINGS);
-			bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
-			checkingAccount.Deposit(1500m);
+			Account savingsAccount = new Account(Account.AccountTypeEnum.SAVINGS);
+			bank.AddCustomer(new Customer("Bill").OpenAccount(savingsAccount));
+			savingsAccount.Deposit(1500m);
 			Assert.AreEqual(
 				expected: 2m,
 				actual: bank.TotalInterestPaid());
@@ -49,11 +50,20 @@ namespace abc_bank_tests
 		public void Maxi_savings_account()
 		{
 			Bank bank = new Bank();
-			Account checkingAccount = new Account(Account.AccountTypeEnum.MAXI_SAVINGS);
-			bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
-			checkingAccount.Deposit(3000m);
+			Account maxiSavingsAccount = new Account(Account.AccountTypeEnum.MAXI_SAVINGS);
+			bank.AddCustomer(new Customer("Bill").OpenAccount(maxiSavingsAccount));
+			maxiSavingsAccount.Deposit(3000m);
+			Assert.IsFalse(maxiSavingsAccount.IsWithdrawAfter(DateTime.Now - TimeSpan.FromDays(10)));
 			Assert.AreEqual(
-				expected: 170m,
+				expected: 150m, // 5% of 3000
+				actual: bank.TotalInterestPaid());
+			maxiSavingsAccount.Withdraw(1000m);
+			Assert.IsTrue(maxiSavingsAccount.IsWithdrawAfter(DateTime.Now - TimeSpan.FromDays(10)));
+			Assert.AreEqual(
+				expected: 2000m,
+				actual: maxiSavingsAccount.SumTransactions());
+			Assert.AreEqual(
+				expected: 2m, // 0.01% of 2000
 				actual: bank.TotalInterestPaid());
 		}
 	}
