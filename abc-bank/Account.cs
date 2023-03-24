@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 
 namespace abc_bank
 {
@@ -48,5 +49,15 @@ namespace abc_bank
 			}
 		}
 		public decimal SumTransactions() => Transactions.Sum(t => t.Amount);
+		public string GetStatement()
+		{
+			StringBuilder statement = new StringBuilder()
+				.AppendLine(AccountType.GetDescription());
+			foreach (Transaction transaction in Transactions)
+				statement.AppendLine("\t" + (transaction.Amount < 0 ? "withdrawal" : "deposit") + " " + transaction.Amount.ToDollars());
+			return statement
+				.AppendLine("Total " + SumTransactions().ToDollars())
+				.ToString();
+		}
 	}
 }

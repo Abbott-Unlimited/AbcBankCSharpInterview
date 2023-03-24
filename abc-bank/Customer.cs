@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -21,22 +20,11 @@ namespace abc_bank
 		{
 			StringBuilder statement = new StringBuilder()
 				.AppendLine("Statement for " + Name);
-			foreach (Account a in Accounts)
-				statement.AppendLine(StatementForAccount(a));
+			foreach (Account account in Accounts)
+				statement.AppendLine(account.GetStatement());
 			return statement
-				.AppendLine("Total In All Accounts " + ToDollars(Accounts.Sum(a => a.SumTransactions())))
+				.AppendLine("Total In All Accounts " + Accounts.Sum(a => a.SumTransactions()).ToDollars())
 				.ToString();
 		}
-		private static string StatementForAccount(Account account)
-		{
-			StringBuilder sb = new StringBuilder()
-				.AppendLine(account.AccountType.GetDescription());
-			foreach (Transaction t in account.Transactions)
-				sb.AppendLine("\t" + (t.Amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.Amount));
-			return sb
-				.AppendLine("Total " + ToDollars(account.SumTransactions()))
-				.ToString();
-		}
-		public static string ToDollars(decimal d) => string.Format("$%,.2f", Math.Abs(d));
 	}
 }
