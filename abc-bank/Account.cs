@@ -1,79 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace abc_bank
 {
 	public class Account
 	{
-		public const int CHECKING = 0,
+		public enum AccountTypeEnum
+		{
+			[Description("Checking Account")]
+			CHECKING = 0,
+			[Description("Savings Account")]
 			SAVINGS = 1,
-			MAXI_SAVINGS = 2;
-		private readonly int accountType;
-		public List<Transaction> transactions;
-		public Account(int accountType)
-		{
-			this.accountType = accountType;
-			transactions = new List<Transaction>();
-		}
-		public void Deposit(double amount)
+			[Description("Maxi Savings Account")]
+			MAXI_SAVINGS = 2,
+		};
+		public readonly AccountTypeEnum AccountType;
+		public readonly List<Transaction> Transactions = new List<Transaction>();
+		public Account(AccountTypeEnum accountType) => AccountType = accountType;
+		public void Deposit(decimal amount)
 		{
 			if (amount <= 0)
-			{
-				throw new ArgumentException("amount must be greater than zero");
-			}
-			else
-			{
-				transactions.Add(new Transaction(amount));
-			}
+				throw new ArgumentException("amount must be greater than zero. Was: " + amount);
+			Transactions.Add(new Transaction(amount));
 		}
-		public void Withdraw(double amount)
+		public void Withdraw(decimal amount)
 		{
 			if (amount <= 0)
-			{
-				throw new ArgumentException("amount must be greater than zero");
-			}
-			else
-			{
-				transactions.Add(new Transaction(-amount));
-			}
+				throw new ArgumentException("amount must be greater than zero. Was: " + amount);
+			Transactions.Add(new Transaction(-amount));
 		}
-		public double InterestEarned()
+		public decimal InterestEarned()
 		{
-			double amount = sumTransactions();
-			switch (accountType)
+			decimal amount = SumTransactions();
+			switch (AccountType)
 			{
-				case SAVINGS:
-					if (amount <= 1000)
-						return amount * 0.001;
-					else
-						return 1 + (amount - 1000) * 0.002;
-				//            case SUPER_SAVINGS:
-				//                if (amount <= 4000)
-				//                    return 20;
-				case MAXI_SAVINGS:
-					if (amount <= 1000)
-						return amount * 0.02;
-					if (amount <= 2000)
-						return 20 + (amount - 1000) * 0.05;
-					return 70 + (amount - 2000) * 0.1;
+				case AccountTypeEnum.SAVINGS:
+					return amount <= 1000m ? amount * 0.001m
+						: 1m + (amount - 1000m) * 0.002m;
+				case AccountTypeEnum.MAXI_SAVINGS:
+					return amount <= 1000m ? amount * 0.02m
+						: amount <= 2000m ? 20m + (amount - 1000m) * 0.05m
+						: 70m + (amount - 2000m) * 0.1m;
 				default:
-					return amount * 0.001;
+					return amount * 0.001m;
 			}
 		}
-		public double sumTransactions()
-		{
-			return CheckIfTransactionsExist(true);
-		}
-		private double CheckIfTransactionsExist(bool checkAll)
-		{
-			double amount = 0.0;
-			foreach (Transaction t in transactions)
-				amount += t.amount;
-			return amount;
-		}
-		public int GetAccountType()
-		{
-			return accountType;
-		}
+		public decimal SumTransactions() => Transactions.Sum(t => t.Amount);
 	}
 }
