@@ -57,5 +57,25 @@ namespace abc_bank_tests
 					.OpenAccount(new Account(Account.AccountTypeEnum.CHECKING))
 					.OpenAccount(new Account(Account.AccountTypeEnum.MAXI_SAVINGS))
 					.GetNumberOfAccounts());
+		[TestMethod]
+		public void Transfer()
+		{
+			Account checkingAccount = new Account(Account.AccountTypeEnum.CHECKING),
+				savingsAccount = new Account(Account.AccountTypeEnum.SAVINGS);
+			Customer oscar = new Customer("Oscar")
+				.OpenAccount(checkingAccount)
+				.OpenAccount(savingsAccount);
+			checkingAccount.Deposit(3000m);
+			savingsAccount.Deposit(10000m);
+			Assert.IsFalse(oscar.TryTransfer(1m, checkingAccount, new Account(Account.AccountTypeEnum.MAXI_SAVINGS))); // Prevent transfers to other customers accounts.
+			Assert.IsFalse(oscar.TryTransfer(4000m, checkingAccount, savingsAccount)); // Prevent overdraft transfer
+			Assert.IsTrue(oscar.TryTransfer(2000m, checkingAccount, savingsAccount));
+			Assert.AreEqual(
+				expected: 1000m,
+				actual: checkingAccount.SumTransactions());
+			Assert.AreEqual(
+				expected: 12000m,
+				actual: savingsAccount.SumTransactions());
+		}
 	}
 }
