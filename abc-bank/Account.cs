@@ -51,11 +51,9 @@ namespace abc_bank
                         return amount * 0.001m;
                     return 1 + (amount - 1000m) * 0.002m;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02m;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05m;
-                    return 70 + (amount-2000) * 0.1m;
+                    if (!withdrawlWithin10Days())
+                        return amount * 0.05m;
+                    return amount * 0.001m;
                 default:
                     return amount * 0.001m;
             }
@@ -74,5 +72,11 @@ namespace abc_bank
             return accountType;
         }
 
+        private bool withdrawlWithin10Days()
+        {
+            return transactions.Exists(transaction =>
+                transaction.amount < 0.0m &&
+                transaction.transactionDate > DateTime.Now - TimeSpan.FromDays(10));
+        }
     }
 }
