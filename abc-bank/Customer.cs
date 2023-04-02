@@ -86,5 +86,20 @@ namespace abc_bank
         {
             return String.Format("{0:C}", Math.Abs(d));
         }
+
+        public Customer Transfer(Account to, Account from, decimal amount)
+        {
+            if (amount <= 0m)
+                throw new ArgumentException("Amount must be greater than zero.");
+            if (!this.accounts.Contains(to))
+                throw new ArgumentException("Account being deposited into does not belong to customer");
+            if (!this.accounts.Contains(from))
+                throw new ArgumentException("Account being withdrawn from does not belong to customer");
+            if (from.sumTransactions() < amount)
+                throw new InvalidOperationException("Insufficient funds");
+            from.Withdraw(amount);
+            to.Deposit(amount);
+            return this;
+        }
     }
 }
