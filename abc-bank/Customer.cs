@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +29,21 @@ namespace abc_bank
             return this;
         }
 
+        public String TransferFunds(Account from, Account to, double amount)
+        {
+            try
+            {
+                from.Withdraw(amount);
+                to.Deposit(amount);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+
+            return "Success";
+        }
+
         public int GetNumberOfAccounts()
         {
             return accounts.Count;
@@ -49,7 +65,7 @@ namespace abc_bank
             foreach (Account a in accounts) 
             {
                 statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                total += a.SumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
@@ -59,32 +75,50 @@ namespace abc_bank
         {
             String s = "";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
+            try
+            {
+                //Translate to pretty account type
+                switch (a.GetAccountType())
+                {
+                    case Account.AccountType.CHECKING:
+                        s += "Checking Account\n";
+                        break;
+                    case Account.AccountType.SAVINGS:
+                        s += "Savings Account\n";
+                        break;
+                    case Account.AccountType.MAXI_SAVINGS:
+                        s += "Maxi Savings Account\n";
+                        break;
+                }
 
-            //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
+                //Now total up all the transactions
+                double total = 0.0;
+                foreach (Transaction t in a.transactions)
+                {
+                    s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
+                    total += t.amount;
+                }
+                s += "Total " + ToDollars(total);
+                return s;
             }
-            s += "Total " + ToDollars(total);
-            return s;
+            catch(Exception ex)
+            {
+                return $"Error while retrieving statement. {ex.Message}";
+            }
+           
         }
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C2}", Math.Abs(d));
+        }
+
+        internal void CalculateAndDepositInterest()
+        {
+            foreach(var account in accounts)
+            {
+                account.DailyInterestDeposit();
+            }
         }
     }
 }
