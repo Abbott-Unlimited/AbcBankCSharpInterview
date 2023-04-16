@@ -35,10 +35,10 @@ namespace abc_bank_tests
         [TestMethod]
         public void SavingsAccount() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.AccountType.SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Account savingsAccount = new Account(Account.AccountType.SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(savingsAccount));
 
-            checkingAccount.Deposit(1500.0);
+            savingsAccount.Deposit(1500.0);
 
             Assert.AreEqual(2.00, bank.TotalInterestPaid(), DOUBLE_DELTA);
         }
@@ -46,10 +46,10 @@ namespace abc_bank_tests
         [TestMethod]
         public void MaxiSavingsAccount_HighInterest() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Account maxiSavingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiSavingsAccount));
 
-            checkingAccount.Deposit(3000.00);
+            maxiSavingsAccount.Deposit(3000.00);
 
             Assert.AreEqual(150.00, bank.TotalInterestPaid(), DOUBLE_DELTA);
         }
@@ -58,13 +58,28 @@ namespace abc_bank_tests
         public void MaxiSavingsAccount_LowInterest()
         {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+            Account maxiSavingsAccount = new Account(Account.AccountType.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiSavingsAccount));
+
+            maxiSavingsAccount.Deposit(3000.00);
+            maxiSavingsAccount.Withdraw(200.00);
+
+            Assert.AreEqual(28.00, bank.TotalInterestPaid(), DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void DailyInterestCalculationAndDeposit()
+        {
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(Account.AccountType.CHECKING);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(3000.00);
-            checkingAccount.Withdraw(200.00);
+            bank.DailyInterestCalculation();
 
-            Assert.AreEqual(28.00, bank.TotalInterestPaid(), DOUBLE_DELTA);
+            var expectedTotal = 3000 + ((.001 * 3000)/365);
+
+            Assert.AreEqual(expectedTotal, checkingAccount.SumTransactions(), DOUBLE_DELTA);
         }
     }
 }
