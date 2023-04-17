@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +9,16 @@ namespace abc_bank
 {
     public class Account
     {
+        public enum AccountType{
+            CHECKING,
+            SAVINGS,
+            MAXI_SAVINGS
+        }
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
-
-        private readonly int accountType;
+        private readonly AccountType accountType;
         public List<Transaction> transactions;
 
-        public Account(int accountType) 
+        public Account(AccountType accountType) 
         {
             this.accountType = accountType;
             this.transactions = new List<Transaction>();
@@ -42,32 +44,31 @@ namespace abc_bank
 
         public double InterestEarned() 
         {
-            double amount = sumTransactions();
+            var amount = SumTransactions();
             switch(accountType){
-                case SAVINGS:
+                case AccountType.CHECKING:
+                    return amount * 0.001;
+                case AccountType.SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.001;
+                    return 1 + ((amount-1000) * 0.002);
+                case AccountType.MAXI_SAVINGS:
+                    if (TransactionsExist(DateTime.Now - TimeSpan.FromDays(10)))
+                        return amount * 0.01;
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                        return amount * 0.05;
                 default:
-                    return amount * 0.001;
+                    throw new Exception("INVALID/MISSING ACCOUNT TYPE");
             }
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
+        public void DailyInterestDeposit()
+        {
+            var days = DateTime.IsLeapYear(DateTime.Now.Year) ? 364 : 365;
+            Deposit(InterestEarned()/days);
         }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        public double SumTransactions() 
         {
             double amount = 0.0;
             foreach (Transaction t in transactions)
@@ -75,7 +76,15 @@ namespace abc_bank
             return amount;
         }
 
-        public int GetAccountType() 
+        private bool TransactionsExist(DateTime fromDate) 
+        {
+            var withdrawals = transactions.Where(x => x.amount < 0 
+                && x.transactionDate > fromDate).ToList();
+
+            return withdrawals.Count() > 0;
+        }
+
+        public AccountType GetAccountType() 
         {
             return accountType;
         }
