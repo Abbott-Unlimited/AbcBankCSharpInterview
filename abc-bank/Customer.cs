@@ -84,7 +84,34 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("${0:0,0.00}", Math.Abs(d));
+        }
+
+        public bool TransferBetweenAccounts(int srcAccount, int destAccount, double amount)
+        {
+            int srcAccountIdx = accounts.FindIndex(x => x.GetAccountType() == srcAccount);
+
+            if  (srcAccountIdx == -1)
+            {
+                return false;
+            }
+
+            int destAccountIdx = accounts.FindIndex(x => x.GetAccountType() == destAccount);
+
+            if (destAccountIdx == -1)
+            {
+                return false;
+            }
+
+            if (amount < 0)
+            {
+                return false;
+            }
+
+            accounts[srcAccountIdx].Withdraw(amount);
+            accounts[destAccountIdx].Deposit(amount);
+
+            return true;
         }
     }
 }
