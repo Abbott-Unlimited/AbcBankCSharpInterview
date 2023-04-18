@@ -46,11 +46,11 @@ namespace abc_bank
                         return amount * 0.001;
                     return 1 + (amount - 1000) * 0.002;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount - 1000) * 0.05;
-                    return 70 + (amount - 2000) * 0.10;
+                    var lastWithdrawDate = LastWithdraw()?.TransactionDate ?? DateTime.MinValue;
+
+                    if (lastWithdrawDate < DateProvider.getInstance().Now().AddDays(-10))
+                        return amount * 0.05;
+                    return amount * 0.001;
                 default:
                     return amount * 0.001;
             }
@@ -58,12 +58,17 @@ namespace abc_bank
 
         public double SumTransactions()
         {
-            return Transactions.Sum(x => x.amount);
+            return Transactions.Sum(x => x.Amount);
         }
 
         public int GetAccountType()
         {
             return accountType;
+        }
+
+        private Transaction LastWithdraw()
+        {
+            return Transactions.LastOrDefault(x => x.Amount < default(double));
         }
     }
 }

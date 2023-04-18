@@ -157,7 +157,7 @@ namespace abc_bank_tests
 
             account.Deposit(500.0);
 
-            Double expected = 10.0;
+            Double expected = 25.0;
 
             // Act
             Double actual = bank.TotalInterestPaid();
@@ -180,7 +180,7 @@ namespace abc_bank_tests
 
             account.Deposit(1500.0);
 
-            Double expected = 45.0;
+            Double expected = 75.0;
 
             // Act
             Double actual = bank.TotalInterestPaid();
@@ -203,7 +203,31 @@ namespace abc_bank_tests
 
             account.Deposit(3000.0);
 
-            Double expected = 170.0;
+            Double expected = 150.0;
+
+            // Act
+            Double actual = bank.TotalInterestPaid();
+
+            // Assert
+            Assert.AreEqual(expected, actual, DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void Maxi_Savings_Account_RecentWithdraw()
+        {
+            // Arrange
+            Account account = new Account(Account.MAXI_SAVINGS);
+
+            Customer customer = new Customer("Bill")
+                .OpenAccount(account);
+
+            Bank bank = new Bank()
+                .AddCustomer(customer);
+
+            account.Deposit(3000.0);
+            account.Withdraw(1000.0);
+
+            Double expected = 2.0;
 
             // Act
             Double actual = bank.TotalInterestPaid();

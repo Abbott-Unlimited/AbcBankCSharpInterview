@@ -36,14 +36,14 @@ namespace abc_bank
                 throw new ArgumentException("Transfer Failed: Withdraw Account doesn't exist.");
             }
 
-            if (withdrawAccount.SumTransactions() < amount)
-            {
-                throw new ArgumentException("Transfer Failed: Insufficient Funds.");
-            }
-
             if (!accounts.Contains(depositAccount))
             {
                 throw new ArgumentException("Transfer Failed: Deposit Account doesn't exist.");
+            }
+
+            if (withdrawAccount.SumTransactions() < amount)
+            {
+                throw new ArgumentException("Transfer Failed: Insufficient Funds.");
             }
 
             withdrawAccount.Withdraw(amount);
@@ -95,9 +95,9 @@ namespace abc_bank
 
             foreach (Transaction transaction in account.Transactions)
             {
-                String transactionType = transaction.amount < default(double) ? "withdrawal" : "deposit";
+                String transactionType = transaction.Amount < default(double) ? "withdrawal" : "deposit";
 
-                statement.Append($"  {transactionType} {ToDollars(transaction.amount)}\n");
+                statement.Append($"  {transactionType} {ToDollars(transaction.Amount)}\n");
             }
 
             double total = account.SumTransactions();
