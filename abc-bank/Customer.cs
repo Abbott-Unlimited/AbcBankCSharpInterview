@@ -29,6 +29,27 @@ namespace abc_bank
             return this;
         }
 
+        public void Transfer(Account withdrawAccount, Account depositAccount, double amount)
+        {
+            if (!accounts.Contains(withdrawAccount))
+            {
+                throw new ArgumentException("Transfer Failed: Withdraw Account doesn't exist.");
+            }
+
+            if (withdrawAccount.SumTransactions() < amount)
+            {
+                throw new ArgumentException("Transfer Failed: Insufficient Funds.");
+            }
+
+            if (!accounts.Contains(depositAccount))
+            {
+                throw new ArgumentException("Transfer Failed: Deposit Account doesn't exist.");
+            }
+
+            withdrawAccount.Withdraw(amount);
+            depositAccount.Deposit(amount);
+        }
+
         public int GetNumberOfAccounts()
         {
             return accounts.Count;
@@ -79,7 +100,7 @@ namespace abc_bank
                 statement.Append($"  {transactionType} {ToDollars(transaction.amount)}\n");
             }
 
-            double total = account.Transactions.Sum(x => x.amount);
+            double total = account.SumTransactions();
 
             statement.Append($"Total {ToDollars(total)}");
 

@@ -142,5 +142,89 @@ namespace abc_bank_tests
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void Transfer()
+        {
+            // Arrange
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry")
+                .OpenAccount(checkingAccount)
+                .OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(4000.0);
+            savingsAccount.Withdraw(200.0);
+
+            const double expectedCheckingAccountBalance = 1100.0;
+            const double expectedSavingsAccountBalance = 2800.00;
+
+            // Act
+            henry.Transfer(savingsAccount, checkingAccount, 1000.0);
+
+            // Assert
+            Assert.AreEqual(expectedCheckingAccountBalance, checkingAccount.SumTransactions());
+            Assert.AreEqual(expectedSavingsAccountBalance, savingsAccount.SumTransactions());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Transfer_Error_WithdrawAccount()
+        {
+            // Arrange
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry")
+                .OpenAccount(checkingAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(4000.0);
+            savingsAccount.Withdraw(200.0);
+
+            // Act
+            henry.Transfer(savingsAccount, checkingAccount, 5000.0);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Transfer_Error_DepositAccount()
+        {
+            // Arrange
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry")
+                .OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(4000.0);
+            savingsAccount.Withdraw(200.0);
+
+            // Act
+            henry.Transfer(savingsAccount, checkingAccount, 1000.0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Transfer_Error_InsufficientFunds()
+        {
+            // Arrange
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer henry = new Customer("Henry")
+                .OpenAccount(checkingAccount)
+                .OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(4000.0);
+            savingsAccount.Withdraw(200.0);
+
+            // Act
+            henry.Transfer(savingsAccount, checkingAccount, 5000.0);
+        }
     }
 }

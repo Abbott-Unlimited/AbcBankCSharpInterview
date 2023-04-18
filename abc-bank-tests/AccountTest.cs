@@ -10,7 +10,7 @@ namespace abc_bank_tests
     public class AccountTest
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "amount must be greater than zero")]
+        [ExpectedException(typeof(ArgumentException))]
         public void Deposit()
         {
             // Arrange
@@ -21,7 +21,7 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "amount must be greater than zero")]
+        [ExpectedException(typeof(ArgumentException))]
         public void Withdraw()
         {
             // Arrange

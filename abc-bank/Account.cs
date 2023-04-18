@@ -11,11 +11,13 @@ namespace abc_bank
         public const int MAXI_SAVINGS = 2;
 
         private readonly int accountType;
-        public List<Transaction> Transactions;
+
+        public List<Transaction> Transactions { get; set; }
 
         public Account(int accountType)
         {
             this.accountType = accountType;
+
             this.Transactions = new List<Transaction>();
         }
 
