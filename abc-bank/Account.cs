@@ -31,6 +31,18 @@ namespace abc_bank
             }
         }
 
+        public void Deposit(double amount, DateTime dateTime)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+            else
+            {
+                transactions.Add(new Transaction(amount, dateTime));
+            }
+        }
+
         public void Withdraw(double amount) 
         {
             if (amount <= 0) {
@@ -40,27 +52,21 @@ namespace abc_bank
             }
         }
 
+        public void Withdraw(double amount, DateTime dateTime)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+            else
+            {
+                transactions.Add(new Transaction(-amount, dateTime));
+            }
+        }
+
         public double InterestEarned() 
         {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.001;
-                    else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
-                default:
-                    return amount * 0.001;
-            }
+            return SumInterestEarnedDaily();
         }
 
         public double sumTransactions() {
@@ -78,6 +84,74 @@ namespace abc_bank
         public int GetAccountType() 
         {
             return accountType;
+        }
+
+        private double SumInterestEarnedDaily()
+        {
+            double balance = 0;
+            double interestEarned = 0;
+
+            if (transactions.Count == 0)
+            {
+                return 0;
+            }
+
+            List<Transaction> sequentialTransactions = transactions.OrderBy(t => t.GetDate()).ToList();
+
+            DateTime eachDay = sequentialTransactions[0].GetDate().Date;
+
+            while (eachDay <= sequentialTransactions[sequentialTransactions.Count - 1].GetDate().Date)
+            {
+                List<Transaction> sameDayTransactions = sequentialTransactions.Where(x => x.GetDate().Date == eachDay).ToList();
+
+                foreach (Transaction transaction in sameDayTransactions)
+                {
+                    balance += transaction.amount;
+                }
+
+                double dailyInterestEarned = 0;
+
+                if (balance <= 0)
+                {
+                    continue;
+                }
+
+                switch (accountType)
+                {
+                    case SAVINGS:
+                        if (balance <= 1000)
+                        {
+                            dailyInterestEarned = balance * 0.001;
+                        }
+                        else
+                        {
+                            dailyInterestEarned = balance * 0.002;
+                        }
+                        break;
+                    case MAXI_SAVINGS:
+                        bool withdrawalInPast10Days = sequentialTransactions.Any(t => t.amount < 0 && (t.GetDate().Ticks < eachDay.AddDays(1).Date.Ticks && t.GetDate().Date >= eachDay.AddDays(-10).Date));
+
+                        if (withdrawalInPast10Days)
+                        {
+                            dailyInterestEarned = balance * 0.001;
+                        } else
+                        {
+                            dailyInterestEarned = balance * 0.05;
+                        }
+                        break;
+                    default:
+                        dailyInterestEarned = balance * 0.001;
+                        break;
+                }
+
+                interestEarned += dailyInterestEarned;
+                balance += dailyInterestEarned;
+
+
+                eachDay = eachDay.AddDays(1).Date;
+            }
+
+            return interestEarned;
         }
 
     }
