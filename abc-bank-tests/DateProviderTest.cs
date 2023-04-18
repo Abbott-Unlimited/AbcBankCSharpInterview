@@ -6,18 +6,18 @@ namespace abc_bank_tests
 {
     [ExcludeFromCodeCoverage]
     [TestClass]
-    public class TransactionTest
+    public class DateProviderTest
     {
         [TestMethod]
-        public void Transaction()
+        public void DateProvider()
         {
             // Arrange
-            Transaction t = new Transaction(5);
+            var dateProvider = abc_bank.DateProvider.getInstance();
 
             // Act
-            
+
             // Assert
-            Assert.IsTrue(t.GetType() == typeof(Transaction));
+            Assert.IsTrue(dateProvider.GetType() == typeof(DateProvider));
         }
     }
 }
