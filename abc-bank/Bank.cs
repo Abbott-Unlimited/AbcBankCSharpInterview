@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
@@ -15,42 +14,51 @@ namespace abc_bank
             customers = new List<Customer>();
         }
 
-        public void AddCustomer(Customer customer)
+        public Bank AddCustomer(Customer customer)
         {
             customers.Add(customer);
+
+            return this;
         }
 
-        public String CustomerSummary() {
-            String summary = "Customer Summary";
-            foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
-            return summary;
+        public String CustomerSummary()
+        {
+            StringBuilder summary = new StringBuilder("Customer Summary");
+
+            foreach (Customer customer in customers)
+            {
+                String numberOfAccounts = format(customer.GetNumberOfAccounts(), "account");
+
+                summary.Append($"\n - {customer.GetName()} ({numberOfAccounts})");
+            }
+
+            return summary.ToString();
         }
 
         //Make sure correct plural of word is created based on the number passed in:
         //If number passed in is 1 just return the word otherwise add an 's' at the end
         private String format(int number, String word)
         {
-            return number + " " + (number == 1 ? word : word + "s");
+            word = number == 1 ? word : $"{word}s";
+
+            return $"{number} {word}";
         }
 
-        public double totalInterestPaid() {
-            double total = 0;
-            foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
-            return total;
+        public double TotalInterestPaid()
+        {
+            return customers.Sum(x => x.TotalInterestEarned());
         }
 
         public String GetFirstCustomer()
         {
             try
             {
-                customers = null;
                 return customers[0].GetName();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.Write(e.StackTrace);
+                Console.Write(ex.StackTrace);
+
                 return "Error";
             }
         }
