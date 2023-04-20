@@ -4,6 +4,7 @@ using abc_bank;
 
 namespace abc_bank_tests
 {
+    // There needs to be more test methods so that all code paths are validated
     [TestClass]
     public class CustomerTest
     {
@@ -56,6 +57,7 @@ namespace abc_bank_tests
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
