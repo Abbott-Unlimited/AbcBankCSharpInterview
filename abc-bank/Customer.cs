@@ -41,6 +41,21 @@ namespace abc_bank
             return total;
         }
 
+        public void Transfer(Account accountFrom, Account accountTo, double amount)
+        {
+            if (amount < 0)
+                throw new ArgumentException("cannot transfer negative amounts");
+
+            if (!accounts.Contains(accountFrom))
+                throw new ArgumentException("'From' Account not found");
+
+            if (!accounts.Contains(accountTo))
+                throw new ArgumentException("'To' Account not found");
+
+            accountFrom.Withdraw(amount);
+            accountTo.Deposit(amount);
+        }
+
         public String GetStatement() 
         {
             String statement = null;
@@ -62,13 +77,13 @@ namespace abc_bank
            //Translate to pretty account type
             switch(a.GetAccountType()){
                 case Account.CHECKING:
-                    s += "Checking Account\n";
+                    s += $"Checking Account\n";
                     break;
                 case Account.SAVINGS:
-                    s += "Savings Account\n";
+                    s += $"Savings Account\n";
                     break;
                 case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
+                    s += $"Maxi Savings Account\n";
                     break;
             }
 
@@ -84,7 +99,8 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C2}", Math.Abs(d));
+            //return String.Format("$%,.2f", Math.Abs(d));      // Never seen this formating string before for currency
         }
     }
 }

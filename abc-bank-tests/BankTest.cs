@@ -4,6 +4,7 @@ using abc_bank;
 
 namespace abc_bank_tests
 {
+    // There needs to be more test methods so that all code paths are validated
     [TestClass]
     public class BankTest
     {
@@ -30,7 +31,8 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(100.0);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            // Assertion is invalid if interest begins tomorrow on today's EOD balance
+            Assert.AreEqual((0.1/365), bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
@@ -41,7 +43,7 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(1500.0);
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual((2.0/365), bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
         [TestMethod]
@@ -52,7 +54,7 @@ namespace abc_bank_tests
 
             checkingAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual((150.0/365), bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }
