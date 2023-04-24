@@ -39,6 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TransactionResult.cs" />
+    <Compile Include="MaxiSavingsAccount.cs" />
+    <Compile Include="SavingsAccount.cs" />
+    <Compile Include="CheckingAccount.cs" />
     <Compile Include="Account.cs" />
     <Compile Include="Bank.cs" />
     <Compile Include="Customer.cs" />

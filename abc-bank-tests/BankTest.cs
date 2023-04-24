@@ -7,52 +7,111 @@ namespace abc_bank_tests
     [TestClass]
     public class BankTest
     {
-
-        private static readonly double DOUBLE_DELTA = 1e-15;
-
         [TestMethod]
-        public void CustomerSummary() 
+        public void Get_Customer_Summary_Report_For_One_Customer() 
         {
+            // Arraange
             Bank bank = new Bank();
             Customer john = new Customer("John");
-            john.OpenAccount(new Account(Account.CHECKING));
+            john.OpenAccount(new CheckingAccount());
+            bank.AddCustomer(john);
+            
+            string expected = "Customer Summary\n - John (1 account)";
+
+            // Act
+            string actual = bank.PrintCustomerSummary();
+            
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Get_Customer_Summary_Report_For_Three_Customers()
+        {
+            // Arraange
+            Bank bank = new Bank();
+        
+            Customer john = new Customer("John");
+            john.OpenAccount(new CheckingAccount());
             bank.AddCustomer(john);
 
-            Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary());
-        }
-
-        [TestMethod]
-        public void CheckingAccount() {
-            Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.CHECKING);
-            Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
+            Customer bill = new Customer("Bill");
+            bill.OpenAccount(new CheckingAccount());
+            bill.OpenAccount(new SavingsAccount());
             bank.AddCustomer(bill);
 
-            checkingAccount.Deposit(100.0);
+            Customer oscar = new Customer("Oscar");
+            oscar.OpenAccount(new CheckingAccount());
+            oscar.OpenAccount(new MaxiSavingsAccount());
+            oscar.OpenAccount(new SavingsAccount());
+            bank.AddCustomer(oscar);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            string expected = "Customer Summary" +
+                "\n - John (1 account)" +
+                "\n - Bill (2 accounts)" +
+                "\n - Oscar (3 accounts)";
+
+            // Act
+            string actual = bank.PrintCustomerSummary();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void Savings_account() {
+        public void Get_Total_Interest_Paid_For_Checking_Account()
+        {
+            // Arrange
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            var checkingAccount = new CheckingAccount();
+            Customer bill = new Customer("Bill");
+            bill.OpenAccount(checkingAccount);
+            bank.AddCustomer(bill);
+            checkingAccount.RequestDeposit(100.0m);
+            
+            decimal expected = 0.1m;
 
-            checkingAccount.Deposit(1500.0);
+            // Act
+            decimal actual = bank.GetTotalInterestPaid();
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void Maxi_savings_account() {
+        public void Get_Total_Interest_Paid_For_Savings_Account()
+        {
+            // Arrange
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            var savingsAccount = new SavingsAccount();
+            bank.AddCustomer(new Customer("Bill").OpenAccount(savingsAccount));
+            savingsAccount.RequestDeposit(1500.0m);
+            
+            decimal expected = 2.0m;
 
-            checkingAccount.Deposit(3000.0);
+            // Act
+            decimal actual = bank.GetTotalInterestPaid();
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Get_Total_Interest_Paid_For_Maxi_Savings_Account() 
+        {
+            // Arange
+            Bank bank = new Bank();
+            var maxiCheckingAccount = new MaxiSavingsAccount();
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiCheckingAccount));
+            maxiCheckingAccount.RequestDeposit(3000.0m);
+            
+            decimal expected = 17.0000m;
+
+            // Act
+            decimal actual = bank.GetTotalInterestPaid();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
     }
 }

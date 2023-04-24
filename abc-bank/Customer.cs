@@ -1,90 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    // A customer can open an account.
+    // A customer can deposit / withdraw funds from an account.
+    // A customer can request a statement that shows transactions and totals for each of their accounts.
+
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
+        private readonly string _name;
+        public string Name { get { return _name; } }
 
-        public Customer(String name)
-        {
-            this.name = name;
-            this.accounts = new List<Account>();
-        }
+        private readonly List<Account> _accounts = new List<Account>();
 
-        public String GetName()
+        public Customer(string name)
         {
-            return name;
+            _name = name;
         }
 
         public Customer OpenAccount(Account account)
         {
-            accounts.Add(account);
+            _accounts.Add(account);
+            
             return this;
         }
 
         public int GetNumberOfAccounts()
         {
-            return accounts.Count;
+            return _accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public decimal GetTotalInterestEarned() 
         {
-            double total = 0;
-            foreach (Account a in accounts)
-                total += a.InterestEarned();
+            decimal total = 0.0m;
+            
+            foreach (Account account in _accounts)
+            {
+                total += account.GetInterestEarned();
+            }
             return total;
         }
 
-        public String GetStatement() 
+        public string GetStatementForAllAcounts() 
         {
-            String statement = null;
-            statement = "Statement for " + name + "\n";
-            double total = 0.0;
-            foreach (Account a in accounts) 
+            string statement = $"Statement for {_name}\n";
+            decimal totalInAllAccounts = 0;
+            
+            foreach (Account account in _accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statement += $"\n{GetStatementForOneAccount(account)}\n";
+                totalInAllAccounts += account.SumTransactions();
             }
-            statement += "\nTotal In All Accounts " + ToDollars(total);
+            statement += $"\nTotal In All Accounts {ToDollars(totalInAllAccounts)}";
+            
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        public string GetStatementForOneAccount(Account account) 
         {
-            String s = "";
+            string statement = "";
 
-           //Translate to pretty account type
-            switch(a.GetAccountType()){
-                case Account.CHECKING:
-                    s += "Checking Account\n";
-                    break;
-                case Account.SAVINGS:
-                    s += "Savings Account\n";
-                    break;
-                case Account.MAXI_SAVINGS:
-                    s += "Maxi Savings Account\n";
-                    break;
-            }
+            //Translate to pretty account type
+            statement += $"{account.AccountName}\n";
 
             //Now total up all the transactions
-            double total = 0.0;
-            foreach (Transaction t in a.transactions) {
-                s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
+            decimal total = 0;
+            foreach (Transaction transaction in account.GetTransactions())
+            {
+                statement += $"  {transaction.TransactionType} {ToDollars(transaction.Amount)}\n";
+                total += transaction.Amount;
             }
-            s += "Total " + ToDollars(total);
-            return s;
+            statement += $"Total {ToDollars(total)}";
+
+            return statement;
         }
 
-        private String ToDollars(double d)
+        private string ToDollars(decimal amount)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return string.Format("{0:C}", Math.Abs(amount));
         }
     }
 }
