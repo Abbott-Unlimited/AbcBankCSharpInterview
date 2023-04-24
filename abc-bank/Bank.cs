@@ -6,53 +6,51 @@ using System.Threading.Tasks;
 
 namespace abc_bank
 {
+    // A bank manager can get a report showing the list of customers and how many accounts they have.
+    // A bank manager can get a report showing the total interest paid by the bank on all accounts.
+
     public class Bank
     {
-        private List<Customer> customers;
+        private readonly List<Customer> _customers = new List<Customer>();
 
-        public Bank()
-        {
-            customers = new List<Customer>();
-        }
+        public Bank() { }
 
         public void AddCustomer(Customer customer)
         {
-            customers.Add(customer);
+            _customers.Add(customer);
         }
 
-        public String CustomerSummary() {
-            String summary = "Customer Summary";
-            foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+        public string PrintCustomerSummary() 
+        {
+            string summary = "Customer Summary";
+
+            foreach (Customer customer in _customers)
+            {
+                var numberOfAccounts = customer.GetNumberOfAccounts();
+                string accountsTense = numberOfAccounts == 1 ? "" : "s";
+                summary += $"\n - {customer.Name} ({numberOfAccounts} account{accountsTense})";
+            }
             return summary;
         }
 
-        //Make sure correct plural of word is created based on the number passed in:
-        //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
+        public decimal GetTotalInterestPaid() 
         {
-            return number + " " + (number == 1 ? word : word + "s");
+            decimal totalInterestPaid = 0;
+
+            foreach (Customer customer in _customers)
+            {
+                totalInterestPaid += customer.GetTotalInterestEarned();
+            }
+            return totalInterestPaid;
         }
 
-        public double totalInterestPaid() {
-            double total = 0;
-            foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
-            return total;
-        }
-
-        public String GetFirstCustomer()
+        public string GetFirstCustomer()
         {
-            try
+            if (_customers.Count == 0)
             {
-                customers = null;
-                return customers[0].GetName();
+                return "No cutomers found";
             }
-            catch (Exception e)
-            {
-                Console.Write(e.StackTrace);
-                return "Error";
-            }
+            return _customers.First().Name;
         }
     }
 }

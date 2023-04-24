@@ -10,9 +10,10 @@ namespace abc_bank_tests
         [TestMethod]
         public void Transaction()
         {
-            Transaction t = new Transaction(5);
-            //t instanceOf Transaction
-            Assert.IsTrue(t.GetType() == typeof(Transaction));
+            
+            Transaction transaction = new Transaction(5);
+
+            Assert.IsTrue(transaction.GetType() == typeof(Transaction));
         }
     }
 }
