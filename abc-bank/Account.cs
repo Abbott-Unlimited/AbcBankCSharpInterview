@@ -15,11 +15,13 @@ namespace abc_bank
 
         private readonly int accountType;
         public List<Transaction> transactions;
+        private DateTime lastInterestDate { get; set; }
 
         public Account(int accountType) 
         {
             this.accountType = accountType;
             this.transactions = new List<Transaction>();
+            this.lastInterestDate = DateTime.Now;
         }
 
         public void Deposit(double amount) 
@@ -43,24 +45,34 @@ namespace abc_bank
         public double InterestEarned() 
         {
             double amount = sumTransactions();
-            switch(accountType){
+            int daysSinceLastInterest = (DateTime.Now - lastInterestDate).Days; // assuming lastInterestDate is a DateTime property that stores the date when the last interest was credited to the account
+            double dailyInterestRate = 0.0;
+
+            switch (accountType)
+            {
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        dailyInterestRate = 0.001 / 365;
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
+                        dailyInterestRate = 0.002 / 365;
+                    break;
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                        dailyInterestRate = 0.02 / 365;
+                    else if (amount <= 2000)
+                        dailyInterestRate = 0.05 / 365;
+                    else
+                        dailyInterestRate = 0.1 / 365;
+                    break;
                 default:
-                    return amount * 0.001;
+                    dailyInterestRate = 0.001 / 365;
+                    break;
             }
+
+            double dailyInterest = amount * dailyInterestRate;
+            double interestEarned = dailyInterest * daysSinceLastInterest;
+
+            return interestEarned;
         }
 
         public double sumTransactions() {
