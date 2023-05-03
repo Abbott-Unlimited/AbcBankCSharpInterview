@@ -56,6 +56,21 @@ namespace abc_bank
             return statement;
         }
 
+        public void Transfer(Account fromAccount, Account toAccount, double amount)
+        {
+            if (fromAccount == null || toAccount == null)
+                throw new ArgumentException("Both accounts must be specified");
+
+            if (fromAccount == toAccount)
+                throw new ArgumentException("Cannot transfer to the same account");
+
+            if (amount <= 0)
+                throw new ArgumentException("Transfer amount must be greater than zero");
+
+            fromAccount.Withdraw(amount);
+            toAccount.Deposit(amount);
+        }
+
         #region Helpers 
 
         private String StatementForAccount(Account a) 
