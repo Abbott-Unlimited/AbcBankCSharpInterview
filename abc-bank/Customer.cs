@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,14 +49,16 @@ namespace abc_bank
             double total = 0.0;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
+                statement += "\n" + StatementForAccount(a) + "\n";
                 total += a.sumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        #region Helpers 
+
+        private String StatementForAccount(Account a) 
         {
             String s = "";
 
@@ -82,9 +85,8 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
-        }
+        private String ToDollars(double d) => Math.Abs(d).ToString("C", CultureInfo.CurrentCulture);
+
+        #endregion 
     }
 }
