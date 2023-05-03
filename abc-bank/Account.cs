@@ -15,59 +15,76 @@ namespace abc_bank
 
         private readonly int accountType;
         public List<Transaction> transactions;
+        private DateTime lastInterestDate { get; set; }
 
-        public Account(int accountType) 
+        public Account(int accountType)
         {
             this.accountType = accountType;
             this.transactions = new List<Transaction>();
+            this.lastInterestDate = DateTime.Now;
         }
 
-        public void Deposit(double amount) 
+        public void Deposit(double amount)
         {
-            if (amount <= 0) {
+            if (amount <= 0)
+            {
                 throw new ArgumentException("amount must be greater than zero");
-            } else {
+            }
+            else
+            {
                 transactions.Add(new Transaction(amount));
             }
         }
 
-        public void Withdraw(double amount) 
+        public void Withdraw(double amount)
         {
-            if (amount <= 0) {
+            if (amount <= 0)
+            {
                 throw new ArgumentException("amount must be greater than zero");
-            } else {
+            }
+            else
+            {
                 transactions.Add(new Transaction(-amount));
             }
         }
 
-        public double InterestEarned() 
+        public double InterestEarned()
         {
             double amount = sumTransactions();
-            switch(accountType){
+            int daysSinceLastInterest = (DateTime.Now - lastInterestDate).Days; // assuming lastInterestDate is a DateTime property that stores the date when the last interest was credited to the account
+            double dailyInterestRate = 0.0;
+
+            switch (accountType)
+            {
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        dailyInterestRate = 0.001 / 365;
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
+                        dailyInterestRate = 0.002 / 365;
+                    break;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    if (HasWithdrawalInPast10Days())
+                        dailyInterestRate = 0.001 / 365;
+                    else
+                        dailyInterestRate = 0.05 / 365;
+                    break;
                 default:
-                    return amount * 0.001;
+                    dailyInterestRate = 0.001 / 365;
+                    break;
             }
+
+            double dailyInterest = amount * dailyInterestRate;
+            double interestEarned = dailyInterest * daysSinceLastInterest;
+
+            return interestEarned;
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
+        public double sumTransactions()
+        {
+            return CheckIfTransactionsExist(true);
         }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        private double CheckIfTransactionsExist(bool checkAll)
         {
             double amount = 0.0;
             foreach (Transaction t in transactions)
@@ -75,10 +92,15 @@ namespace abc_bank
             return amount;
         }
 
-        public int GetAccountType() 
+        public int GetAccountType()
         {
             return accountType;
         }
 
+        #region Helpers
+
+        private bool HasWithdrawalInPast10Days() => transactions.Any(tran => tran.amount < 0 && (DateTime.Now - tran.TransactionDate).Days <= 10);
+
+        #endregion 
     }
 }

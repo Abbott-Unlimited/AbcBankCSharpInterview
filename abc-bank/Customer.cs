@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,14 +49,31 @@ namespace abc_bank
             double total = 0.0;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
+                statement += "\n" + StatementForAccount(a) + "\n";
                 total += a.sumTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        public void Transfer(Account fromAccount, Account toAccount, double amount)
+        {
+            if (fromAccount == null || toAccount == null)
+                throw new ArgumentException("Both accounts must be specified");
+
+            if (fromAccount == toAccount)
+                throw new ArgumentException("Cannot transfer to the same account");
+
+            if (amount <= 0)
+                throw new ArgumentException("Transfer amount must be greater than zero");
+
+            fromAccount.Withdraw(amount);
+            toAccount.Deposit(amount);
+        }
+
+        #region Helpers 
+
+        private String StatementForAccount(Account a) 
         {
             String s = "";
 
@@ -82,9 +100,8 @@ namespace abc_bank
             return s;
         }
 
-        private String ToDollars(double d)
-        {
-            return String.Format("$%,.2f", Math.Abs(d));
-        }
+        private String ToDollars(double d) => Math.Abs(d).ToString("C", CultureInfo.CurrentCulture);
+
+        #endregion 
     }
 }

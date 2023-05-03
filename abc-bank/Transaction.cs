@@ -10,12 +10,12 @@ namespace abc_bank
     {
         public readonly double amount;
 
-        private DateTime transactionDate;
+        public DateTime TransactionDate;
 
         public Transaction(double amount) 
         {
             this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            this.TransactionDate = DateProvider.getInstance().Now();
         }
     }
 }
