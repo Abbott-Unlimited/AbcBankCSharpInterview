@@ -35,5 +35,36 @@ namespace abc_bank_tests
 
             Assert.AreEqual(expectedInterest, actualInterest, 0.001);
         }
+
+        [TestMethod]
+        public void TestMaxiSavingsInterestEarned_5PercentInterest_NoWithdrawalIn10Days()
+        {
+            var maxiSavings = new Account(Account.MAXI_SAVINGS);
+            maxiSavings.Deposit(10000);
+
+            maxiSavings.GetType().GetProperty("lastInterestDate", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(maxiSavings, DateTime.Now.AddDays(-20));
+
+            var expectedInterest = (10000 * 0.05 / 365) * 20; 
+
+            var actualInterest = maxiSavings.InterestEarned();
+
+            Assert.AreEqual(expectedInterest, actualInterest, 0.001);
+        }
+
+        [TestMethod]
+        public void TestMaxiSavingsInterestEarned_5PercentInterest_WITHWithdrawalIn10Days()
+        {
+            var maxiSavings = new Account(Account.MAXI_SAVINGS);
+            maxiSavings.Deposit(10000);
+
+            maxiSavings.GetType().GetProperty("lastInterestDate", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(maxiSavings, DateTime.Now.AddDays(-20));
+
+            maxiSavings.Withdraw(1000);
+
+            var expectedInterest = (9000 * 0.001 / 365) * 20;
+            var actualInterest = maxiSavings.InterestEarned();
+
+            Assert.AreEqual(expectedInterest, actualInterest, 0.001);
+        }
     }
 }
