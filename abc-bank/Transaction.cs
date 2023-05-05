@@ -1,21 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace abc_bank
 {
     public class Transaction
     {
-        public readonly double amount;
+        private decimal _amount;
 
-        private DateTime transactionDate;
+        private DateTime? _transactionDate;
 
-        public Transaction(double amount) 
+
+        //Allows backdating for both testing and corrections
+        public Transaction(decimal amount, DateTime? date = null)
         {
-            this.amount = amount;
-            this.transactionDate = DateProvider.getInstance().Now();
+            this._amount = amount;
+            this._transactionDate = date == null ? DateProvider.GetInstance().Now() : date;
+        }
+
+        public DateTime? GetDate()
+        {
+            return _transactionDate;
+        }
+
+        public decimal GetAmount()
+        {
+            return _amount;
         }
     }
 }
