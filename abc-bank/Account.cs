@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,76 +9,97 @@ namespace abc_bank
 {
     public class Account
     {
+        //TO-DO: Implement GUID system for account IDs
 
-        public const int CHECKING = 0;
-        public const int SAVINGS = 1;
-        public const int MAXI_SAVINGS = 2;
+        private readonly AccountType _accountType;
+        public List<Transaction> Transactions;
 
-        private readonly int accountType;
-        public List<Transaction> transactions;
+        private const decimal SAVINGSRATE1 = 0.001m;
+        private const decimal SAVINGSRATE2 = 0.002m;
+        private const decimal MAXI_SAVINGS1 = 0.001m;
+        private const decimal MAXI_SAVINGS2 = 0.05m;
+        private const decimal CHECKING1 = 0.001m;
 
-        public Account(int accountType) 
+        public Account(AccountType accountType) 
         {
-            this.accountType = accountType;
-            this.transactions = new List<Transaction>();
+            this._accountType = accountType;
+            this.Transactions = new List<Transaction>();
         }
 
-        public void Deposit(double amount) 
+        public Result Deposit(decimal amount, DateTime? date = null) 
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(amount));
-            }
+            if (amount <= 0)
+                return new FailureResult
+                {
+                    Message = "amount must be greater than zero",
+                };
+
+            Transactions.Add(new Transaction(amount, date));
+
+            return new SuccessResult();
         }
 
-        public void Withdraw(double amount) 
+        public Result Withdraw(decimal amount, DateTime? date = null) 
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
-            }
+            if (amount <= 0)
+                return new FailureResult
+                {
+                    Message = "amount must be greater than zero",
+                };
+
+            if(amount > SumTransactions())
+                return new FailureResult
+                {
+                    Message = "withdrawal greater then balance",
+                };
+
+            Transactions.Add(new Transaction(-amount, date));
+
+            return new SuccessResult();
         }
 
-        public double InterestEarned() 
+        public decimal InterestEarned() 
         {
-            double amount = sumTransactions();
-            switch(accountType){
-                case SAVINGS:
+            decimal amount = SumTransactions();
+            switch(_accountType){
+                case AccountType.SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return amount * (SAVINGSRATE1 / 365);
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
-                case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                        return 1 + ((amount-1000) * (SAVINGSRATE2 / 365));
+                case AccountType.MAXI_SAVINGS:
+                    if (TransactionInLastTenDays())
+                        return amount * (MAXI_SAVINGS1 / 365);   
+                    else
+                        return amount * (MAXI_SAVINGS2 / 365);
                 default:
-                    return amount * 0.001;
+                    return amount * (CHECKING1 / 365);
             }
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
-        {
-            double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
+        public decimal SumTransactions() {
+            decimal amount = 0.0M;
+            foreach (Transaction t in Transactions)
+                amount += t.GetAmount();
             return amount;
         }
 
-        public int GetAccountType() 
+        public AccountType GetAccountType() 
         {
-            return accountType;
+            return _accountType;
+        }
+
+        //Checks for transactions within the last ten days.        
+        private bool TransactionInLastTenDays()
+        {
+            foreach (Transaction t in Transactions)
+            {
+                if(t.GetDate() >= DateProvider.GetInstance().Now().AddDays(-10) && t.GetDate() <= DateProvider.GetInstance().Now())
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
     }
