@@ -24,51 +24,56 @@ namespace abc_bank
 
         public void Deposit(double amount) 
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(amount));
-            }
+            IsPositiveNumber(amount);
+            transactions.Add(new Transaction(amount, Transaction.DEPOSIT));
         }
 
         public void Withdraw(double amount) 
         {
-            if (amount <= 0) {
-                throw new ArgumentException("amount must be greater than zero");
-            } else {
-                transactions.Add(new Transaction(-amount));
-            }
+            IsPositiveNumber(amount);
+            transactions.Add(new Transaction(-amount, Transaction.WITHDRAWAL));
         }
 
-        public double InterestEarned() 
+        public void Transfer(double amount, Account receivingAccount)
         {
-            double amount = sumTransactions();
+            IsPositiveNumber(amount);
+            //withdrawal from calling account
+            transactions.Add(new Transaction(-amount, Transaction.WITHDRAWAL));
+            //deposit to account receiving the transfer
+            receivingAccount.transactions.Add(new Transaction(amount, Transaction.DEPOSIT));
+        }
+
+        //ADDITIONAL FEATURE
+        //Interest rates should accrue daily including weekends, rates IN METHOD are per-annum (for each year).
+        //I don't think this calculation is actually correct since it's just flat percentage calculations... The original calculation I think is wrong too
+        //https://programcsharp.com/blog/post/calculating-compound-interest-dotnet-cs looks more accurate compared to source code
+        public double InterestEarnedForOneDay() 
+        {
+            double amount = sumAllTransactions();
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
-                        return amount * 0.001;
+                        return (amount * 0.001)/365;
                     else
-                        return 1 + (amount-1000) * 0.002;
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
+                        return (1 + (amount-1000) * 0.002)/365;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                    //ADDITIONAL FEATURE
+                    //Change Maxi-Savings accounts to have an interest rate of 5% assuming no withdrawals in the past 10 days otherwise 0.1%.
+                    foreach (Transaction t in transactions)
+                    {
+                        //checks if Transaction Type is a withdrawal and within the last 10 days to give 0.1% return
+                        if(t.GetTransactionType() == Transaction.WITHDRAWAL && (t.GetTransactionDate() - DateTime.Now).TotalDays <= 10)
+                            return (amount * 0.01)/365;
+                    }
+                    return (amount * 0.05)/365;
+                case CHECKING:
+                    return (amount * 0.001)/365;
                 default:
-                    return amount * 0.001;
+                    throw new NotImplementedException(accountType + " has no implementation for interest calculation.");
             }
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
-
-        private double CheckIfTransactionsExist(bool checkAll) 
-        {
+        public double sumAllTransactions() {
             double amount = 0.0;
             foreach (Transaction t in transactions)
                 amount += t.amount;
@@ -78,6 +83,15 @@ namespace abc_bank
         public int GetAccountType() 
         {
             return accountType;
+        }
+
+        private void IsPositiveNumber(double number)
+        {
+            //number is expected to always be a positive number and above zero
+            if (number < 0)
+            {
+                throw new ArgumentException("Number is negative. Positive number is required.");
+            }
         }
 
     }

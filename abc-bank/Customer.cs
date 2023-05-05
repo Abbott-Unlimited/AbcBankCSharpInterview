@@ -33,11 +33,11 @@ namespace abc_bank
             return accounts.Count;
         }
 
-        public double TotalInterestEarned() 
+        public double TotalInterestEarnedForOneDay() 
         {
             double total = 0;
             foreach (Account a in accounts)
-                total += a.InterestEarned();
+                total += a.InterestEarnedForOneDay();
             return total;
         }
 
@@ -48,14 +48,14 @@ namespace abc_bank
             double total = 0.0;
             foreach (Account a in accounts) 
             {
-                statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                statement += "\n" + StatementForAccount(a) + "\n";
+                total += a.sumAllTransactions();
             }
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
 
-        private String statementForAccount(Account a) 
+        private String StatementForAccount(Account a) 
         {
             String s = "";
 
@@ -84,7 +84,9 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            //https://stackoverflow.com/questions/890100/how-do-i-format-a-double-to-currency-rounded-to-the-nearest-dollar
+            //currency formatting
+            return String.Format("{0:C2}", Math.Abs(d));
         }
     }
 }
