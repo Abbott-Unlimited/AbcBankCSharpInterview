@@ -23,36 +23,28 @@ namespace abc_bank
         public String CustomerSummary() {
             String summary = "Customer Summary";
             foreach (Customer c in customers)
-                summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+                summary += "\n - " + c.GetName() + " (" + FormatWordToSingularOrPlural(c.GetNumberOfAccounts(), "account") + ")";
             return summary;
         }
 
-        //Make sure correct plural of word is created based on the number passed in:
-        //If number passed in is 1 just return the word otherwise add an 's' at the end
-        private String format(int number, String word)
+
+        /// <summary>
+        /// Formats a word to the plural version if the number of items passed is more than 1.
+        /// </summary>
+        /// <param name="numberOfItems">Number of items you're passing in.</param>
+        /// <param name="word">The word you want to format.</param>
+        /// <returns></returns>
+        private String FormatWordToSingularOrPlural(int numberOfItems, String word)
         {
-            return number + " " + (number == 1 ? word : word + "s");
+            return numberOfItems + " " + (numberOfItems > 1 ? word + "s" : word );
         }
 
-        public double totalInterestPaid() {
+        public double TotalInterestPaidForOneDayAllAccounts() {
             double total = 0;
             foreach(Customer c in customers)
-                total += c.TotalInterestEarned();
+                total += c.TotalInterestEarnedForOneDay();
             return total;
         }
 
-        public String GetFirstCustomer()
-        {
-            try
-            {
-                customers = null;
-                return customers[0].GetName();
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.StackTrace);
-                return "Error";
-            }
-        }
     }
 }

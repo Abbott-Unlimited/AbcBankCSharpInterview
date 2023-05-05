@@ -14,45 +14,85 @@ namespace abc_bank_tests
         public void CustomerSummary() 
         {
             Bank bank = new Bank();
-            Customer john = new Customer("John");
-            john.OpenAccount(new Account(Account.CHECKING));
-            bank.AddCustomer(john);
+            Customer john = new Customer("John")
+                .OpenAccount(new Account(Account.CHECKING));
+            Customer joe = new Customer("Joe")
+                .OpenAccount(new Account(Account.CHECKING))
+                .OpenAccount(new Account(Account.SAVINGS))
+                .OpenAccount(new Account(Account.MAXI_SAVINGS));
 
-            Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary());
+            bank.AddCustomer(john);
+            bank.AddCustomer(joe);
+
+            string expectedCustomerSummary = "Customer Summary" +
+                                        "\n - John (1 account)" +
+                                        "\n - Joe (3 accounts)";
+
+            string actualCustomerSummary = bank.CustomerSummary();
+
+            Assert.AreEqual(expectedCustomerSummary, actualCustomerSummary);
         }
 
         [TestMethod]
         public void CheckingAccount() {
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.CHECKING);
-            Customer bill = new Customer("Bill").OpenAccount(checkingAccount);
-            bank.AddCustomer(bill);
+            bank.AddCustomer(new Customer("Bill")
+                .OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(100.0);
 
-            Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
+            double expectedInterestOneYear = 0.1/365;
+            double actualInterest = bank.TotalInterestPaidForOneDayAllAccounts();
+
+            Assert.AreEqual(expectedInterestOneYear, actualInterest, DOUBLE_DELTA);
         }
 
         [TestMethod]
-        public void Savings_account() {
+        public void SavingsAccount() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Account savingsAccount = new Account(Account.SAVINGS);
+            bank.AddCustomer(new Customer("Bill")
+                .OpenAccount(savingsAccount));
 
-            checkingAccount.Deposit(1500.0);
+            savingsAccount.Deposit(1500.0);
 
-            Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            double expectedInterestOneYear = 2.0/365;
+            double actualInterest = bank.TotalInterestPaidForOneDayAllAccounts();
+
+            Assert.AreEqual(expectedInterestOneYear, actualInterest, DOUBLE_DELTA);
         }
 
         [TestMethod]
-        public void Maxi_savings_account() {
+        public void MaxiSavingsAccountNoWithdrawal() {
             Bank bank = new Bank();
-            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
+            Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill")
+                .OpenAccount(maxiSavingsAccount));
 
-            checkingAccount.Deposit(3000.0);
+            maxiSavingsAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            double expectedInterestOneYear = 150.0/365;
+            double actualInterest = bank.TotalInterestPaidForOneDayAllAccounts();
+
+            Assert.AreEqual(expectedInterestOneYear, actualInterest, DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void MaxiSavingsAccountWithWithdrawal()
+        {
+            Bank bank = new Bank();
+            Account maxiSavingsAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill")
+                .OpenAccount(maxiSavingsAccount));
+
+            maxiSavingsAccount.Deposit(3000.0);
+            maxiSavingsAccount.Withdraw(150.0);
+
+            double expectedInterestOneYear = 28.5/365;
+            double actualInterest = bank.TotalInterestPaidForOneDayAllAccounts();
+
+            Assert.AreEqual(expectedInterestOneYear, actualInterest, DOUBLE_DELTA);
         }
     }
 }
