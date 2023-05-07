@@ -40,6 +40,19 @@ namespace abc_bank
             }
         }
 
+        public void TransferFunds(Account fromAccount, double amount)
+        {
+            if (amount <= 0)
+                throw new ArgumentException("Amount must be greated than zero");
+            if (fromAccount.sumTransactions() < amount)
+                throw new ArgumentException("Insufficient funds.");
+            else
+            {
+                fromAccount.Withdraw(amount);
+                Deposit(amount); 
+            }
+        }
+
         public double InterestEarned() 
         {
             double amount = sumTransactions();
