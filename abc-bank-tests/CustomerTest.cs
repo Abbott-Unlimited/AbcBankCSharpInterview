@@ -18,7 +18,20 @@ namespace abc_bank_tests
             checkingAccount.Deposit(100.0);
             savingsAccount.Deposit(4000.0);
             savingsAccount.Withdraw(200.0);
-
+            string expected = "Statement for Henry\n" +
+                    "\n" +
+                    "Checking Account\n" +
+                    "  deposit $100.00\n" +
+                    "Total $100.00\n" +
+                    "\n" +
+                    "Savings Account\n" +
+                    "  deposit $4,000.00\n" +
+                    "  withdrawal $200.00\n" +
+                    "Total $3,800.00\n" +
+                    "\n" +
+                    "Total In All Accounts $3,900.00";
+            string actual = henry.GetStatement();
+            /*
             Assert.AreEqual("Statement for Henry\n" +
                     "\n" +
                     "Checking Account\n" +
@@ -31,6 +44,8 @@ namespace abc_bank_tests
                     "Total $3,800.00\n" +
                     "\n" +
                     "Total In All Accounts $3,900.00", henry.GetStatement());
+            */
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -50,13 +65,15 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
+//        [Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
+                .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(3, oscar.GetNumberOfAccounts());
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
+            int acctCount = oscar.GetNumberOfAccounts();
+            Assert.AreEqual(3, acctCount);
         }
     }
 }
