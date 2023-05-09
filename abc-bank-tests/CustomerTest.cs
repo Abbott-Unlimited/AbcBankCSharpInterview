@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
 
@@ -10,14 +11,14 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestApp()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
-            Account savingsAccount = new Account(Account.SAVINGS);
+            var checkingAccount = new Account(Account.Checking);
+            var savingsAccount = new Account(Account.Savings);
 
-            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+            var henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
 
             checkingAccount.Deposit(100.0);
             savingsAccount.Deposit(4000.0);
-            savingsAccount.Withdraw(200.0);
+            savingsAccount.Withdraw(200.0, DateTime.Now);
 
             Assert.AreEqual("Statement for Henry\n" +
                     "\n" +
@@ -34,28 +35,58 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
+        public void DepositToAccount()
+        {
+            var checkingAccount = new Account(Account.Checking);
+            var customer        = new Customer("Eric").OpenAccount(checkingAccount);
+            checkingAccount.Deposit(500.0);
+
+            var transactions= checkingAccount.Transactions;
+            var sum             = transactions.Sum(transaction => transaction.Amount);
+           
+            Assert.AreEqual(sum, 500.00);
+            Assert.IsTrue(customer.GetStatement().Contains("500.00"));
+        }
+
+        [TestMethod]
+        public void WithdrawFromAccount()
+        {
+            var checkingAccount = new Account(Account.Checking);
+            var customer        = new Customer("Eric").OpenAccount(checkingAccount);
+            checkingAccount.Deposit(500.0);
+            checkingAccount.Withdraw(100.00, DateTime.Now);
+
+            var transactions = checkingAccount.Transactions;
+            var sum          = transactions.Sum(transaction => transaction.Amount);
+
+            Assert.AreEqual(sum, 400.00);
+            Assert.IsTrue(customer.GetStatement().Contains("400.00"));
+        }
+
+        [TestMethod]
         public void TestOneAccount()
         {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
+            var oscar = new Customer("Oscar").OpenAccount(new Account(Account.Savings));
             Assert.AreEqual(1, oscar.GetNumberOfAccounts());
         }
 
         [TestMethod]
         public void TestTwoAccount()
         {
-            Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
+            var oscar = new Customer("Oscar")
+                 .OpenAccount(new Account(Account.Savings));
+            oscar.OpenAccount(new Account(Account.Checking));
             Assert.AreEqual(2, oscar.GetNumberOfAccounts());
         }
 
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
-            Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
+            var oscar = new Customer("Oscar")
+                    .OpenAccount(new Account(Account.Savings));
+            oscar.OpenAccount(new Account(Account.Checking));
+            oscar.OpenAccount(new Account(Account.MaxiSavings));
+
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
