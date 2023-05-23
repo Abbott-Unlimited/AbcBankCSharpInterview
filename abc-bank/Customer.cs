@@ -72,7 +72,7 @@ namespace abc_bank
                     break;
             }
 
-            //Now total up all the transactions
+            //Now list and total up all the transactions
             double total = 0.0;
             foreach (Transaction t in a.transactions) {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
@@ -84,7 +84,9 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
-        }
+            //return String.Format("$%,.2f", Math.Abs(d));
+            // following assumes that current culture is US-EN.  If not in US En, will need to specify en-US for context to format correctly 
+            return String.Format("{0,0:C2}", Math.Abs(d));
+      }
     }
 }

@@ -63,19 +63,19 @@ namespace abc_bank
             }
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
+        public double sumTransactions()
+      {
+         double amount = 0.0;
+         foreach (Transaction t in transactions)
+            amount += t.amount;
+         return amount;
+      }
 
-        private double CheckIfTransactionsExist(bool checkAll) 
-        {
-            double amount = 0.0;
-            foreach (Transaction t in transactions)
-                amount += t.amount;
-            return amount;
-        }
-
-        public int GetAccountType() 
+      private double CheckIfTransactionsExist(bool checkAll)
+      {
+         return 0.0; // keep skeleton for future state
+      }
+         public int GetAccountType() 
         {
             return accountType;
         }
