@@ -71,9 +71,28 @@ namespace abc_bank
          return amount;
       }
 
-      private double CheckIfTransactionsExist(bool checkAll)
+      private int countWithdrawalTransactions(bool countAll)
       {
-         return 0.0; // keep skeleton for future state
+         // assumption - checkAll true means all time, false means current calendar year...assumes we only care about current year for interest calcs
+
+         int numRelevantWithdrawals = 0;
+         foreach (Transaction t in transactions)
+         {
+            if (countAll)
+            {
+               if (t.amount < 0)
+                  numRelevantWithdrawals++;
+            }
+            else
+            {
+               if (t.transactionDate.Year == DateProvider.getInstance().Now().Year)
+               {
+                  if (t.amount < 0)
+                     numRelevantWithdrawals++;
+               }
+            }
+         }
+         return numRelevantWithdrawals;
       }
          public int GetAccountType() 
         {
