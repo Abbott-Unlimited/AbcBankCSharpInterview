@@ -10,7 +10,7 @@ namespace abc_bank
     {
         public readonly double amount;
 
-        private DateTime transactionDate;
+        public DateTime transactionDate;
 
         public Transaction(double amount) 
         {
