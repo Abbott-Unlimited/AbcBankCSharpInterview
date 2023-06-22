@@ -10,16 +10,8 @@ namespace abc_bank_tests
         [TestMethod]
         public void TestApp()
         {
-            Account checkingAccount = new Account(Account.CHECKING);
-            Account savingsAccount = new Account(Account.SAVINGS);
-
-            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
-
-            checkingAccount.Deposit(100.0);
-            savingsAccount.Deposit(4000.0);
-            savingsAccount.Withdraw(200.0);
-
-            Assert.AreEqual("Statement for Henry\n" +
+            //Arrange
+            var expected = "Statement for Henry\n" +
                     "\n" +
                     "Checking Account\n" +
                     "  deposit $100.00\n" +
@@ -30,32 +22,64 @@ namespace abc_bank_tests
                     "  withdrawal $200.00\n" +
                     "Total $3,800.00\n" +
                     "\n" +
-                    "Total In All Accounts $3,900.00", henry.GetStatement());
+                    "Total In All Accounts $3,900.00";
+            Account checkingAccount = new Account(Account.AccountType.Checking);
+            Account savingsAccount = new Account(Account.AccountType.Savings);
+
+            Customer henry = new Customer("Henry").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(4000.0);
+            savingsAccount.Withdraw(200.0);
+
+            //Act
+            var actual = henry.GetStatement();
+
+            //Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
         public void TestOneAccount()
         {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
-            Assert.AreEqual(1, oscar.GetNumberOfAccounts());
+            //Arrange
+            var account = new Account(Account.AccountType.Savings);
+            Customer oscar = new Customer("Oscar").OpenAccount(account);
+
+            //Act
+            var numberOfAccounts = oscar.GetNumberOfAccounts();
+            
+            //Assert
+            Assert.AreEqual(1, numberOfAccounts);
         }
 
         [TestMethod]
         public void TestTwoAccount()
         {
-            Customer oscar = new Customer("Oscar")
-                 .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
-            Assert.AreEqual(2, oscar.GetNumberOfAccounts());
+            //Arrange
+            Customer oscar = new Customer("Oscar");
+            Account savingsAccount = new Account(Account.AccountType.Savings);
+            Account checkingsAccount = new Account(Account.AccountType.Checking);
+            oscar.OpenAccount(savingsAccount);
+            oscar.OpenAccount(checkingsAccount);
+
+            //Act
+            var numberOfAccounts = oscar.GetNumberOfAccounts();
+
+            //Assert
+            Assert.AreEqual(2, numberOfAccounts);
         }
 
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
-            Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
+            Customer oscar = new Customer("Oscar");
+            Account savingsAccount = new Account(Account.AccountType.Savings);
+            Account checkingsAccount = new Account(Account.AccountType.Checking);
+            Account maxiSavingsAccount = new Account(Account.AccountType.MaxiSavings);
+            oscar.OpenAccount(savingsAccount);
+            oscar.OpenAccount(checkingsAccount);
+            oscar.OpenAccount(maxiSavingsAccount);
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
