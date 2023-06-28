@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using abc_bank;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace abc_bank_tests
 {
@@ -50,13 +52,51 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
             oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
+
+        [TestMethod]
+        public void TestTransferFunds()
+        {
+            Account checkingAccount = new Account(Account.CHECKING);
+            Account savingsAccount = new Account(Account.SAVINGS);
+
+            Customer jake = new Customer("jake").OpenAccount(checkingAccount).OpenAccount(savingsAccount);
+
+            checkingAccount.Deposit(100.0);
+            savingsAccount.Deposit(4000.0);
+
+            jake.TransferFunds(300.00, savingsAccount, checkingAccount);
+
+            // Check checking account for deposited funds
+            Assert.AreEqual(checkingAccount.sumTransactions(), 400.00);
+
+            // CHeck savings account for funds withdrawn
+            Assert.AreEqual(savingsAccount.sumTransactions(), 3700.00);
+        }
+
+/*        
+ *        This is how the test for daily interest would look with
+ *        a few changes made to the transactions class
+ *        
+ *        [TestMethod]
+        public void CalculateInterestTest()
+        {
+            // Arrange
+            List<Transaction> transactionList = new List<Transaction>();
+            transactionList.Add(new Transaction { amount = 1000, transactionDate = DateTime.Now.AddDays(-10) });
+
+            // Act
+            DepositDailyInterest(transactionList);
+
+            // Assert
+            Assert.AreEqual(1.0, transactionList.Last().amount);
+        }*/
     }
 }

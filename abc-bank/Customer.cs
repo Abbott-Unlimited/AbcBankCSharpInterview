@@ -41,6 +41,16 @@ namespace abc_bank
             return total;
         }
 
+        public void TransferFunds(double amount, Account from, Account to)
+        {
+            /*
+             * Did not do any exception handling here as it has already been
+             * taken care of in the following two methods
+             */
+            from.Withdraw(amount);
+            to.Deposit(amount);
+        }
+
         public String GetStatement() 
         {
             String statement = null;
@@ -84,7 +94,7 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("{0:C}", Math.Abs(d));
         }
     }
 }
