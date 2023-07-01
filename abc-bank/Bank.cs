@@ -30,6 +30,26 @@ namespace abc_bank
             return summary;
         }
 
+        /// <summary>
+        /// Summary of interest that the bank paid out
+        /// </summary>
+        /// <returns>text with interest summary</returns>
+        public String InterestSummary()
+        {
+            String summary = "Bank Paid Interest Summary\r\n";
+            //double totalinterestpaid = 0;
+            foreach (Customer c in Customers)
+            {
+                var interestpaid = c.TotalInterestEarned();
+                summary += $"\r\nCustomer {c.GetName()}: " + $"{this.Format(interestpaid)/*(String.Format("{0:C}", interestpaid))*/}";
+                //totalinterestpaid += interestpaid;
+            }
+
+
+            return summary;
+        }
+
+
         //Make sure correct plural of word is created based on the number passed in:
         //If number passed in is 1 just return the word otherwise add an 's' at the end
         private String format(int number, String word)
@@ -71,6 +91,13 @@ namespace abc_bank
                 Console.Write(e.StackTrace);
                 return "Error";
             }
+        }
+
+        // format a dollar amount
+        private String Format(double amount)
+        {
+            return String.Format("{0:C}", amount);
+            //return number + " " + (number == 1 ? word : word + "s");
         }
     }
 }

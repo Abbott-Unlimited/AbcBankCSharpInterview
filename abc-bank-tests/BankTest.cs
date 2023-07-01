@@ -37,7 +37,41 @@ namespace abc_bank_tests
             bank.AddCustomer(customerBill);
 
             Assert.AreEqual(3, bank.TotalNumberAccounts());
+
+            // report bank's total interest paid
+            bank.totalInterestPaid();
             
+        }
+        
+        [TestMethod]
+        public void InterestSummary()
+        {
+            Bank bank = new Bank();
+            Customer john = new Customer("John");
+            Account johnacct = new Account(Account.CHECKING);
+            john.OpenAccount(johnacct);
+            johnacct.Deposit(5000);
+
+
+            bank.AddCustomer(john);
+
+            var interestjohn = bank.InterestSummary();
+
+            Assert.AreEqual("Bank Paid Interest Summary\r\n\r\nCustomer John: $5.00", interestjohn);
+
+
+            Customer bill = new Customer("Bill");
+            Account billaccount = new Account(Account.SAVINGS);
+            bill.OpenAccount(billaccount);
+            billaccount.Deposit(10000);
+
+
+            bank.AddCustomer(bill);
+
+            var interestall = bank.InterestSummary();
+
+            Assert.AreEqual("Bank Paid Interest Summary\r\n\r\nCustomer John: $5.00\r\nCustomer Bill: $19.00", interestall);
+
         }
 
         [TestMethod]
@@ -83,5 +117,7 @@ namespace abc_bank_tests
 
             Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
+
+        
     }
 }
