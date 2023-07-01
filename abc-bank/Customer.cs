@@ -49,8 +49,9 @@ namespace abc_bank
             foreach (Account a in accounts) 
             {
                 statement += "\n" + statementForAccount(a) + "\n";
-                total += a.sumTransactions();
+                total += a.SumTransactions();
             }
+
             statement += "\nTotal In All Accounts " + ToDollars(total);
             return statement;
         }
@@ -59,8 +60,11 @@ namespace abc_bank
         {
             String s = "";
 
+            // possibly need later; we'll see.
+            int accounttype = a.GetAccountType();
            //Translate to pretty account type
-            switch(a.GetAccountType()){
+            switch (accounttype)
+            {
                 case Account.CHECKING:
                     s += "Checking Account\n";
                     break;
@@ -74,9 +78,10 @@ namespace abc_bank
 
             //Now total up all the transactions
             double total = 0.0;
-            foreach (Transaction t in a.transactions) {
+            foreach (Transaction t in a.transactions) 
+            {
                 s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + ToDollars(t.amount) + "\n";
-                total += t.amount;
+                total += t.amount;// < 0 ? -t.amount : t.amount;
             }
             s += "Total " + ToDollars(total);
             return s;
@@ -84,7 +89,11 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+            // see the result string before returning to caller
+            var seestring = String.Format("{0:C}", d);
+            return seestring;
+            //return String.Format("$%,.2f", Math.Abs(d));
+            
         }
     }
 }

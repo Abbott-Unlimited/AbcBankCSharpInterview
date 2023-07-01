@@ -42,7 +42,7 @@ namespace abc_bank
 
         public double InterestEarned() 
         {
-            double amount = sumTransactions();
+            double amount = SumTransactions();
             switch(accountType){
                 case SAVINGS:
                     if (amount <= 1000)
@@ -63,16 +63,36 @@ namespace abc_bank
             }
         }
 
-        public double sumTransactions() {
-           return CheckIfTransactionsExist(true);
-        }
+        //public double sumTransactions() {
+        //   return CheckIfTransactionsExist(true);
+        //}
 
-        private double CheckIfTransactionsExist(bool checkAll) 
+        /// <summary>
+        /// Sum the transactions
+        /// </summary>
+        /// <returns>The sum of the trasactions for either checking or savings</returns>
+        public double SumTransactions()
         {
             double amount = 0.0;
             foreach (Transaction t in transactions)
                 amount += t.amount;
             return amount;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="checkAll">Don't know yet how to use checkAll. Either transactions exist or not. Possibly remove.</param>
+        /// <returns></returns>
+        private bool CheckIfTransactionsExist(bool checkAll) 
+        {
+
+            bool dotransexist = this.transactions.Count > 0;
+            return dotransexist;
+            //double amount = 0.0;
+            //foreach (Transaction t in transactions)
+            //    amount += t.amount;
+            //return amount;
         }
 
         public int GetAccountType() 
