@@ -8,45 +8,48 @@ namespace abc_bank
 {
     public class Customer
     {
-        private String name;
-        private List<Account> accounts;
+        private String Name;
+        private List<Account> Accounts;
 
         public Customer(String name)
         {
-            this.name = name;
-            this.accounts = new List<Account>();
+            this.Name = name;
+            this.Accounts = new List<Account>();
         }
 
         public String GetName()
         {
-            return name;
+            return Name;
         }
 
         public Customer OpenAccount(Account account)
         {
-            accounts.Add(account);
+            Accounts.Add(account);
             return this;
         }
 
         public int GetNumberOfAccounts()
         {
-            return accounts.Count;
+            return Accounts.Count;
         }
 
         public double TotalInterestEarned() 
         {
             double total = 0;
-            foreach (Account a in accounts)
+            foreach (Account a in Accounts)
+            {
                 total += a.InterestEarned();
+            }
+
             return total;
         }
 
         public String GetStatement() 
         {
             String statement = null;
-            statement = "Statement for " + name + "\n";
+            statement = "Statement for " + Name + "\n";
             double total = 0.0;
-            foreach (Account a in accounts) 
+            foreach (Account a in Accounts) 
             {
                 statement += "\n" + statementForAccount(a) + "\n";
                 total += a.SumTransactions();

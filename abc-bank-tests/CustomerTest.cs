@@ -62,7 +62,7 @@ namespace abc_bank_tests
             Assert.AreEqual(henryStatement, "Statement for Henry\n\nChecking Account\n  deposit $100.00\n  withdrawal " +
                 "($500.00)\nTotal ($400.00)\n\nSavings Account\n  deposit $4,000.00\n  withdrawal ($200.00)\nTotal $3,800.00\n\nMaxi Savings Account\nTotal " +
                 "$0.00\n\nTotal In All Accounts $3,400.00");
-            
+
         }
 
         [TestMethod]
@@ -87,7 +87,8 @@ namespace abc_bank_tests
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
-                    .OpenAccount(new Account(Account.SAVINGS));
+            .OpenAccount(new Account(Account.SAVINGS));
+
             oscar.OpenAccount(new Account(Account.CHECKING))
                 .OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());

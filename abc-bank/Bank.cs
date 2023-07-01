@@ -8,21 +8,21 @@ namespace abc_bank
 {
     public class Bank
     {
-        private List<Customer> customers;
+        private List<Customer> Customers;
 
         public Bank()
         {
-            customers = new List<Customer>();
+            Customers = new List<Customer>();
         }
 
         public void AddCustomer(Customer customer)
         {
-            customers.Add(customer);
+            Customers.Add(customer);
         }
 
         public String CustomerSummary() {
             String summary = "Customer Summary";
-            foreach (Customer c in customers)
+            foreach (Customer c in Customers)
                 summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
             return summary;
         }
@@ -34,10 +34,14 @@ namespace abc_bank
             return number + " " + (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
+        public double totalInterestPaid() 
+        {
             double total = 0;
-            foreach(Customer c in customers)
+            foreach (Customer c in Customers)
+            {
                 total += c.TotalInterestEarned();
+            }
+
             return total;
         }
 
@@ -45,8 +49,8 @@ namespace abc_bank
         {
             try
             {
-                customers = null;
-                return customers[0].GetName();
+                Customers = null;
+                return Customers[0].GetName();
             }
             catch (Exception e)
             {
