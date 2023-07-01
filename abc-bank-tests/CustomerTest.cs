@@ -19,6 +19,10 @@ namespace abc_bank_tests
             savingsAccount.Deposit(4000.0);
             savingsAccount.Withdraw(200.0);
 
+            // make it clearer; possibly remove the text in order to verify the amounts
+            var henryStatement = henry.GetStatement();
+
+
             Assert.AreEqual("Statement for Henry\n" +
                     "\n" +
                     "Checking Account\n" +
