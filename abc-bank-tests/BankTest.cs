@@ -16,9 +16,28 @@ namespace abc_bank_tests
             Bank bank = new Bank();
             Customer john = new Customer("John");
             john.OpenAccount(new Account(Account.CHECKING));
+            
             bank.AddCustomer(john);
 
             Assert.AreEqual("Customer Summary\n - John (1 account)", bank.CustomerSummary());
+
+            john.OpenAccount(new Account(Account.MAXI_SAVINGS));
+
+            var banksummarytwoaccts = bank.CustomerSummary();
+            var totalnumberaccts = bank.TotalNumberAccounts();
+
+            // test value
+            Assert.AreEqual(2, totalnumberaccts);
+
+            // test with text
+            Assert.AreEqual("Customer Summary\n - John (2 accounts)", banksummarytwoaccts);
+
+            Customer customerBill = new Customer("Bill Smith");
+            customerBill.OpenAccount(new Account(Account.MAXI_SAVINGS));
+            bank.AddCustomer(customerBill);
+
+            Assert.AreEqual(3, bank.TotalNumberAccounts());
+            
         }
 
         [TestMethod]
@@ -33,7 +52,12 @@ namespace abc_bank_tests
 
             Assert.AreEqual(0.1, bank.totalInterestPaid(), DOUBLE_DELTA);
 
-            
+            checkingAccount.Deposit(5289.98);
+
+            var totalinterest = bank.totalInterestPaid();
+            Assert.AreEqual(5.38998, totalinterest , DOUBLE_DELTA);
+
+
         }
 
         [TestMethod]

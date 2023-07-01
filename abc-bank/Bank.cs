@@ -20,10 +20,13 @@ namespace abc_bank
             Customers.Add(customer);
         }
 
-        public String CustomerSummary() {
+        public String CustomerSummary() 
+        {
             String summary = "Customer Summary";
             foreach (Customer c in Customers)
+            {
                 summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+            }
             return summary;
         }
 
@@ -43,6 +46,17 @@ namespace abc_bank
             }
 
             return total;
+        }
+
+        public int TotalNumberAccounts()
+        {
+            int numaccts = 0;
+            foreach(var account in this.Customers)
+            {
+                numaccts += account.GetNumberOfAccounts();
+            }
+
+            return numaccts;
         }
 
         public String GetFirstCustomer()
