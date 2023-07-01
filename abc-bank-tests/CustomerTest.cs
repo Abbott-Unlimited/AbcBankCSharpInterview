@@ -62,24 +62,14 @@ namespace abc_bank_tests
             Assert.AreEqual(henryStatement, "Statement for Henry\n\nChecking Account\n  deposit $100.00\n  withdrawal " +
                 "($500.00)\nTotal ($400.00)\n\nSavings Account\n  deposit $4,000.00\n  withdrawal ($200.00)\nTotal $3,800.00\n\nMaxi Savings Account\nTotal " +
                 "$0.00\n\nTotal In All Accounts $3,400.00");
-            //Assert.AreEqual("Statement for Henry\n" +
-            //        "\n" +
-            //        "Checking Account\n" +
-            //        "  deposit $100.00\n" +
-            //        "Total $100.00\n" +
-            //        "\n" +
-            //        "Savings Account\n" +
-            //        "  deposit $4,000.00\n" +
-            //        "  withdrawal $200.00\n" +
-            //        "Total $3,800.00\n" +
-            //        "\n" +
-            //        "Total In All Accounts $3,900.00", henry.GetStatement());
+            
         }
 
         [TestMethod]
         public void TestOneAccount()
         {
-            Customer oscar = new Customer("Oscar").OpenAccount(new Account(Account.SAVINGS));
+            var savingaccount = new Account(Account.SAVINGS);
+            Customer oscar = new Customer("Oscar").OpenAccount(savingaccount);
             Assert.AreEqual(1, oscar.GetNumberOfAccounts());
         }
 
@@ -93,12 +83,13 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        [Ignore]
+        // why not test?
         public void TestThreeAccounts()
         {
             Customer oscar = new Customer("Oscar")
                     .OpenAccount(new Account(Account.SAVINGS));
-            oscar.OpenAccount(new Account(Account.CHECKING));
+            oscar.OpenAccount(new Account(Account.CHECKING))
+                .OpenAccount(new Account(Account.MAXI_SAVINGS));
             Assert.AreEqual(3, oscar.GetNumberOfAccounts());
         }
     }
