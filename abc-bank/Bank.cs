@@ -8,24 +8,47 @@ namespace abc_bank
 {
     public class Bank
     {
-        private List<Customer> customers;
+        private List<Customer> Customers;
 
         public Bank()
         {
-            customers = new List<Customer>();
+            Customers = new List<Customer>();
         }
 
         public void AddCustomer(Customer customer)
         {
-            customers.Add(customer);
+            Customers.Add(customer);
         }
 
-        public String CustomerSummary() {
+        public String CustomerSummary() 
+        {
             String summary = "Customer Summary";
-            foreach (Customer c in customers)
+            foreach (Customer c in Customers)
+            {
                 summary += "\n - " + c.GetName() + " (" + format(c.GetNumberOfAccounts(), "account") + ")";
+            }
             return summary;
         }
+
+        /// <summary>
+        /// Summary of interest that the bank paid out
+        /// </summary>
+        /// <returns>text with interest summary</returns>
+        public String InterestSummary()
+        {
+            String summary = "Bank Paid Interest Summary\r\n";
+            //double totalinterestpaid = 0;
+            foreach (Customer c in Customers)
+            {
+                var interestpaid = c.TotalInterestEarned();
+                summary += $"\r\nCustomer {c.GetName()}: " + $"{this.Format(interestpaid)/*(String.Format("{0:C}", interestpaid))*/}";
+                //totalinterestpaid += interestpaid;
+            }
+
+
+            return summary;
+        }
+
 
         //Make sure correct plural of word is created based on the number passed in:
         //If number passed in is 1 just return the word otherwise add an 's' at the end
@@ -34,25 +57,47 @@ namespace abc_bank
             return number + " " + (number == 1 ? word : word + "s");
         }
 
-        public double totalInterestPaid() {
+        public double totalInterestPaid() 
+        {
             double total = 0;
-            foreach(Customer c in customers)
+            foreach (Customer c in Customers)
+            {
                 total += c.TotalInterestEarned();
+            }
+
             return total;
+        }
+
+        public int TotalNumberAccounts()
+        {
+            int numaccts = 0;
+            foreach(var account in this.Customers)
+            {
+                numaccts += account.GetNumberOfAccounts();
+            }
+
+            return numaccts;
         }
 
         public String GetFirstCustomer()
         {
             try
             {
-                customers = null;
-                return customers[0].GetName();
+                Customers = null;
+                return Customers[0].GetName();
             }
             catch (Exception e)
             {
                 Console.Write(e.StackTrace);
                 return "Error";
             }
+        }
+
+        // format a dollar amount
+        private String Format(double amount)
+        {
+            return String.Format("{0:C}", amount);
+            //return number + " " + (number == 1 ? word : word + "s");
         }
     }
 }

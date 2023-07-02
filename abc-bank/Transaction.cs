@@ -17,5 +17,12 @@ namespace abc_bank
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
         }
+        public DateTime GetDate() => transactionDate;
+
+        /// <summary>
+        /// Only use this for testing.
+        /// </summary>
+        /// <param name="dateTestOnly">only a test date</param>
+        public void SetDate(DateTime dateTestOnly) => this.transactionDate = dateTestOnly;
     }
 }
