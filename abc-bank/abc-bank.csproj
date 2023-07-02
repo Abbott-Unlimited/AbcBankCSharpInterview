@@ -45,6 +45,7 @@
     <Compile Include="Customer.cs" />
     <Compile Include="DateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaticAccountFunctions.cs" />
     <Compile Include="Transaction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

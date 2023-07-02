@@ -47,11 +47,11 @@ namespace abc_bank_tests
         public void InterestSummary()
         {
             Bank bank = new Bank();
+
             Customer john = new Customer("John");
             Account johnacct = new Account(Account.CHECKING);
             john.OpenAccount(johnacct);
             johnacct.Deposit(5000);
-
 
             bank.AddCustomer(john);
 

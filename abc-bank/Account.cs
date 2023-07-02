@@ -14,12 +14,12 @@ namespace abc_bank
         public const int MAXI_SAVINGS = 2;
 
         private readonly int accountType;
-        public List<Transaction> transactions;
+        public List<Transaction> Transactions;
 
         public Account(int accountType) 
         {
             this.accountType = accountType;
-            this.transactions = new List<Transaction>();
+            this.Transactions = new List<Transaction>();
         }
 
         public void Deposit(double amount) 
@@ -27,7 +27,7 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(amount));
+                Transactions.Add(new Transaction(amount));
             }
         }
 
@@ -36,7 +36,7 @@ namespace abc_bank
             if (amount <= 0) {
                 throw new ArgumentException("amount must be greater than zero");
             } else {
-                transactions.Add(new Transaction(-amount));
+                Transactions.Add(new Transaction(-amount));
             }
         }
 
@@ -76,10 +76,7 @@ namespace abc_bank
             }
         }
 
-        //public double sumTransactions() {
-        //   return CheckIfTransactionsExist(true);
-        //}
-
+        
         /// <summary>
         /// Sum the transactions
         /// </summary>
@@ -87,7 +84,7 @@ namespace abc_bank
         public double SumTransactions()
         {
             double amount = 0.0;
-            foreach (Transaction t in transactions)
+            foreach (Transaction t in Transactions)
                 amount += t.amount;
             return amount;
         }
@@ -100,17 +97,21 @@ namespace abc_bank
         private bool CheckIfTransactionsExist(bool checkAll) 
         {
 
-            bool dotransexist = this.transactions.Count > 0;
-            return dotransexist;
-            //double amount = 0.0;
-            //foreach (Transaction t in transactions)
-            //    amount += t.amount;
-            //return amount;
+            bool dotransexist = this.Transactions.Count > 0;
+            return dotransexist;            
         }
 
         public int GetAccountType() 
         {
             return accountType;
+        }
+
+        public void DoTransferIntoThisAccount(double transferamount, Account fromaccount)
+        {
+            
+            this.DoTransfer(fromaccount, transferamount);
+
+            
         }
 
     }

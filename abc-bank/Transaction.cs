@@ -17,5 +17,15 @@ namespace abc_bank
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
         }
+
+        /// <summary>
+        /// Do transfer between accounts belonging to same individual
+        /// </summary>
+        /// <param name="fromAccount">money transferred from this account</param>
+        /// <param name="toAccount">$ transferred to this account</param>
+        //public void DoTransfer(Account toAccount)
+        //{
+        //    fromAccount.
+        //}
     }
 }
