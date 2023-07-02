@@ -118,6 +118,47 @@ namespace abc_bank_tests
             Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
-        
+        [TestMethod]
+        public void MaxiNewInterestMethod()
+        {
+            Bank bank = new Bank();
+            Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiAccount));
+            
+            maxiAccount.Deposit(3000.0);
+            maxiAccount.WithdrawSetDate(500, DateTime.Today);
+
+            double interestearned = maxiAccount.InterestEarned();
+            Assert.AreEqual(2.5, interestearned, DOUBLE_DELTA);
+
+
+            maxiAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiAccount));
+
+            maxiAccount.Deposit(3000.0);
+
+            // obviously, you can't have a withdrawal date prior to the deposit date.
+            maxiAccount.WithdrawSetDate(500, DateTime.Parse("1/1/2023"));
+
+            interestearned = maxiAccount.InterestEarned();
+
+            Assert.AreEqual(125, interestearned, DOUBLE_DELTA);
+
+            // another test
+            maxiAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiAccount));
+
+            maxiAccount.Deposit(3000.0);
+
+            // obviously, you can't have a withdrawal date prior to the deposit date.
+            maxiAccount.WithdrawSetDate(500, DateTime.Parse("6/21/2023"));
+            maxiAccount.WithdrawSetDate(500, DateTime.Parse("1/1/2023"));
+
+            interestearned = maxiAccount.InterestEarned();
+
+            Assert.AreEqual(2, interestearned, DOUBLE_DELTA);
+
+
+        }
     }
 }

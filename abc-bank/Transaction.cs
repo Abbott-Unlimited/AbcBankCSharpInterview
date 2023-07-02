@@ -17,15 +17,12 @@ namespace abc_bank
             this.amount = amount;
             this.transactionDate = DateProvider.getInstance().Now();
         }
+        public DateTime GetDate() => transactionDate;
 
         /// <summary>
-        /// Do transfer between accounts belonging to same individual
+        /// Only use this for testing.
         /// </summary>
-        /// <param name="fromAccount">money transferred from this account</param>
-        /// <param name="toAccount">$ transferred to this account</param>
-        //public void DoTransfer(Account toAccount)
-        //{
-        //    fromAccount.
-        //}
+        /// <param name="dateTestOnly">only a test date</param>
+        public void SetDate(DateTime dateTestOnly) => this.transactionDate = dateTestOnly;
     }
 }

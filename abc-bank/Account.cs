@@ -31,6 +31,25 @@ namespace abc_bank
             }
         }
 
+        /// <summary>
+        /// Don't use this in production; just for testing
+        /// </summary>
+        /// <param name="amount">amount to withdraw</param>
+        /// <param name="date">date of withdrawal</param>
+        public void WithdrawSetDate(double amount, DateTime date)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("amount must be greater than zero");
+            }
+            else
+            {
+                Transaction transaction = new Transaction(-amount);
+                transaction.SetDate(date);
+                this.Transactions.Add(transaction);
+            }
+        }
+
         public void Withdraw(double amount) 
         {
             if (amount <= 0) {
@@ -58,18 +77,30 @@ namespace abc_bank
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
+                    double maxamount = 0;
+                    bool withdraw = Check4WithdrawLast10();
+                    if (withdraw)
                     {
-                        return amount * 0.02;
-
+                        maxamount = amount * .001;
                     }
-                    if (amount <= 2000)
+                    else
                     {
-                        return 20 + (amount - 1000) * 0.05;
+                        maxamount = amount * .05;
                     }
 
-                    double maxamount = 70 + (amount-2000) * 0.1;
                     return maxamount;
+                    // old way of computing interest
+                    //if (amount <= 1000)
+                    //{
+                    //    return amount * 0.02;
+                    //}
+                    //if (amount <= 2000)
+                    //{
+                    //    return 20 + (amount - 1000) * 0.05;
+                    //}
+
+                //double maxamount = 70 + (amount-2000) * 0.1;
+                //return maxamount;
                 default:
                     // checking account
                     return amount * 0.001;
@@ -94,12 +125,7 @@ namespace abc_bank
         /// </summary>
         /// <param name="checkAll">Don't know yet how to use checkAll. Either transactions exist or not. Possibly remove.</param>
         /// <returns></returns>
-        private bool CheckIfTransactionsExist(bool checkAll) 
-        {
-
-            bool dotransexist = this.Transactions.Count > 0;
-            return dotransexist;            
-        }
+       
 
         public int GetAccountType() 
         {
@@ -107,12 +133,46 @@ namespace abc_bank
         }
 
         public void DoTransferIntoThisAccount(double transferamount, Account fromaccount)
-        {
-            
-            this.DoTransfer(fromaccount, transferamount);
-
-            
+        {            
+            this.DoTransfer(fromaccount, transferamount);            
         }
 
+        /// <summary>
+        /// Checks for withdrawal in the last 10 days
+        /// </summary>
+        /// <returns></returns>
+        private bool Check4WithdrawLast10()
+        {
+            bool withdrawalinlast10days = false;
+            DateTime date10 = DateTime.Today.AddDays(-10);
+
+            // are there any withdrawals in the last 10 days?
+            var found = this.Transactions.FirstOrDefault(fd => 
+            this.IsWithdrawalTran(fd) && fd.GetDate() >= date10);
+            withdrawalinlast10days = found == null ? false : true;
+
+            return withdrawalinlast10days;
+            //foreach(Transaction transaction in this.Transactions)
+            //{
+
+            //}
+
+            //return true;
+        }
+
+        /// <summary>
+        /// Is the transaction a withdrawl? Test for negative number
+        /// </summary>
+        /// <param name="tran"></param>
+        /// <returns></returns>
+        private bool IsWithdrawalTran(Transaction tran)
+        {
+            return tran.amount < 0 ? true : false;
+        }
+        private bool CheckIfTransactionsExist(bool checkAll)
+        {
+            bool dotransexist = this.Transactions.Count > 0;
+            return dotransexist;
+        }
     }
 }
