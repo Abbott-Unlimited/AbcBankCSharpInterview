@@ -62,33 +62,36 @@ namespace abc_bank
         public double InterestEarned() 
         {
             double amount = this.SumTransactions();
-            switch(accountType){
+            double intearned = 0;
+            switch(accountType)
+            {
                 case SAVINGS:
                     if (amount <= 1000)
                     {
-                        return amount * 0.001;
+                        
+                        intearned = amount * 0.001;
                     }
                     else
                     {
                         // .001 for the first 1000, then .002
-                        return 1 + (amount - 1000) * 0.002;
+                        intearned = 1 + (amount - 1000) * 0.002;
                     }
-    //            case SUPER_SAVINGS:
-    //                if (amount <= 4000)
-    //                    return 20;
+
+                    break;
                 case MAXI_SAVINGS:
-                    double maxamount = 0;
+                    //double maxamount = 0;
                     bool withdraw = Check4WithdrawLast10();
                     if (withdraw)
                     {
-                        maxamount = amount * .001;
+                        intearned = amount * .001;
                     }
                     else
                     {
-                        maxamount = amount * .05;
+                        intearned = amount * .05;
                     }
 
-                    return maxamount;
+                    break;
+                    //return maxamount;
                     // old way of computing interest
                     //if (amount <= 1000)
                     //{
@@ -103,11 +106,61 @@ namespace abc_bank
                 //return maxamount;
                 default:
                     // checking account
-                    return amount * 0.001;
+                    // compute daily accrual
+
+                    intearned = amount * 0.001;
+                    break;
             }
+
+            return intearned;
         }
 
-        
+        public double InterestEarnedDailyAccrual()
+        {
+            double amount = this.SumTransactions();
+            double intearned = 0;
+            switch (accountType)
+            {
+                case SAVINGS:
+                    if (amount <= 1000)
+                    {
+                        amount += this.ComputeDailyAccrualPerYear(.001, amount);
+                        intearned = amount * 0.001;
+                    }
+                    else
+                    {
+                        // .001 for the first 1000, then .002
+                        amount += this.ComputeDailyAccrualPerYear(.002, amount);
+                        intearned = 1 + (amount - 1000) * 0.002;
+                    }
+
+                    break;
+                case MAXI_SAVINGS:
+                    bool withdraw = Check4WithdrawLast10();
+                    if (withdraw)
+                    {
+                        amount += this.ComputeDailyAccrualPerYear(.001, amount);
+                        intearned = amount * .001;
+                    }
+                    else
+                    {
+                        amount += this.ComputeDailyAccrualPerYear(.05, amount);
+                        intearned = amount * .05;
+                    }
+
+                    break;
+                
+                default:
+                    // checking account
+                    // compute daily accrual
+                    amount += this.ComputeDailyAccrualPerYear(.001, amount);
+                    intearned = amount * 0.001;
+                    break;
+            }
+
+            return intearned;
+        }
+
         /// <summary>
         /// Sum the transactions
         /// </summary>
@@ -152,12 +205,7 @@ namespace abc_bank
             withdrawalinlast10days = found == null ? false : true;
 
             return withdrawalinlast10days;
-            //foreach(Transaction transaction in this.Transactions)
-            //{
-
-            //}
-
-            //return true;
+           
         }
 
         /// <summary>
@@ -168,6 +216,18 @@ namespace abc_bank
         private bool IsWithdrawalTran(Transaction tran)
         {
             return tran.amount < 0 ? true : false;
+        }
+
+        private double ComputeDailyAccrualPerYear(double yearlyIntRate, double amount)
+        {
+            double dailyrt = yearlyIntRate / 365;
+            double dailytot = 0;
+            for (int i = 0; i < 365; i++)
+            {
+                dailytot += dailyrt * amount;
+            }
+
+            return dailytot;
         }
         private bool CheckIfTransactionsExist(bool checkAll)
         {

@@ -106,16 +106,48 @@ namespace abc_bank_tests
             Assert.AreEqual(2.0, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
 
+        // replaced by new method of computing interest
+        //[TestMethod]
+        //public void Maxi_savings_account_OldMethod() 
+        //{
+        //    Bank bank = new Bank();
+        //    Account maxiAccount = new Account(Account.MAXI_SAVINGS);
+        //    bank.AddCustomer(new Customer("Bill").OpenAccount(maxiAccount));
+
+        //    maxiAccount.Deposit(3000.0);
+
+        //    Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+        //}
+
         [TestMethod]
-        public void Maxi_savings_account() 
+        public void Maxi_savings_account_DailyAccrual()
         {
             Bank bank = new Bank();
             Account maxiAccount = new Account(Account.MAXI_SAVINGS);
-            bank.AddCustomer(new Customer("Bill").OpenAccount(maxiAccount));
+            Customer bill = new Customer("Bill");
+            bank.AddCustomer(bill.OpenAccount(maxiAccount));
 
             maxiAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            var totalinterestdaily = maxiAccount.InterestEarnedDailyAccrual();
+
+            Assert.AreEqual(157.5, totalinterestdaily, DOUBLE_DELTA);
+
+            Account checking = new Account(Account.CHECKING);
+            bill.OpenAccount(checking);
+
+            checking.Deposit(3000.0);
+
+            var totalinterestdailychecking = checking.InterestEarnedDailyAccrual();
+            Assert.AreEqual(3.003, totalinterestdailychecking, DOUBLE_DELTA);
+
+            Account savings = new Account(Account.SAVINGS);
+            bill.OpenAccount(savings);
+
+            savings.Deposit(3000.0);
+
+            var totalinterestdailysavings = savings.InterestEarnedDailyAccrual();
+            Assert.AreEqual(5.012, totalinterestdailysavings, DOUBLE_DELTA);
         }
 
         [TestMethod]
