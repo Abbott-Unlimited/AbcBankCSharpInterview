@@ -84,7 +84,10 @@ namespace abc_bank
 
         private String ToDollars(double d)
         {
-            return String.Format("$%,.2f", Math.Abs(d));
+           //10-11-2023 Curtis Hines
+            //Changed this line of code for proper formatting
+            //return String.Format("$%,.2f", Math.Abs(d));
+            return String.Format("${0:N2}", Math.Abs(d));
         }
     }
 }
