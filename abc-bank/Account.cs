@@ -52,12 +52,21 @@ namespace abc_bank
     //            case SUPER_SAVINGS:
     //                if (amount <= 4000)
     //                    return 20;
+               //case MAXI_SAVINGS:
+                //    if (amount <= 1000)
+                //        return amount * 0.02;
+                //    if (amount <= 2000)
+                //        return 20 + (amount - 1000) * 0.05;
+                //    return 70 + (amount - 2000) * 0.1;
                 case MAXI_SAVINGS:
                     if (amount <= 1000)
                         return amount * 0.02;
                     if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+                        return 20 + (amount - 1000) * 0.05;
+                    if (noWithdrawalsInPast10Days)//boolean decides whether or not there has been any withdrawals in the past 10 days
+                        return 70 + (amount - 2000) * 0.05; // Updated interest rate to 5%
+                    return 70 + (amount - 2000) * 0.01; // Interest rate of 0.1%
+
                 default:
                     return amount * 0.001;
             }
