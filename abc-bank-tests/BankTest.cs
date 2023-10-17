@@ -45,14 +45,27 @@ namespace abc_bank_tests
         }
 
         [TestMethod]
-        public void Maxi_savings_account() {
+        public void Maxi_savings_account() { //no withdrawls for scenario feature of if withdrawls in the last ten days 
             Bank bank = new Bank();
             Account checkingAccount = new Account(Account.MAXI_SAVINGS);
             bank.AddCustomer(new Customer("Bill").OpenAccount(checkingAccount));
 
             checkingAccount.Deposit(3000.0);
 
-            Assert.AreEqual(170.0, bank.totalInterestPaid(), DOUBLE_DELTA);
+            Assert.AreEqual(220.00, bank.totalInterestPaid(), DOUBLE_DELTA);
+        }
+
+        [TestMethod]
+        public void Maxi_savings_account_withdrawl()
+        { //1 withdrawls for scenario feature of if withdrawls in the last ten days 
+            Bank bank = new Bank();
+            Account checkingAccount = new Account(Account.MAXI_SAVINGS);
+            bank.AddCustomer(new Customer("JoeBob").OpenAccount(checkingAccount));
+
+            checkingAccount.Deposit(3000.0);
+            checkingAccount.Withdraw(50.00);
+
+            Assert.AreEqual(72.95, bank.totalInterestPaid(), DOUBLE_DELTA);
         }
     }
 }
