@@ -53,11 +53,17 @@ namespace abc_bank
     //                if (amount <= 4000)
     //                    return 20;
                 case MAXI_SAVINGS:
-                    if (amount <= 1000)
-                        return amount * 0.02;
-                    if (amount <= 2000)
-                        return 20 + (amount-1000) * 0.05;
-                    return 70 + (amount-2000) * 0.1;
+
+                    if (noWithdrawalsInPast10Days())//boolean decides whether or not there has been any withdrawals in the past 10 days
+                        return 70 + (amount) * 0.05; // Updated interest rate to 5%
+
+                    //if (amount <= 1000)
+                    //    return amount * 0.02;
+                    //if (amount <= 2000)
+                    //{
+                    //    return 20 + (amount - 1000) * 0.05;
+                    //}                        
+                    return 70 + (amount) * 0.001;
                 default:
                     return amount * 0.001;
             }
@@ -74,6 +80,13 @@ namespace abc_bank
                 amount += t.amount;
             return amount;
         }
+
+        private bool noWithdrawalsInPast10Days()
+        {
+            return transactions.Where(w => w.transactionDate <= DateTime.Now.AddDays(-10)).ToList().Count() > 0;        
+
+        }
+
 
         public int GetAccountType() 
         {
